@@ -1,0 +1,77 @@
+@using hakathon.Models;
+@model IList<tblMenu>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Menu</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Menu" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Menu
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Tên Menu</th>
+                                    <th class="text-center">Cấp Bậc</th>
+                                    <th class="text-center">Parent ID</th>
+                                    <th class="text-center">Thứ Tự</th>
+                                    <th class="text-center">Hiển Thị</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="table-row">
+                                        <td class="text-center" scope="row">@item.MenuID</td>
+                                        <td class="text-left text-primary" scope="row">
+                                            <a asp-area="Admin" 
+                                               asp-controller="Menu" 
+                                               asp-action="Details"
+                                               asp-route-id="@item.MenuID">@item.MenuName</a>
+                                        </td>
+                                        <td class="text-center" scope="row">@item.Levels</td>
+                                        <td class="text-center" scope="row">@item.ParentID</td>
+                                        <td class="text-center" scope="row">@item.MenuOrder</td>
+                                        <td class="text-center" scope="row">
+                                            @if (item.IsActive.HasValue && item.IsActive.Value)
+                                            {
+                                                <span class="badge bg-success">True</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">False</span>
+                                            }
+                                        </td>
+                                        <td class="text-center" scope="row">
+                                            <a asp-area="Admin" asp-controller="Menu" asp-action="Edit" 
+                                               asp-route-id="@item.MenuID" class="btn btn-primary btn-sm" 
+                                               title="Chỉnh sửa Menu"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="Menu" asp-action="Delete" 
+                                               asp-route-id="@item.MenuID" class="btn btn-danger btn-sm" 
+                                               title="Xóa Menu" onclick="return confirm('Bạn có chắc chắn muốn xóa menu này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
