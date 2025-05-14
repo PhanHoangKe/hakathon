@@ -1,0 +1,404 @@
+/* 
+* Prefix: sensu-
+* Để tránh xung đột CSS khi làm các phần khác, tất cả các class đều có prefix sensu-
+*/
+
+/* Container styles */
+.sensu-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Favorite page header */
+.sensu-favorite-main {
+    padding: 40px 0;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.sensu-favorite-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sensu-favorite-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.sensu-favorite-title:after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 4px;
+    background-color: #0bb9d7;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.sensu-favorite-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 0;
+}
+
+/* Filter and controls */
+.sensu-favorite-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.sensu-favorite-search {
+    display: flex;
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+}
+
+.sensu-favorite-search-input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.sensu-favorite-search-input:focus {
+    border-color: #0bb9d7;
+    box-shadow: 0 0 0 3px rgba(11, 185, 215, 0.2);
+}
+
+.sensu-favorite-search-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #0bb9d7;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.sensu-favorite-search-btn:hover {
+    background: #09a2bc;
+}
+
+.sensu-favorite-sort-select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sensu-favorite-sort-select:focus {
+    border-color: #0bb9d7;
+}
+
+/* Favorite list and items */
+.sensu-favorite-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.sensu-favorite-item {
+    display: flex;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sensu-favorite-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sensu-favorite-item-image {
+    flex: 0 0 150px;
+    height: 200px;
+    overflow: hidden;
+    background-color: #eee;
+}
+
+.sensu-favorite-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.sensu-favorite-item:hover .sensu-favorite-item-image img {
+    transform: scale(1.05);
+}
+
+.sensu-favorite-item-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sensu-favorite-item-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
+}
+
+.sensu-favorite-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.sensu-favorite-item-author {
+    display: flex;
+    align-items: center;
+}
+
+.sensu-favorite-item-author:before {
+    content: "\f007";
+    font-family: "Font Awesome 5 Free";
+    margin-right: 5px;
+}
+
+.sensu-favorite-item-date {
+    display: flex;
+    align-items: center;
+}
+
+.sensu-favorite-item-date:before {
+    content: "\f073";
+    font-family: "Font Awesome 5 Free";
+    margin-right: 5px;
+}
+
+.sensu-favorite-item-desc {
+    margin-bottom: 15px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.sensu-favorite-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.sensu-tag {
+    display: inline-block;
+    background-color: rgba(11, 185, 215, 0.1);
+    color: #0bb9d7;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.sensu-favorite-item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.sensu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+.sensu-btn i {
+    margin-right: 6px;
+}
+
+.sensu-btn-view {
+    background-color: #e9f8fb;
+    color: #0bb9d7;
+}
+
+.sensu-btn-view:hover {
+    background-color: #d2f1f7;
+}
+
+.sensu-btn-download {
+    background-color: #e2f2e4;
+    color: #28a745;
+}
+
+.sensu-btn-download:hover {
+    background-color: #d0e9d4;
+}
+
+.sensu-btn-unfavorite {
+    background-color: #f8e9e9;
+    color: #dc3545;
+}
+
+.sensu-btn-unfavorite:hover {
+    background-color: #f2d6d6;
+}
+
+.sensu-btn-primary {
+    background-color: #0bb9d7;
+    color: white;
+}
+
+.sensu-btn-primary:hover {
+    background-color: #09a2bc;
+}
+
+/* Empty state */
+.sensu-favorite-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.sensu-favorite-empty-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.sensu-favorite-empty h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.sensu-favorite-empty p {
+    color: #777;
+    margin-bottom: 25px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Pagination */
+.sensu-favorite-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.sensu-pagination-prev,
+.sensu-pagination-next {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sensu-pagination-prev:not([disabled]):hover,
+.sensu-pagination-next:not([disabled]):hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}
+
+.sensu-pagination-prev[disabled],
+.sensu-pagination-next[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.sensu-pagination-numbers {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sensu-pagination-number {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sensu-pagination-number:hover {
+    background-color: #f5f5f5;
+}
+
+.sensu-pagination-number.active {
+    background-color: #0bb9d7;
+    color: white;
+    border-color: #0bb9d7;
+}
+
+.sensu-pagination-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sensu-favorite-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .sensu-favorite-search {
+        max-width: 100%;
+    }
+    
+    .sensu-favorite-item {
+        flex-direction: column;
+    }
+    
+    .sensu-favorite-item-image {
+        flex: 0 0 auto;
+        height: 180px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,548 @@
+/* Sensy Profile CSS - Màu chủ đạo: #0bb9d7 */
+
+/* Reset và style cơ bản */
+:root {
+    --primary-color: #0bb9d7;
+    --primary-dark: #099cb5;
+    --primary-light: #5ed4e9;
+    --text-color: #333;
+    --text-light: #666;
+    --bg-color: #f9f9f9;
+    --border-color: #e0e0e0;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --error-color: #dc3545;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+ul {
+    list-style: none;
+}
+
+/* Container styles */
+.sensy-profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 15px;
+}
+
+.sensy-profile-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sensy-profile-title {
+    font-size: 28px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.sensy-profile-wrapper {
+    display: flex;
+    gap: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+}
+
+/* Sidebar styles */
+.sensy-profile-sidebar {
+    width: 280px;
+    background-color: #fff;
+    border-right: 1px solid var(--border-color);
+    padding: 20px 0;
+}
+
+.sensy-profile-user-info {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sensy-profile-avatar {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px rgba(11, 185, 215, 0.2);
+}
+
+.sensy-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sensy-profile-avatar-edit {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.sensy-profile-avatar-edit:hover {
+    background-color: var(--primary-dark);
+}
+
+.sensy-icon-camera {
+    color: white;
+    font-size: 18px;
+}
+
+.sensy-profile-name {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.sensy-profile-email {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.sensy-profile-nav {
+    margin-top: 20px;
+}
+
+.sensy-profile-nav-item {
+    padding: 15px 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    border-left: 4px solid transparent;
+}
+
+.sensy-profile-nav-item:hover {
+    background-color: rgba(11, 185, 215, 0.05);
+}
+
+.sensy-profile-nav-item.active {
+    background-color: rgba(11, 185, 215, 0.1);
+    border-left: 4px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.sensy-profile-nav-item i {
+    font-size: 18px;
+}
+
+/* Content area styles */
+.sensy-profile-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #fff;
+}
+
+.sensy-profile-tab {
+    display: none;
+}
+
+.sensy-profile-tab.active {
+    display: block;
+}
+
+.sensy-profile-section {
+    margin-bottom: 30px;
+}
+
+.sensy-profile-section-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-weight: 500;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Form styles */
+.sensy-profile-form {
+    max-width: 600px;
+}
+
+.sensy-form-group {
+    margin-bottom: 20px;
+}
+
+.sensy-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.sensy-form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.sensy-form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(11, 185, 215, 0.2);
+}
+
+.sensy-radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+}
+
+.sensy-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.sensy-radio input {
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.sensy-form-actions {
+    margin-top: 30px;
+}
+
+.sensy-btn {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+}
+
+.sensy-btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.sensy-btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.sensy-btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.sensy-btn-outline:hover {
+    background-color: rgba(11, 185, 215, 0.1);
+}
+
+/* Password field styles */
+.sensy-password-field {
+    position: relative;
+}
+
+.sensy-toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+.sensy-toggle-password:hover {
+    color: var(--primary-color);
+}
+
+.sensy-password-requirements {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.sensy-password-requirements p {
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.sensy-password-requirements ul {
+    padding-left: 20px;
+}
+
+.sensy-requirement {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-light);
+}
+
+.sensy-requirement::before {
+    content: "●";
+    font-size: 12px;
+}
+
+.sensy-requirement.valid {
+    color: var(--success-color);
+}
+
+.sensy-requirement.valid::before {
+    content: "✓";
+}
+
+/* Activity history styles */
+.sensy-activity-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.sensy-activity-tab {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.sensy-activity-tab:hover {
+    color: var(--primary-color);
+}
+
+.sensy-activity-tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.sensy-activity-content {
+    display: none;
+}
+
+.sensy-activity-content.active {
+    display: block;
+}
+
+.sensy-activity-list {
+    margin-bottom: 20px;
+}
+
+.sensy-activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sensy-activity-item:last-child {
+    border-bottom: none;
+}
+
+.sensy-activity-info h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.sensy-activity-meta {
+    color: var(--text-light);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.sensy-activity-date {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sensy-activity-rating {
+    display: flex;
+    gap: 2px;
+    color: #ccc;
+}
+
+.sensy-icon-star.active {
+    color: #ffc107;
+}
+
+.sensy-comment-text {
+    font-style: italic;
+    color: var(--text-color);
+    margin: 8px 0;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-left: 3px solid var(--primary-light);
+    border-radius: 4px;
+}
+
+/* Pagination styles */
+.sensy-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.sensy-pagination-prev,
+.sensy-pagination-next {
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.sensy-pagination-prev:hover,
+.sensy-pagination-next:hover {
+    background-color: rgba(11, 185, 215, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.sensy-pagination-prev:disabled,
+.sensy-pagination-next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.sensy-pagination-info {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+/* Icon styles */
+.sensy-icon-user::before { content: "👤"; }
+.sensy-icon-lock::before { content: "🔒"; }
+.sensy-icon-history::before { content: "📋"; }
+.sensy-icon-eye::before { content: "👁️"; }
+.sensy-icon-star::before { content: "★"; }
+.sensy-icon-camera::before { content: "📷"; }
+
+/* Responsive styles */
+@media (max-width: 992px) {
+    .sensy-profile-wrapper {
+        flex-direction: column;
+    }
+    
+    .sensy-profile-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .sensy-profile-user-info {
+        display: flex;
+        align-items: center;
+        text-align: left;
+        padding: 15px;
+    }
+    
+    .sensy-profile-avatar {
+        width: 80px;
+        height: 80px;
+        margin: 0 20px 0 0;
+    }
+    
+    .sensy-profile-nav {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .sensy-profile-nav-item {
+        flex: 1;
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sensy-profile-content {
+        padding: 20px 15px;
+    }
+    
+    .sensy-activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .sensy-activity-actions {
+        margin-top: 15px;
+    }
+    
+    .sensy-radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sensy-profile-user-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .sensy-profile-avatar {
+        margin: 0 auto 15px;
+    }
+    
+    .sensy-activity-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .sensy-activity-tab {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+        padding: 10px;
+    }
+}

@@ -1,0 +1,392 @@
+/* SenseLib About Page Styles */
+
+/* ------------ Common Styles ------------ */
+.senso-about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+.senso-section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.senso-section-title {
+    font-size: 2.25rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+.senso-section-divider {
+    width: 80px;
+    height: 4px;
+    background-color: #0bb9d7;
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+.senso-highlight {
+    color: #0bb9d7;
+}
+
+/* ------------ Hero Section ------------ */
+.senso-hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 0;
+    gap: 2rem;
+}
+
+.senso-hero-content {
+    flex: 1;
+}
+
+.senso-hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.senso-hero-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.senso-hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.senso-hero-subtitle {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.senso-hero-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* ------------ Mission Section ------------ */
+.senso-mission-section {
+    padding: 5rem 0;
+    background-color: #f9fbfd;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.senso-mission-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.senso-mission-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    flex: 1;
+    min-width: 280px;
+    max-width: 350px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.senso-mission-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.senso-mission-icon {
+    font-size: 2.5rem;
+    color: #0bb9d7;
+    margin-bottom: 1.5rem;
+    width: 80px;
+    height: 80px;
+    background: rgba(11, 185, 215, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.senso-mission-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.senso-mission-text {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ------------ Team Section ------------ */
+.senso-team-section {
+    padding: 5rem 0;
+}
+
+.senso-team-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.senso-team-member {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    flex: 1;
+    min-width: 220px;
+    max-width: 280px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.senso-team-member:hover {
+    transform: translateY(-5px);
+}
+
+.senso-member-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.5rem;
+    border: 5px solid rgba(11, 185, 215, 0.2);
+}
+
+.senso-member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.senso-member-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.senso-member-role {
+    color: #0bb9d7;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.senso-member-social {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.senso-social-link {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    transition: all 0.3s;
+}
+
+.senso-social-link:hover {
+    background-color: #0bb9d7;
+    color: #fff;
+}
+
+/* ------------ Technology Section ------------ */
+.senso-tech-section {
+    padding: 5rem 0;
+    background-color: #f9fbfd;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.senso-tech-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.senso-tech-group {
+    text-align: center;
+}
+
+.senso-tech-category {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.senso-tech-category::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background-color: #0bb9d7;
+    border-radius: 1.5px;
+}
+
+.senso-tech-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.senso-tech-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    min-width: 120px;
+    transition: transform 0.3s;
+}
+
+.senso-tech-item:hover {
+    transform: translateY(-5px);
+}
+
+.senso-tech-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.senso-tech-name {
+    font-weight: 500;
+    color: #555;
+}
+
+/* ------------ CTA Section ------------ */
+.senso-cta-section {
+    background: linear-gradient(135deg, #0bb9d7, #08889e);
+    border-radius: 10px;
+    padding: 4rem 2rem;
+    margin: 4rem 0 2rem;
+    text-align: center;
+    color: #fff;
+}
+
+.senso-cta-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.senso-cta-text {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+.senso-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.senso-primary-button {
+    background-color: #fff;
+    color: #0bb9d7;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.senso-primary-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+
+.senso-secondary-button {
+    background-color: transparent;
+    color: #fff;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid #fff;
+    transition: all 0.3s;
+}
+
+.senso-secondary-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* ------------ Responsive Styles ------------ */
+@media (max-width: 992px) {
+    .senso-hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .senso-hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .senso-section-title {
+        font-size: 1.75rem;
+    }
+    
+    .senso-mission-card,
+    .senso-team-member,
+    .senso-tech-item {
+        min-width: 100%;
+    }
+    
+    .senso-hero-title {
+        font-size: 2rem;
+    }
+    
+    .senso-cta-title {
+        font-size: 1.75rem;
+    }
+    
+    .senso-tech-items {
+        gap: 1rem;
+    }
+}

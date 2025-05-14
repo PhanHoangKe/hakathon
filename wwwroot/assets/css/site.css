@@ -689,9 +689,10 @@
 
 /* FOOTER */
 .sense-footer {
-    background-color: #34495e;
-    color: white;
+    background-color: #ffffff;
+    color: #333333;
     padding: 60px 0 20px;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .sense-footer-grid {
@@ -711,11 +712,13 @@
 .sense-footer-logo span {
     font-size: 1.5rem;
     font-weight: 700;
+    color: #0bb9d7;
 }
 
 .sense-footer-col p {
     margin-bottom: 20px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #666666;
+    line-height: 1.6;
 }
 
 .sense-footer-col h3 {
@@ -723,6 +726,7 @@
     font-size: 1.2rem;
     position: relative;
     padding-bottom: 10px;
+    color: #333333;
 }
 
 .sense-footer-col h3::after {
@@ -732,7 +736,7 @@
     bottom: 0;
     width: 50px;
     height: 2px;
-    background-color: var(--sense-primary);
+    background-color: #0bb9d7;
 }
 
 .sense-footer-col ul li {
@@ -740,12 +744,13 @@
 }
 
 .sense-footer-col ul li a {
-    color: rgba(255, 255, 255, 0.8);
-    transition: var(--sense-transition);
+    color: #555555;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .sense-footer-col ul li a:hover {
-    color: white;
+    color: #0bb9d7;
     padding-left: 5px;
 }
 
@@ -760,14 +765,15 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #f5f5f5;
     border-radius: 50%;
-    color: white;
-    transition: var(--sense-transition);
+    color: #0bb9d7;
+    transition: all 0.3s ease;
 }
 
 .sense-social a:hover {
-    background-color: var(--sense-primary);
+    background-color: #0bb9d7;
+    color: white;
     transform: translateY(-3px);
 }
 
@@ -776,18 +782,18 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #555555;
 }
 
 .sense-contact-info li i {
-    color: var(--sense-primary);
+    color: #0bb9d7;
 }
 
 .sense-copyright {
     text-align: center;
     padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid #eaeaea;
+    color: #777777;
     font-size: 0.9rem;
 }
 

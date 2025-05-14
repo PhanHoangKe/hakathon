@@ -1,0 +1,302 @@
+<!-- Main content (không bao gồm header, menu và footer) -->
+<main class="sensy-profile-container">
+    <div class="sensy-profile-header">
+        <h1 class="sensy-profile-title">Trang cá nhân</h1>
+    </div>
+
+    <div class="sensy-profile-wrapper">
+        <!-- Sidebar navigation -->
+        <div class="sensy-profile-sidebar">
+            <div class="sensy-profile-user-info">
+                <div class="sensy-profile-avatar">
+                    <img src="/api/placeholder/150/150" alt="Avatar người dùng" id="sensy-user-avatar">
+                    <div class="sensy-profile-avatar-edit">
+                        <label for="sensy-avatar-upload">
+                            <i class="sensy-icon-camera"></i>
+                        </label>
+                        <input type="file" id="sensy-avatar-upload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <h2 class="sensy-profile-name" id="sensy-user-name">Nguyễn Văn A</h2>
+                <p class="sensy-profile-email" id="sensy-user-email">nguyenvana@example.com</p>
+            </div>
+            <ul class="sensy-profile-nav">
+                <li class="sensy-profile-nav-item active" data-tab="sensy-personal-info">
+                    <i class="sensy-icon-user"></i> Thông tin cá nhân
+                </li>
+                <li class="sensy-profile-nav-item" data-tab="sensy-change-password">
+                    <i class="sensy-icon-lock"></i> Đổi mật khẩu
+                </li>
+                <li class="sensy-profile-nav-item" data-tab="sensy-activity-history">
+                    <i class="sensy-icon-history"></i> Lịch sử hoạt động
+                </li>
+            </ul>
+        </div>
+
+        <!-- Content area -->
+        <div class="sensy-profile-content">
+            <!-- Thông tin cá nhân tab -->
+            <div class="sensy-profile-tab active" id="sensy-personal-info">
+                <div class="sensy-profile-section">
+                    <h3 class="sensy-profile-section-title">Thông tin cá nhân</h3>
+                    <form id="sensy-personal-info-form" class="sensy-profile-form">
+                        <div class="sensy-form-group">
+                            <label for="sensy-fullname">Họ và tên</label>
+                            <input type="text" id="sensy-fullname" class="sensy-form-control" value="Nguyễn Văn A">
+                        </div>
+                        <div class="sensy-form-group">
+                            <label for="sensy-email">Email</label>
+                            <input type="email" id="sensy-email" class="sensy-form-control" value="nguyenvana@example.com">
+                        </div>
+                        <div class="sensy-form-group">
+                            <label for="sensy-phone">Số điện thoại</label>
+                            <input type="tel" id="sensy-phone" class="sensy-form-control" value="0123456789">
+                        </div>
+                        <div class="sensy-form-group">
+                            <label for="sensy-dob">Ngày sinh</label>
+                            <input type="date" id="sensy-dob" class="sensy-form-control" value="1990-01-01">
+                        </div>
+                        <div class="sensy-form-group">
+                            <label>Giới tính</label>
+                            <div class="sensy-radio-group">
+                                <label class="sensy-radio">
+                                    <input type="radio" name="gender" value="male" checked> Nam
+                                </label>
+                                <label class="sensy-radio">
+                                    <input type="radio" name="gender" value="female"> Nữ
+                                </label>
+                                <label class="sensy-radio">
+                                    <input type="radio" name="gender" value="other"> Khác
+                                </label>
+                            </div>
+                        </div>
+                        <div class="sensy-form-actions">
+                            <button type="submit" class="sensy-btn sensy-btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Đổi mật khẩu tab -->
+            <div class="sensy-profile-tab" id="sensy-change-password">
+                <div class="sensy-profile-section">
+                    <h3 class="sensy-profile-section-title">Đổi mật khẩu</h3>
+                    <form id="sensy-change-password-form" class="sensy-profile-form">
+                        <div class="sensy-form-group">
+                            <label for="sensy-current-password">Mật khẩu hiện tại</label>
+                            <div class="sensy-password-field">
+                                <input type="password" id="sensy-current-password" class="sensy-form-control">
+                                <span class="sensy-toggle-password"><i class="sensy-icon-eye"></i></span>
+                            </div>
+                        </div>
+                        <div class="sensy-form-group">
+                            <label for="sensy-new-password">Mật khẩu mới</label>
+                            <div class="sensy-password-field">
+                                <input type="password" id="sensy-new-password" class="sensy-form-control">
+                                <span class="sensy-toggle-password"><i class="sensy-icon-eye"></i></span>
+                            </div>
+                        </div>
+                        <div class="sensy-form-group">
+                            <label for="sensy-confirm-password">Xác nhận mật khẩu</label>
+                            <div class="sensy-password-field">
+                                <input type="password" id="sensy-confirm-password" class="sensy-form-control">
+                                <span class="sensy-toggle-password"><i class="sensy-icon-eye"></i></span>
+                            </div>
+                        </div>
+                        <div class="sensy-password-requirements">
+                            <p>Mật khẩu phải có:</p>
+                            <ul>
+                                <li class="sensy-requirement" id="sensy-length">Ít nhất 8 ký tự</li>
+                                <li class="sensy-requirement" id="sensy-uppercase">Ít nhất 1 chữ hoa</li>
+                                <li class="sensy-requirement" id="sensy-lowercase">Ít nhất 1 chữ thường</li>
+                                <li class="sensy-requirement" id="sensy-number">Ít nhất 1 số</li>
+                                <li class="sensy-requirement" id="sensy-special">Ít nhất 1 ký tự đặc biệt</li>
+                            </ul>
+                        </div>
+                        <div class="sensy-form-actions">
+                            <button type="submit" class="sensy-btn sensy-btn-primary">Đổi mật khẩu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lịch sử hoạt động tab -->
+            <div class="sensy-profile-tab" id="sensy-activity-history">
+                <div class="sensy-profile-section">
+                    <h3 class="sensy-profile-section-title">Lịch sử hoạt động</h3>
+                    
+                    <!-- Tab navigation for activity history -->
+                    <div class="sensy-activity-tabs">
+                        <button class="sensy-activity-tab active" data-activity="sensy-viewed">Đã xem</button>
+                        <button class="sensy-activity-tab" data-activity="sensy-downloaded">Đã tải xuống</button>
+                        <button class="sensy-activity-tab" data-activity="sensy-rated">Đã đánh giá</button>
+                        <button class="sensy-activity-tab" data-activity="sensy-comments">Bình luận</button>
+                    </div>
+
+                    <!-- Viewed documents -->
+                    <div class="sensy-activity-content active" id="sensy-viewed">
+                        <div class="sensy-activity-list">
+                            <!-- Sample viewed document items -->
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Tài liệu về Kinh tế vĩ mô</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã xem lúc: 12/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem lại</a>
+                                </div>
+                            </div>
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Hướng dẫn sử dụng Excel nâng cao</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã xem lúc: 10/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem lại</a>
+                                </div>
+                            </div>
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Báo cáo thị trường 2025</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã xem lúc: 05/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem lại</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensy-pagination">
+                            <button class="sensy-pagination-prev">Trước</button>
+                            <span class="sensy-pagination-info">Trang 1/3</span>
+                            <button class="sensy-pagination-next">Sau</button>
+                        </div>
+                    </div>
+
+                    <!-- Downloaded documents -->
+                    <div class="sensy-activity-content" id="sensy-downloaded">
+                        <div class="sensy-activity-list">
+                            <!-- Sample downloaded document items -->
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Báo cáo tài chính Q1 2025</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã tải lúc: 11/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Tải lại</a>
+                                </div>
+                            </div>
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Sổ tay hướng dẫn quản lý</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã tải lúc: 09/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Tải lại</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensy-pagination">
+                            <button class="sensy-pagination-prev">Trước</button>
+                            <span class="sensy-pagination-info">Trang 1/1</span>
+                            <button class="sensy-pagination-next" disabled>Sau</button>
+                        </div>
+                    </div>
+
+                    <!-- Rated documents -->
+                    <div class="sensy-activity-content" id="sensy-rated">
+                        <div class="sensy-activity-list">
+                            <!-- Sample rated document items -->
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Công nghệ thông tin 2025</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-rating">
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star"></i>
+                                        </span>
+                                        <span class="sensy-activity-date">Đã đánh giá lúc: 08/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+                                </div>
+                            </div>
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Sách hướng dẫn lập trình Python</a></h4>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-rating">
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star active"></i>
+                                            <i class="sensy-icon-star"></i>
+                                            <i class="sensy-icon-star"></i>
+                                        </span>
+                                        <span class="sensy-activity-date">Đã đánh giá lúc: 04/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensy-pagination">
+                            <button class="sensy-pagination-prev">Trước</button>
+                            <span class="sensy-pagination-info">Trang 1/1</span>
+                            <button class="sensy-pagination-next" disabled>Sau</button>
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="sensy-activity-content" id="sensy-comments">
+                        <div class="sensy-activity-list">
+                            <!-- Sample comment items -->
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Hướng dẫn SEO 2025</a></h4>
+                                    <p class="sensy-comment-text">"Tài liệu rất hữu ích và dễ hiểu. Cảm ơn tác giả!"</p>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã bình luận lúc: 11/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+                                </div>
+                            </div>
+                            <div class="sensy-activity-item">
+                                <div class="sensy-activity-info">
+                                    <h4><a href="#">Chiến lược marketing online</a></h4>
+                                    <p class="sensy-comment-text">"Tôi đã áp dụng các chiến lược này và thấy hiệu quả rõ rệt. Đề xuất cho mọi người cùng đọc."</p>
+                                    <p class="sensy-activity-meta">
+                                        <span class="sensy-activity-date">Đã bình luận lúc: 07/05/2025</span>
+                                    </p>
+                                </div>
+                                <div class="sensy-activity-actions">
+                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensy-pagination">
+                            <button class="sensy-pagination-prev">Trước</button>
+                            <span class="sensy-pagination-info">Trang 1/1</span>
+                            <button class="sensy-pagination-next" disabled>Sau</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

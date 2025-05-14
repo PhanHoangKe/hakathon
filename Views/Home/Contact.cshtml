@@ -1,0 +1,130 @@
+<!-- Main content - Trang liên hệ / phản hồi -->
+<main class="sensi-contact-main">
+    <div class="sensi-container">
+        <div class="sensi-contact-header">
+            <h1 class="sensi-contact-title">Liên hệ & Góp ý</h1>
+            <p class="sensi-contact-subtitle">Gửi câu hỏi hoặc đóng góp ý kiến của bạn cho chúng tôi</p>
+        </div>
+
+        <div class="sensi-contact-wrapper">
+            <div class="sensi-contact-info">
+                <div class="sensi-contact-card">
+                    <div class="sensi-contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="sensi-contact-text">
+                        <h3>Địa chỉ</h3>
+                        <p>182 Lê Duẩn, TP. Vinh, Nghệ An</p>
+                    </div>
+                </div>
+                <div class="sensi-contact-card">
+                    <div class="sensi-contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="sensi-contact-text">
+                        <h3>Điện thoại</h3>
+                        <p>(+84) 238 3855 452</p>
+                    </div>
+                </div>
+                <div class="sensi-contact-card">
+                    <div class="sensi-contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="sensi-contact-text">
+                        <h3>Email</h3>
+                        <p>senselib@vinhuni.edu.vn</p>
+                    </div>
+                </div>
+                <div class="sensi-contact-card">
+                    <div class="sensi-contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="sensi-contact-text">
+                        <h3>Thời gian làm việc</h3>
+                        <p>Thứ 2 - Thứ 6: 8:00 - 17:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sensi-contact-form-container">
+                <form id="sensi-contact-form" class="sensi-contact-form">
+                    <div class="sensi-form-group">
+                        <label for="sensi-name">Họ và tên <span class="sensi-required">*</span></label>
+                        <input type="text" id="sensi-name" name="sensi-name" class="sensi-form-control" required>
+                        <div class="sensi-error-message" id="sensi-name-error"></div>
+                    </div>
+                    
+                    <div class="sensi-form-group">
+                        <label for="sensi-email">Email <span class="sensi-required">*</span></label>
+                        <input type="email" id="sensi-email" name="sensi-email" class="sensi-form-control" required>
+                        <div class="sensi-error-message" id="sensi-email-error"></div>
+                    </div>
+                    
+                    <div class="sensi-form-group">
+                        <label for="sensi-subject">Chủ đề <span class="sensi-required">*</span></label>
+                        <select id="sensi-subject" name="sensi-subject" class="sensi-form-control" required>
+                            <option value="" selected disabled>-- Chọn chủ đề --</option>
+                            <option value="question">Câu hỏi</option>
+                            <option value="feedback">Góp ý</option>
+                            <option value="report">Báo lỗi</option>
+                            <option value="request">Yêu cầu tài liệu</option>
+                            <option value="other">Khác</option>
+                        </select>
+                        <div class="sensi-error-message" id="sensi-subject-error"></div>
+                    </div>
+                    
+                    <div class="sensi-form-group">
+                        <label for="sensi-message">Nội dung <span class="sensi-required">*</span></label>
+                        <textarea id="sensi-message" name="sensi-message" class="sensi-form-control" rows="5" required></textarea>
+                        <div class="sensi-error-message" id="sensi-message-error"></div>
+                    </div>
+                    
+                    <div class="sensi-form-group sensi-captcha-group">
+                        <div class="sensi-captcha">
+                            <span id="sensi-captcha-code"></span>
+                            <button type="button" id="sensi-refresh-captcha" class="sensi-refresh-btn" aria-label="Làm mới mã xác nhận">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="sensi-captcha-input">
+                            <label for="sensi-captcha-input">Nhập mã xác nhận <span class="sensi-required">*</span></label>
+                            <input type="text" id="sensi-captcha-input" name="sensi-captcha-input" class="sensi-form-control" required>
+                            <div class="sensi-error-message" id="sensi-captcha-error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="sensi-form-group sensi-form-actions">
+                        <button type="button" id="sensi-submit-btn" class="sensi-submit-btn">
+                            <span>Gửi phản hồi</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Map section -->
+        <div class="sensi-map-container">
+            <h2 class="sensi-map-title">Bản đồ</h2>
+            <div class="sensi-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3779.6571669825697!2d105.69143917495005!3d18.6617129623612!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3139ce640b5a1dad%3A0x5f4a0c499d18541a!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBWaW5o!5e0!3m2!1svi!2s!4v1714807343400!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+
+        <!-- Popup thông báo -->
+        <div id="sensi-popup" class="sensi-popup">
+            <div class="sensi-popup-content">
+                <div class="sensi-popup-header">
+                    <h3 id="sensi-popup-title">Thông báo</h3>
+                    <button id="sensi-close-popup" class="sensi-close-popup">&times;</button>
+                </div>
+                <div class="sensi-popup-body">
+                    <p id="sensi-popup-message"></p>
+                </div>
+                <div class="sensi-popup-footer">
+                    <button id="sensi-popup-btn" class="sensi-popup-btn">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

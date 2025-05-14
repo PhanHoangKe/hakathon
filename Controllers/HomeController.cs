@@ -18,6 +18,36 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Category()
+    {
+        return View();
+    }
+
+    public IActionResult Document()
+    {
+        return View();
+    }
+
+    public IActionResult Profile()
+    {
+        return View();
+    }
+
+    public IActionResult Contact()
+    {
+        return View();
+    }
+
+    public IActionResult About()
+    {
+        return View();
+    }
+
+    public IActionResult FavoriteDocument()
+    {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();

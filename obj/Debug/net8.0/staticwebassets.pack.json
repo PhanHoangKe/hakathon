@@ -4957,8 +4957,56 @@
       "PackagePath": "staticwebassets\\Admin\\lib\\snote\\summernote.min.js.map"
     },
     {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\about.css",
+      "PackagePath": "staticwebassets\\assets\\css\\about.css"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\category.css",
+      "PackagePath": "staticwebassets\\assets\\css\\category.css"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\contact.css",
+      "PackagePath": "staticwebassets\\assets\\css\\contact.css"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\document.css",
+      "PackagePath": "staticwebassets\\assets\\css\\document.css"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\favoritedocument.css",
+      "PackagePath": "staticwebassets\\assets\\css\\favoritedocument.css"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\profile.css",
+      "PackagePath": "staticwebassets\\assets\\css\\profile.css"
+    },
+    {
       "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\css\\site.css",
       "PackagePath": "staticwebassets\\assets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\about.js",
+      "PackagePath": "staticwebassets\\assets\\js\\about.js"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\category.js",
+      "PackagePath": "staticwebassets\\assets\\js\\category.js"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\contact.js",
+      "PackagePath": "staticwebassets\\assets\\js\\contact.js"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\document.js",
+      "PackagePath": "staticwebassets\\assets\\js\\document.js"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\favoritedocument.js",
+      "PackagePath": "staticwebassets\\assets\\js\\favoritedocument.js"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\profile.js",
+      "PackagePath": "staticwebassets\\assets\\js\\profile.js"
     },
     {
       "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\site.js",
