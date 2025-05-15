@@ -1,0 +1,378 @@
+<div class="sensr-browse-container">
+        <div class="sensr-browse-wrapper">
+            <!-- Sidebar filters -->
+            <aside class="sensr-sidebar">
+                <div class="sensr-filter-section">
+                    <h3 class="sensr-filter-title">Danh mục</h3>
+                    <div class="sensr-filter-content">
+                        <div class="sensr-filter-search">
+                            <input type="text" placeholder="Tìm danh mục" class="sensr-filter-search-input">
+                            <i class="fas fa-search sensr-search-icon"></i>
+                        </div>
+                        <div class="sensr-filter-options">
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="cat-1" class="sensr-filter-checkbox">
+                                <label for="cat-1">Công nghệ thông tin</label>
+                                <span class="sensr-filter-count">120</span>
+                            </div>
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="cat-2" class="sensr-filter-checkbox">
+                                <label for="cat-2">Khoa học dữ liệu</label>
+                                <span class="sensr-filter-count">85</span>
+                            </div>
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="cat-3" class="sensr-filter-checkbox">
+                                <label for="cat-3">Trí tuệ nhân tạo</label>
+                                <span class="sensr-filter-count">62</span>
+                            </div>
+                            <div class="sensr-show-more">
+                                <span>Xem thêm</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sensr-filter-section">
+                    <h3 class="sensr-filter-title">Tác giả</h3>
+                    <div class="sensr-filter-content">
+                        <div class="sensr-filter-search">
+                            <input type="text" placeholder="Tìm tác giả" class="sensr-filter-search-input">
+                            <i class="fas fa-search sensr-search-icon"></i>
+                        </div>
+                        <div class="sensr-filter-options">
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="author-1" class="sensr-filter-checkbox">
+                                <label for="author-1">Nguyễn Văn A</label>
+                                <span class="sensr-filter-count">35</span>
+                            </div>
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="author-2" class="sensr-filter-checkbox">
+                                <label for="author-2">Trần Thị B</label>
+                                <span class="sensr-filter-count">27</span>
+                            </div>
+                            <div class="sensr-show-more">
+                                <span>Xem thêm</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sensr-filter-section">
+                    <h3 class="sensr-filter-title">Ngôn ngữ</h3>
+                    <div class="sensr-filter-content">
+                        <div class="sensr-filter-options">
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="lang-1" class="sensr-filter-checkbox">
+                                <label for="lang-1">Tiếng Việt</label>
+                                <span class="sensr-filter-count">215</span>
+                            </div>
+                            <div class="sensr-filter-option">
+                                <input type="checkbox" id="lang-2" class="sensr-filter-checkbox">
+                                <label for="lang-2">Tiếng Anh</label>
+                                <span class="sensr-filter-count">183</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sensr-filter-section">
+                    <h3 class="sensr-filter-title">Năm xuất bản</h3>
+                    <div class="sensr-filter-content">
+                        <div class="sensr-filter-range">
+                            <div class="sensr-range-inputs">
+                                <input type="number" placeholder="Từ" class="sensr-range-input">
+                                <span>-</span>
+                                <input type="number" placeholder="Đến" class="sensr-range-input">
+                            </div>
+                            <button class="sensr-range-apply">Áp dụng</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="sensr-clear-filters">Xóa bộ lọc</button>
+            </aside>
+
+            <!-- Main content area -->
+            <div class="sensr-main-content">
+                <!-- Toolbar section -->
+                <div class="sensr-toolbar">
+                    <div class="sensr-search-bar">
+                        <input type="text" placeholder="Tìm kiếm tài liệu..." class="sensr-search-input">
+                        <button class="sensr-search-button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="sensr-toolbar-options">
+                        <div class="sensr-sort-dropdown">
+                            <select class="sensr-sort-select">
+                                <option value="newest">Mới nhất</option>
+                                <option value="popular">Phổ biến nhất</option>
+                                <option value="title-asc">Tên A-Z</option>
+                                <option value="title-desc">Tên Z-A</option>
+                            </select>
+                        </div>
+                        
+                        <div class="sensr-view-options">
+                            <button class="sensr-view-btn sensr-grid-view active" data-view="grid">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="sensr-view-btn sensr-list-view" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter tags display -->
+                <div class="sensr-filter-tags">
+                    <span class="sensr-result-count">Hiển thị <strong>24</strong> trong số <strong>256</strong> tài liệu</span>
+                    <div class="sensr-active-filters">
+                        <div class="sensr-filter-tag">
+                            Công nghệ thông tin
+                            <button class="sensr-remove-tag"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="sensr-filter-tag">
+                            Tiếng Việt
+                            <button class="sensr-remove-tag"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents grid view (default) -->
+                <div class="sensr-documents sensr-grid-layout">
+                    <!-- Document card 1 -->
+                    <div class="sensr-document-card">
+                        <div class="sensr-document-thumbnail">
+                            <img src="/api/placeholder/200/280" alt="Document Thumbnail">
+                            <div class="sensr-document-overlay">
+                                <div class="sensr-document-actions">
+                                    <button class="sensr-action-btn sensr-view-btn">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-download-btn">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-favorite-btn">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensr-document-info">
+                            <h3 class="sensr-document-title">Giáo trình Trí tuệ nhân tạo</h3>
+                            <p class="sensr-document-author">Nguyễn Văn A</p>
+                            <div class="sensr-document-meta">
+                                <span class="sensr-document-type">PDF</span>
+                                <span class="sensr-document-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document card 2 -->
+                    <div class="sensr-document-card">
+                        <div class="sensr-document-thumbnail">
+                            <img src="/api/placeholder/200/280" alt="Document Thumbnail">
+                            <div class="sensr-document-overlay">
+                                <div class="sensr-document-actions">
+                                    <button class="sensr-action-btn sensr-view-btn">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-download-btn">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-favorite-btn">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensr-document-info">
+                            <h3 class="sensr-document-title">Nhập môn khoa học dữ liệu</h3>
+                            <p class="sensr-document-author">Trần Thị B</p>
+                            <div class="sensr-document-meta">
+                                <span class="sensr-document-type">PDF</span>
+                                <span class="sensr-document-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document card 3 -->
+                    <div class="sensr-document-card">
+                        <div class="sensr-document-thumbnail">
+                            <img src="/api/placeholder/200/280" alt="Document Thumbnail">
+                            <div class="sensr-document-overlay">
+                                <div class="sensr-document-actions">
+                                    <button class="sensr-action-btn sensr-view-btn">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-download-btn">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-favorite-btn">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensr-document-info">
+                            <h3 class="sensr-document-title">Lập trình Web nâng cao</h3>
+                            <p class="sensr-document-author">Phạm Văn C</p>
+                            <div class="sensr-document-meta">
+                                <span class="sensr-document-type">PDF</span>
+                                <span class="sensr-document-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document card 4 -->
+                    <div class="sensr-document-card">
+                        <div class="sensr-document-thumbnail">
+                            <img src="/api/placeholder/200/280" alt="Document Thumbnail">
+                            <div class="sensr-document-overlay">
+                                <div class="sensr-document-actions">
+                                    <button class="sensr-action-btn sensr-view-btn">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-download-btn">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="sensr-action-btn sensr-favorite-btn">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sensr-document-info">
+                            <h3 class="sensr-document-title">Cơ sở dữ liệu phân tán</h3>
+                            <p class="sensr-document-author">Lê Thị D</p>
+                            <div class="sensr-document-meta">
+                                <span class="sensr-document-type">PDF</span>
+                                <span class="sensr-document-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents list view (initially hidden) -->
+                <div class="sensr-documents sensr-list-layout" style="display: none;">
+                    <!-- Document row 1 -->
+                    <div class="sensr-document-row">
+                        <div class="sensr-row-thumbnail">
+                            <img src="/api/placeholder/100/140" alt="Document Thumbnail">
+                        </div>
+                        <div class="sensr-row-info">
+                            <h3 class="sensr-row-title">Giáo trình Trí tuệ nhân tạo</h3>
+                            <p class="sensr-row-author">Tác giả: Nguyễn Văn A</p>
+                            <p class="sensr-row-description">Giáo trình cung cấp kiến thức cơ bản về trí tuệ nhân tạo, bao gồm các thuật toán học máy, mạng nơ-ron và ứng dụng AI trong thực tế.</p>
+                            <div class="sensr-row-meta">
+                                <span class="sensr-row-type">PDF</span>
+                                <span class="sensr-row-date">2023</span>
+                                <span class="sensr-row-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="sensr-rating-text">4.0</span>
+                                </span>
+                                <span class="sensr-row-downloads">
+                                    <i class="fas fa-download"></i> 125
+                                </span>
+                            </div>
+                        </div>
+                        <div class="sensr-row-actions">
+                            <button class="sensr-row-btn sensr-view-doc">
+                                <i class="fas fa-eye"></i>
+                                <span>Xem</span>
+                            </button>
+                            <button class="sensr-row-btn sensr-download-doc">
+                                <i class="fas fa-download"></i>
+                                <span>Tải</span>
+                            </button>
+                            <button class="sensr-row-btn sensr-favorite-doc">
+                                <i class="far fa-heart"></i>
+                                <span>Lưu</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Document row 2 -->
+                    <div class="sensr-document-row">
+                        <div class="sensr-row-thumbnail">
+                            <img src="/api/placeholder/100/140" alt="Document Thumbnail">
+                        </div>
+                        <div class="sensr-row-info">
+                            <h3 class="sensr-row-title">Nhập môn khoa học dữ liệu</h3>
+                            <p class="sensr-row-author">Tác giả: Trần Thị B</p>
+                            <p class="sensr-row-description">Giới thiệu về khoa học dữ liệu, các kỹ thuật phân tích và xử lý dữ liệu lớn, cùng các ứng dụng trong thực tế.</p>
+                            <div class="sensr-row-meta">
+                                <span class="sensr-row-type">PDF</span>
+                                <span class="sensr-row-date">2024</span>
+                                <span class="sensr-row-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="sensr-rating-text">4.5</span>
+                                </span>
+                                <span class="sensr-row-downloads">
+                                    <i class="fas fa-download"></i> 89
+                                </span>
+                            </div>
+                        </div>
+                        <div class="sensr-row-actions">
+                            <button class="sensr-row-btn sensr-view-doc">
+                                <i class="fas fa-eye"></i>
+                                <span>Xem</span>
+                            </button>
+                            <button class="sensr-row-btn sensr-download-doc">
+                                <i class="fas fa-download"></i>
+                                <span>Tải</span>
+                            </button>
+                            <button class="sensr-row-btn sensr-favorite-doc">
+                                <i class="far fa-heart"></i>
+                                <span>Lưu</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load more section -->
+                <div class="sensr-load-more">
+                    <button class="sensr-load-more-btn">
+                        <span>Xem thêm</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="sensr-page-count">Trang 1 / 11</div>
+                </div>
+            </div>
+        </div>
+    </div>
