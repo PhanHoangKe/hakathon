@@ -1,0 +1,372 @@
+@model hakathon.Models.tblDocuments
+<div class="senst-container">
+    <!-- Document Header Section -->
+    <div class="senst-document-header">
+      <div class="senst-document-cover">
+        <img src="@(Model.Category?.ImagePath ?? "/images/default-category.jpg")" alt="Bìa tài liệu" />
+      </div>
+      <div class="senst-document-info">
+        <h1 class="senst-document-title">@Model.Title</h1>
+        
+        <div class="senst-document-meta">
+          <div class="senst-author">
+            <span class="senst-meta-label">Tác giả:</span>
+            <span class="senst-meta-value">
+              @if (Model.DocumentAuthor != null && Model.DocumentAuthor.Count > 0)
+              {
+                  var authorNames = Model.DocumentAuthor.Select(da => da.Author.AuthorName).ToList();
+                  @string.Join(", ", authorNames)
+              }
+              else
+              {
+                  <span>Không có thông tin</span>
+              }
+            </span>
+          </div>
+          <div class="senst-publisher">
+            <span class="senst-meta-label">Nhà xuất bản:</span>
+            <span class="senst-meta-value">@(Model.Publisher?.PublisherName ?? "Không có thông tin")</span>
+          </div>
+          <div class="senst-publish-date">
+            <span class="senst-meta-label">Ngày tải lên:</span>
+            <span class="senst-meta-value">@Model.UploadDate.ToString("dd/MM/yyyy")</span>
+          </div>
+          <div class="senst-categories">
+            <span class="senst-meta-label">Danh mục:</span>
+            <span class="senst-meta-value">
+              <a href="/Category/Index/@Model.CategoryID" class="senst-category-tag">@Model.Category?.CategoryName</a>
+            </span>
+          </div>
+        </div>
+
+        <div class="senst-document-stats">
+          <div class="senst-stat-item">
+            <i class="fa fa-eye"></i> @Model.ViewCount lượt xem
+          </div>
+          <div class="senst-stat-item">
+            <i class="fa fa-download"></i> @Model.DownloadCount lượt tải
+          </div>
+          <div class="senst-stat-item">
+            <i class="fa fa-star"></i> @ViewBag.AverageRating.ToString("0.0")/5 (@ViewBag.RatingCount đánh giá)
+          </div>
+        </div>
+
+        <div class="senst-document-description">
+          <h3>Mô tả tài liệu:</h3>
+          <p>@(string.IsNullOrEmpty(Model.Description) ? "Không có mô tả cho tài liệu này." : Model.Description)</p>
+        </div>
+
+        <div class="senst-document-actions">
+          <button class="senst-btn @(ViewBag.IsFavorite ? "senst-btn-favorite-active" : "senst-btn-favorite")" id="favoriteBtn" data-id="@Model.DocumentID">
+            <i class="@(ViewBag.IsFavorite ? "fa fa-heart" : "fa fa-heart-o")"></i> Yêu thích
+          </button>
+          <div class="senst-dropdown">
+            <button class="senst-btn senst-btn-download">
+              <i class="fa fa-download"></i> Tải xuống
+            </button>
+            <div class="senst-dropdown-content">
+              <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'pdf')" class="senst-download-option">Tải bản PDF</a>
+              @if (!string.IsNullOrEmpty(Model.FileOriginalPath))
+              {
+                <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'original')" class="senst-download-option">Tải bản gốc (@(string.IsNullOrEmpty(Model.FileType) ? "Unknown" : Model.FileType))</a>
+              }
+            </div>
+          </div>
+          <button class="senst-btn senst-btn-read" id="readDocBtn">
+            <i class="fa fa-book"></i> Đọc tài liệu
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Document Content Tabs -->
+    <div class="senst-document-tabs">
+      <ul class="senst-tabs-nav">
+        <li class="senst-tab-item active" data-tab="preview">Xem trước</li>
+        <li class="senst-tab-item" data-tab="summary">Tóm tắt AI</li>
+        <li class="senst-tab-item" data-tab="chat">Hỏi đáp AI</li>
+        <li class="senst-tab-item" data-tab="reviews">Đánh giá & Bình luận</li>
+      </ul>
+
+      <div class="senst-tabs-content">
+        <!-- Tab 1: Xem trước tài liệu -->
+        <div class="senst-tab-pane active" id="preview">
+          <div class="senst-preview-header">
+            <h3>Xem trước tài liệu</h3>
+            <p class="senst-preview-notice">Chỉ hiển thị 3 trang đầu tiên. Vui lòng tải xuống để xem toàn bộ.</p>
+          </div>
+          <div class="senst-pdf-viewer">
+            <div class="senst-pdf-controls">
+              <button class="senst-pdf-btn" id="prevPage">
+                <i class="fa fa-chevron-left"></i>
+              </button>
+              <span class="senst-page-info">Trang <span id="currentPage">1</span> / <span id="totalPages">3</span></span>
+              <button class="senst-pdf-btn" id="nextPage">
+                <i class="fa fa-chevron-right"></i>
+              </button>
+              <button class="senst-pdf-btn" id="zoomIn">
+                <i class="fa fa-search-plus"></i>
+              </button>
+              <button class="senst-pdf-btn" id="zoomOut">
+                <i class="fa fa-search-minus"></i>
+              </button>
+            </div>
+            <div class="senst-pdf-container">
+              <canvas id="pdfRender"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Tóm tắt AI -->
+        <div class="senst-tab-pane" id="summary">
+          <div class="senst-ai-summary">
+            <div class="senst-summary-header">
+              <h3>Tóm tắt bằng AI</h3>
+              <div class="senst-summary-options">
+                <select id="summaryType" class="senst-select">
+                  <option value="full">Toàn bộ tài liệu</option>
+                  <option value="chapter">Theo chương</option>
+                </select>
+                
+                <div id="chapterSelection" style="display: none;">
+                  <select id="chapterNumber" class="senst-select">
+                    <option value="1">Chương 1</option>
+                    <option value="2">Chương 2</option>
+                    <option value="3">Chương 3</option>
+                  </select>
+                </div>
+                
+                <button class="senst-btn senst-btn-generate" id="generateSummary">
+                  <i class="fa fa-magic"></i> Tạo tóm tắt
+                </button>
+              </div>
+            </div>
+            
+            <div class="senst-summary-content">
+              <div class="senst-summary-result">
+                <h4>Tóm tắt toàn bộ tài liệu:</h4>
+                <p>
+                  Cuốn sách "Lập trình Web với HTML, CSS và JavaScript" là tài liệu toàn diện về phát triển web. Phần đầu giới thiệu về nền tảng web và cách hoạt động của trình duyệt. Các chương tiếp theo tập trung vào HTML để xây dựng cấu trúc, CSS để định dạng và tạo giao diện hấp dẫn. JavaScript được giới thiệu từ cơ bản đến nâng cao để tạo tương tác cho trang web. Phần cuối đề cập đến các framework hiện đại như React, Angular và Vue.js cùng các kỹ thuật tối ưu hiệu suất. Sách phù hợp cho cả người mới học và người muốn nâng cao kỹ năng lập trình web.
+                </p>
+              </div>
+
+              <div class="senst-tts-feature">
+                <h4>Nghe tóm tắt:</h4>
+                <div class="senst-audio-player">
+                  <button class="senst-btn senst-btn-play" id="playTTS">
+                    <i class="fa fa-play"></i> Phát giọng nói
+                  </button>
+                  <select class="senst-select senst-voice-select">
+                    <option value="female">Giọng nữ</option>
+                    <option value="male">Giọng nam</option>
+                  </select>
+                  <audio id="audioPlayer" controls style="display: none;"></audio>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Hỏi đáp AI -->
+        <div class="senst-tab-pane" id="chat">
+          <div class="senst-ai-chat">
+            <h3>Hỏi đáp về tài liệu với AI</h3>
+            <p class="senst-chat-intro">Đặt câu hỏi về nội dung tài liệu và nhận câu trả lời ngay lập tức.</p>
+            
+            <div class="senst-chat-container">
+              <div class="senst-chat-messages" id="chatMessages">
+                <div class="senst-message senst-message-bot">
+                  <div class="senst-message-avatar">
+                    <img src="/api/placeholder/40/40" alt="Bot Avatar" />
+                  </div>
+                  <div class="senst-message-content">
+                    <p>Xin chào! Tôi có thể giúp bạn trả lời các câu hỏi về tài liệu "Lập trình Web với HTML, CSS và JavaScript". Bạn muốn biết thêm về phần nào?</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="senst-chat-input">
+                <input type="text" id="userQuestion" placeholder="Nhập câu hỏi của bạn..." />
+                <button class="senst-btn senst-btn-send" id="sendQuestion">
+                  <i class="fa fa-paper-plane"></i>
+                </button>
+              </div>
+
+              <div class="senst-chat-suggestions">
+                <p>Gợi ý câu hỏi:</p>
+                <div class="senst-suggestion-chips">
+                  <button class="senst-chip">Chương 1 nói về nội dung gì?</button>
+                  <button class="senst-chip">Tài liệu có bao nhiêu chương?</button>
+                  <button class="senst-chip">Kết luận của tác giả là gì?</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Đánh giá & Bình luận -->
+        <div class="senst-tab-pane" id="reviews">
+          <div class="senst-reviews-section">
+            <div class="senst-rating-overview">
+              <h3>Đánh giá từ người dùng</h3>
+              <div class="senst-rating-stats">
+                <div class="senst-rating-average">
+                  <span class="senst-rating-number">4.8</span>
+                  <div class="senst-stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                  </div>
+                  <span class="senst-rating-count">56 đánh giá</span>
+                </div>
+                
+                <div class="senst-rating-bars">
+                  <div class="senst-rating-bar-row">
+                    <span class="senst-star-level">5 <i class="fa fa-star"></i></span>
+                    <div class="senst-rating-bar">
+                      <div class="senst-rating-fill" style="width: 75%"></div>
+                    </div>
+                    <span class="senst-rating-percent">75%</span>
+                  </div>
+                  <div class="senst-rating-bar-row">
+                    <span class="senst-star-level">4 <i class="fa fa-star"></i></span>
+                    <div class="senst-rating-bar">
+                      <div class="senst-rating-fill" style="width: 20%"></div>
+                    </div>
+                    <span class="senst-rating-percent">20%</span>
+                  </div>
+                  <div class="senst-rating-bar-row">
+                    <span class="senst-star-level">3 <i class="fa fa-star"></i></span>
+                    <div class="senst-rating-bar">
+                      <div class="senst-rating-fill" style="width: 3%"></div>
+                    </div>
+                    <span class="senst-rating-percent">3%</span>
+                  </div>
+                  <div class="senst-rating-bar-row">
+                    <span class="senst-star-level">2 <i class="fa fa-star"></i></span>
+                    <div class="senst-rating-bar">
+                      <div class="senst-rating-fill" style="width: 1%"></div>
+                    </div>
+                    <span class="senst-rating-percent">1%</span>
+                  </div>
+                  <div class="senst-rating-bar-row">
+                    <span class="senst-star-level">1 <i class="fa fa-star"></i></span>
+                    <div class="senst-rating-bar">
+                      <div class="senst-rating-fill" style="width: 1%"></div>
+                    </div>
+                    <span class="senst-rating-percent">1%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="senst-add-review">
+              <h3>Thêm đánh giá của bạn</h3>
+              <div class="senst-rating-input">
+                <div class="senst-stars-input">
+                  <span>Đánh giá:</span>
+                  <div class="senst-star-select">
+                    <i class="fa fa-star-o" data-rating="1"></i>
+                    <i class="fa fa-star-o" data-rating="2"></i>
+                    <i class="fa fa-star-o" data-rating="3"></i>
+                    <i class="fa fa-star-o" data-rating="4"></i>
+                    <i class="fa fa-star-o" data-rating="5"></i>
+                  </div>
+                </div>
+                <textarea class="senst-review-text" placeholder="Viết đánh giá của bạn về tài liệu này..."></textarea>
+                <button class="senst-btn senst-btn-submit">Gửi đánh giá</button>
+              </div>
+            </div>
+
+            <div class="senst-reviews-list">
+              <h3>Bình luận (12)</h3>
+              
+              <!-- Bình luận mẫu 1 -->
+              <div class="senst-review-item">
+                <div class="senst-reviewer-info">
+                  <img src="/api/placeholder/50/50" alt="User Avatar" class="senst-reviewer-avatar" />
+                  <div class="senst-reviewer-details">
+                    <div class="senst-reviewer-name">Trần Thị B</div>
+                    <div class="senst-review-date">15/04/2025</div>
+                    <div class="senst-reviewer-rating">
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="senst-review-content">
+                  <p>Tài liệu rất hữu ích cho người mới bắt đầu học lập trình web. Các ví dụ trong sách rất dễ hiểu và có thể áp dụng ngay vào thực tế. Đặc biệt phần JavaScript được giải thích rất chi tiết và dễ hiểu.</p>
+                </div>
+                <div class="senst-review-actions">
+                  <button class="senst-btn senst-btn-like">
+                    <i class="fa fa-thumbs-up"></i> Hữu ích (5)
+                  </button>
+                  <button class="senst-btn senst-btn-reply">
+                    <i class="fa fa-reply"></i> Trả lời
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Bình luận mẫu 2 -->
+              <div class="senst-review-item">
+                <div class="senst-reviewer-info">
+                  <img src="/api/placeholder/50/50" alt="User Avatar" class="senst-reviewer-avatar" />
+                  <div class="senst-reviewer-details">
+                    <div class="senst-reviewer-name">Lê Văn C</div>
+                    <div class="senst-review-date">10/04/2025</div>
+                    <div class="senst-reviewer-rating">
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star-o"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="senst-review-content">
+                  <p>Sách rất hay, nhưng tôi nghĩ phần về CSS Grid và Flexbox cần được cập nhật thêm. Các ví dụ khá đầy đủ, tuy nhiên còn thiếu một số kỹ thuật responsive design mới nhất.</p>
+                </div>
+                <div class="senst-review-actions">
+                  <button class="senst-btn senst-btn-like">
+                    <i class="fa fa-thumbs-up"></i> Hữu ích (2)
+                  </button>
+                  <button class="senst-btn senst-btn-reply">
+                    <i class="fa fa-reply"></i> Trả lời
+                  </button>
+                </div>
+              </div>
+
+              <!-- Nút xem thêm bình luận -->
+              <button class="senst-btn senst-btn-more">Xem thêm bình luận</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+@section Scripts {
+    <!-- Load PDF.js trực tiếp từ CDN với phiên bản cụ thể và đầy đủ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pRrKqA6GiCqLVz2IS/lhX4MJ2F3ZATMjTE0SJZeNJVHHHOHHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Quan trọng: Thiết lập worker path trước khi sử dụng PDF.js -->
+    <script>
+        console.log("Setting up PDF.js worker");
+        
+        // Định nghĩa PDF.js
+        window.pdfjsLib = pdfjsLib;
+        
+        // Thiết lập worker path từ CDN tương ứng
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        console.log("PDF.js setup completed");
+    </script>
+    
+    <!-- Sau đó mới load document.js -->
+    <script src="~/assets/js/document.js" asp-append-version="true"></script>
+}

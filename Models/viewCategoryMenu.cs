@@ -14,7 +14,9 @@ namespace hakathon.Models
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }
         public string? Description { get; set; }
+        public string? ImagePath { get; set; }
         public bool IsActive { get; set; } = true;
+        public int? MenuID { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }

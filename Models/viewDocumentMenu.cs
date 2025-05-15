@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace hakathon.Models
 {
-    [Table("tblDocuments")]
-    public class tblDocuments
+    [Table("viewDocumentMenu")]
+    public class viewDocumentMenu
     {
         [Key]
         public int DocumentID { get; set; }

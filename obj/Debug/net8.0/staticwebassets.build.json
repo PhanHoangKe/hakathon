@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yqbhvyfNU4oycrft7hX04vaALU0cmZwc2QSXlxLu7H0=",
+  "Hash": "SToHhqX3SEHzEBlKQNrIUYlmdqaI172xUfqMjfXFxdU=",
   "Source": "hakathon",
   "BasePath": "_content/hakathon",
   "Mode": "Default",
@@ -23710,6 +23710,25 @@
       "OriginalItemSpec": "wwwroot\\assets\\css\\site.css"
     },
     {
+      "Identity": "D:\\hakathon\\hakathon\\wwwroot\\assets\\images\\category\\c1.png",
+      "SourceId": "hakathon",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\hakathon\\hakathon\\wwwroot\\",
+      "BasePath": "_content/hakathon",
+      "RelativePath": "assets/images/category/c1.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\images\\category\\c1.png"
+    },
+    {
       "Identity": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\about.js",
       "SourceId": "hakathon",
       "SourceType": "Discovered",
@@ -24943,6 +24962,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\documents\\ke.pdf",
+      "SourceId": "hakathon",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\hakathon\\hakathon\\wwwroot\\",
+      "BasePath": "_content/hakathon",
+      "RelativePath": "uploads/documents/ke.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\documents\\ke.pdf"
+    },
+    {
+      "Identity": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\originals\\ke.docx",
+      "SourceId": "hakathon",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\hakathon\\hakathon\\wwwroot\\",
+      "BasePath": "_content/hakathon",
+      "RelativePath": "uploads/originals/ke.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\originals\\ke.docx"
     }
   ]
 }

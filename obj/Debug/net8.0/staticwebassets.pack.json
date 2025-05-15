@@ -4985,6 +4985,10 @@
       "PackagePath": "staticwebassets\\assets\\css\\site.css"
     },
     {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\images\\category\\c1.png",
+      "PackagePath": "staticwebassets\\assets\\images\\category\\c1.png"
+    },
+    {
       "Id": "D:\\hakathon\\hakathon\\wwwroot\\assets\\js\\about.js",
       "PackagePath": "staticwebassets\\assets\\js\\about.js"
     },
@@ -5243,6 +5247,14 @@
     {
       "Id": "D:\\hakathon\\hakathon\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\documents\\ke.pdf",
+      "PackagePath": "staticwebassets\\uploads\\documents\\ke.pdf"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\originals\\ke.docx",
+      "PackagePath": "staticwebassets\\uploads\\originals\\ke.docx"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.hakathon.props",

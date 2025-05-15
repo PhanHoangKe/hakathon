@@ -23,8 +23,9 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Document()
+    public IActionResult Document(int id)
     {
+        ViewBag.DocumentId = id;
         return View();
     }
 

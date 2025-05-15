@@ -1,10 +1,9 @@
-// Đợi tài liệu HTML tải xong trước khi thực thi JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // ===== QUẢN LÝ TAB =====
     initTabs();
     
-    // ===== XEM TRƯỚC TÀI LIỆU =====
-    initPdfViewer();
+    // Các chức năng khác sẽ được khởi tạo dựa vào sự sẵn sàng của PDF.js
+    checkPdfJsAndInitialize();
     
     // ===== TÓM TẮT AI =====
     initAiSummary();
@@ -18,6 +17,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== CÁC NÚT HÀNH ĐỘNG =====
     initActionButtons();
 });
+
+// Kiểm tra PDF.js và khởi tạo trình xem PDF khi sẵn sàng
+function checkPdfJsAndInitialize() {
+    console.log("Checking if PDF.js is ready");
+    
+    // Nếu PDF.js đã sẵn sàng, khởi tạo ngay
+    if (window.pdfjsLib) {
+        console.log("PDF.js is ready, initializing viewer");
+        initPdfViewer();
+    } else {
+        // Nếu chưa, đợi và kiểm tra lại sau mỗi 100ms
+        console.log("PDF.js not ready yet, waiting");
+        let checkCount = 0;
+        const maxChecks = 50; // Tối đa 5 giây (50 * 100ms)
+        
+        const checkInterval = setInterval(function() {
+            checkCount++;
+            console.log(`Checking for PDF.js (attempt ${checkCount}/${maxChecks})`);
+            
+            if (window.pdfjsLib) {
+                console.log("PDF.js is now ready, initializing viewer");
+                clearInterval(checkInterval);
+                initPdfViewer();
+            } else if (checkCount >= maxChecks) {
+                console.error("PDF.js failed to load after multiple attempts");
+                clearInterval(checkInterval);
+                
+                // Hiển thị thông báo lỗi trong canvas
+                const pdfContainer = document.getElementById('pdfRender');
+                if (pdfContainer) {
+                    const ctx = pdfContainer.getContext('2d');
+                    if (ctx) {
+                        pdfContainer.width = 600;
+                        pdfContainer.height = 200;
+                        ctx.font = '16px Arial';
+                        ctx.fillText('Không thể tải thư viện PDF.js. Vui lòng làm mới trang.', 20, 50);
+                    }
+                }
+            }
+        }, 100);
+    }
+}
 
 // ===== QUẢN LÝ TAB =====
 function initTabs() {
@@ -42,120 +83,263 @@ function initTabs() {
 
 // ===== XEM TRƯỚC TÀI LIỆU =====
 function initPdfViewer() {
-    // Mô phỏng PDF viewer (trong thực tế sẽ sử dụng thư viện như PDF.js)
-    const currentPageEl = document.getElementById('currentPage');
-    const totalPagesEl = document.getElementById('totalPages');
+    console.log("Initializing PDF viewer");
+    
+    // Elements
+    const pdfContainer = document.getElementById('pdfRender');
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
+    const currentPageElem = document.getElementById('currentPage');
+    const totalPagesElem = document.getElementById('totalPages');
     const zoomInBtn = document.getElementById('zoomIn');
     const zoomOutBtn = document.getElementById('zoomOut');
     
-    let currentPage = 1;
-    const totalPages = 3; // Giả sử có 3 trang xem trước
-    let currentZoom = 100;
-    
-    // Cập nhật hiển thị trang
-    function updatePageInfo() {
-        currentPageEl.textContent = currentPage;
-        totalPagesEl.textContent = totalPages;
-        
-        // Vô hiệu hóa nút khi đạt giới hạn
-        prevPageBtn.disabled = currentPage === 1;
-        nextPageBtn.disabled = currentPage === totalPages;
+    // Kiểm tra canvas element
+    if (!pdfContainer) {
+        console.error("PDF container (canvas) element not found");
+        return;
     }
     
-    // Xử lý chuyển trang
-    prevPageBtn.addEventListener('click', function() {
-        if (currentPage > 1) {
-            currentPage--;
-            updatePageInfo();
-            renderPage(currentPage);
-        }
-    });
+    // Khởi tạo canvas context
+    const ctx = pdfContainer.getContext('2d');
     
-    nextPageBtn.addEventListener('click', function() {
-        if (currentPage < totalPages) {
-            currentPage++;
-            updatePageInfo();
-            renderPage(currentPage);
+    // Kiểm tra thư viện PDF.js
+    if (!window.pdfjsLib) {
+        console.error("PDF.js library not found");
+        
+        // Hiển thị thông báo lỗi trên canvas
+        if (ctx) {
+            ctx.font = '16px Arial';
+            ctx.fillText('Không thể tải thư viện PDF.js. Vui lòng làm mới trang.', 20, 50);
         }
-    });
-    
-    // Xử lý phóng to/thu nhỏ
-    zoomInBtn.addEventListener('click', function() {
-        if (currentZoom < 200) {
-            currentZoom += 25;
-            applyZoom();
-        }
-    });
-    
-    zoomOutBtn.addEventListener('click', function() {
-        if (currentZoom > 50) {
-            currentZoom -= 25;
-            applyZoom();
-        }
-    });
-    
-    function applyZoom() {
-        const pdfContainer = document.querySelector('.senst-pdf-container');
-        pdfContainer.style.transform = `scale(${currentZoom / 100})`;
-        pdfContainer.style.transformOrigin = 'top left';
+        return;
     }
     
-    // Giả lập render trang PDF
-    function renderPage(pageNum) {
-        const canvas = document.getElementById('pdfRender');
-        const ctx = canvas.getContext('2d');
-        
-        // Xóa nội dung hiện tại
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Thiết lập kích thước canvas
-        canvas.width = 800;
-        canvas.height = 1100;
-        
-        // Vẽ một khung giả lập trang PDF
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.strokeStyle = '#dddddd';
-        ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
-        
-        // Hiển thị số trang
-        ctx.fillStyle = '#333333';
-        ctx.font = '24px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Trang xem trước ${pageNum}`, canvas.width / 2, 50);
-        
-        // Nội dung giả lập
+    console.log("PDF.js library found:", window.pdfjsLib);
+    
+    // Hiển thị "Đang tải" trên canvas
+    if (ctx) {
+        pdfContainer.width = 600;  // Đặt kích thước mặc định cho canvas
+        pdfContainer.height = 200;
+        ctx.clearRect(0, 0, pdfContainer.width, pdfContainer.height);
         ctx.font = '16px Arial';
-        ctx.textAlign = 'left';
-        ctx.fillText(`Nội dung tài liệu "Lập trình Web với HTML, CSS và JavaScript"`, 50, 100);
-        ctx.fillText(`Đây là nội dung xem trước cho trang ${pageNum}`, 50, 130);
+        ctx.fillText('Đang tải tài liệu...', 20, 50);
+    }
+    
+    // Variables
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.0;
+    const MAX_PREVIEW_PAGES = 3; // Giới hạn xem trước 3 trang
+    
+    /**
+     * Get page info from document, resize canvas accordingly, and render page.
+     * @param num Page number.
+     */
+    function renderPage(num) {
+        pageRendering = true;
+        console.log(`Rendering page ${num}`);
         
-        // Thêm văn bản theo trang
-        switch(pageNum) {
-            case 1:
-                ctx.fillText("Chương 1: Giới thiệu về HTML", 50, 180);
-                ctx.fillText("HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản", 50, 210);
-                ctx.fillText("được sử dụng để tạo và cấu trúc các trang web.", 50, 240);
-                break;
-            case 2:
-                ctx.fillText("Chương 2: CSS và định dạng trang web", 50, 180);
-                ctx.fillText("CSS (Cascading Style Sheets) là ngôn ngữ được sử dụng để định dạng", 50, 210);
-                ctx.fillText("và trang trí nội dung được viết bằng HTML.", 50, 240);
-                break;
-            case 3:
-                ctx.fillText("Chương 3: JavaScript và tương tác người dùng", 50, 180);
-                ctx.fillText("JavaScript là ngôn ngữ lập trình được sử dụng để tạo các tính năng", 50, 210);
-                ctx.fillText("tương tác trên trang web.", 50, 240);
-                break;
+        // Using promise to fetch the page
+        pdfDoc.getPage(num).then(function(page) {
+            console.log(`Page ${num} loaded`);
+            
+            const viewport = page.getViewport({ scale: scale });
+            pdfContainer.height = viewport.height;
+            pdfContainer.width = viewport.width;
+            
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            
+            console.log("Starting render task");
+            const renderTask = page.render(renderContext);
+            
+            // Wait for rendering to finish
+            renderTask.promise.then(function() {
+                console.log(`Page ${num} rendered successfully`);
+                pageRendering = false;
+                
+                if (pageNumPending !== null) {
+                    // New page rendering is pending
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+            }).catch(function(error) {
+                console.error('Error rendering PDF page:', error);
+                pageRendering = false;
+                
+                if (ctx) {
+                    ctx.font = '16px Arial';
+                    ctx.fillText(`Lỗi khi hiển thị trang ${num}. ${error.message}`, 20, 50);
+                }
+            });
+        }).catch(function(error) {
+            console.error(`Error getting page ${num}:`, error);
+            pageRendering = false;
+            
+            if (ctx) {
+                ctx.font = '16px Arial';
+                ctx.fillText(`Không thể tải trang ${num}. ${error.message}`, 20, 50);
+            }
+        });
+        
+        // Update page counters
+        if (currentPageElem) {
+            currentPageElem.textContent = num;
         }
     }
     
-    // Khởi tạo trạng thái ban đầu
-    updatePageInfo();
-    renderPage(currentPage);
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finished. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    }
+    
+    /**
+     * Go to previous page.
+     */
+    function onPrevPage() {
+        if (pageNum <= 1) {
+            return;
+        }
+        pageNum--;
+        queueRenderPage(pageNum);
+    }
+    
+    /**
+     * Go to next page.
+     */
+    function onNextPage() {
+        if (pageNum >= Math.min(pdfDoc?.numPages || 1, MAX_PREVIEW_PAGES)) {
+            return;
+        }
+        pageNum++;
+        queueRenderPage(pageNum);
+    }
+    
+    /**
+     * Zoom in the PDF
+     */
+    function onZoomIn() {
+        scale += 0.1;
+        queueRenderPage(pageNum);
+    }
+    
+    /**
+     * Zoom out the PDF
+     */
+    function onZoomOut() {
+        if (scale <= 0.2) return;
+        scale -= 0.1;
+        queueRenderPage(pageNum);
+    }
+    
+    // Event listeners
+    if (prevPageBtn) {
+        console.log("Adding event listener to prevPageBtn");
+        prevPageBtn.addEventListener('click', onPrevPage);
+    }
+    
+    if (nextPageBtn) {
+        console.log("Adding event listener to nextPageBtn");
+        nextPageBtn.addEventListener('click', onNextPage);
+    }
+    
+    if (zoomInBtn) {
+        console.log("Adding event listener to zoomInBtn");
+        zoomInBtn.addEventListener('click', onZoomIn);
+    }
+    
+    if (zoomOutBtn) {
+        console.log("Adding event listener to zoomOutBtn");
+        zoomOutBtn.addEventListener('click', onZoomOut);
+    }
+    
+    // Các cách khác nhau để tìm document ID
+    let documentId;
+    
+    // Cách 1: Từ thuộc tính data-id
+    const documentElement = document.querySelector('[data-id]');
+    if (documentElement) {
+        documentId = documentElement.getAttribute('data-id');
+        console.log("Document ID found from data-id attribute:", documentId);
+    }
+    
+    // Cách 2: Từ URL
+    if (!documentId) {
+        const urlParts = window.location.pathname.split('/');
+        const potentialId = urlParts[urlParts.length - 1];
+        if (!isNaN(potentialId)) {
+            documentId = potentialId;
+            console.log("Document ID found from URL:", documentId);
+        }
+    }
+    
+    // Cách 3: Từ ViewBag (nếu được truyền vào view)
+    if (!documentId && window.documentId) {
+        documentId = window.documentId;
+        console.log("Document ID found from window variable:", documentId);
+    }
+    
+    // Nếu tìm thấy document ID, tải PDF
+    if (documentId) {
+        loadPdf(`/Document/GetPdfPreview/${documentId}`);
+    } else {
+        // Nếu không tìm được ID, thử tải file cứng
+        console.log("Document ID not found, trying hardcoded path");
+        loadPdf('/uploads/documents/ke.pdf');
+    }
+    
+    // Hàm tải PDF từ URL
+    function loadPdf(url) {
+        console.log("Loading PDF from:", url);
+        
+        // Sử dụng PDF.js để tải và hiển thị PDF
+        const loadingTask = window.pdfjsLib.getDocument(url);
+        
+        loadingTask.promise.then(function(pdf) {
+            console.log("PDF document loaded successfully");
+            pdfDoc = pdf;
+            
+            // Show max 3 pages in preview
+            const totalPages = Math.min(pdf.numPages, MAX_PREVIEW_PAGES);
+            console.log(`Document has ${pdf.numPages} pages, showing max ${totalPages} pages`);
+            
+            if (totalPagesElem) {
+                totalPagesElem.textContent = totalPages;
+            }
+            
+            // Initial page render
+            renderPage(pageNum);
+        }).catch(function(error) {
+            console.error('Error loading PDF document:', error);
+            
+            // Nếu không tải được từ URL đầu tiên, thử URL dự phòng
+            if (url !== '/uploads/documents/ke.pdf') {
+                console.log("Trying fallback PDF path");
+                loadPdf('/uploads/documents/ke.pdf');
+            } else {
+                // Hiển thị thông báo lỗi trên canvas
+                if (ctx) {
+                    ctx.clearRect(0, 0, pdfContainer.width, pdfContainer.height);
+                    ctx.font = '16px Arial';
+                    ctx.fillText('Không thể tải tài liệu. Vui lòng thử lại sau.', 20, 50);
+                    ctx.font = '14px Arial';
+                    ctx.fillText(`Lỗi: ${error.message}`, 20, 75);
+                }
+            }
+        });
+    }
 }
 
 // ===== TÓM TẮT AI =====

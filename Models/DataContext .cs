@@ -23,6 +23,7 @@ namespace hakathon.Models
         public DbSet<tblPublishers> tblPublishers { get; set; }
         public DbSet<tblAuthors> tblAuthors { get; set; }
         public DbSet<tblDocuments> tblDocuments { get; set; }
+        public DbSet<tblViewHistory> tblViewHistories { get; set; }
         public DbSet<tblDocumentAuthors> tblDocumentAuthors { get; set; }
         public DbSet<tblFavorites> tblFavorites { get; set; }
         public DbSet<tblComments> tblComments { get; set; }
@@ -36,6 +37,7 @@ namespace hakathon.Models
         public DbSet<tblContactMessages> tblContactMessages { get; set; }
         public DbSet<tblDocumentSummaries> tblDocumentSummaries { get; set; }
         public DbSet<tblDocumentAudio> tblDocumentAudios { get; set; }
+        public DbSet<tblDocumentRatings> tblDocumentRatings { get; set; }
         public DbSet<tblChatbotMessages> tblChatbotMessages { get; set; }
         public DbSet<tblChatbotConversations> tblChatbotConversations { get; set; }
         public DbSet<viewCategoryMenu> viewCategoryMenus { get; set; }
