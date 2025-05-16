@@ -57,18 +57,25 @@
         </div>
 
         <div class="senst-document-actions">
-          <button class="senst-btn @(ViewBag.IsFavorite ? "senst-btn-favorite-active" : "senst-btn-favorite")" id="favoriteBtn" data-id="@Model.DocumentID">
-            <i class="@(ViewBag.IsFavorite ? "fa fa-heart" : "fa fa-heart-o")"></i> Yêu thích
-          </button>
+          <button class="senst-btn @(ViewBag.IsFavorite ? "senst-btn-favorite-active" : "senst-btn-favorite")"
+        id="favoriteBtn"
+        data-id="@Model.DocumentID">
+    <i class="@(ViewBag.IsFavorite ? "fa fa-heart" : "fa fa-heart-o")"></i>
+    Yêu thích
+</button>
           <div class="senst-dropdown">
             <button class="senst-btn senst-btn-download">
               <i class="fa fa-download"></i> Tải xuống
             </button>
             <div class="senst-dropdown-content">
-              <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'pdf')" class="senst-download-option">Tải bản PDF</a>
+              <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'pdf')" class="senst-download-option">
+                <i class="fa fa-file-pdf-o"></i> Tải bản PDF
+              </a>
               @if (!string.IsNullOrEmpty(Model.FileOriginalPath))
               {
-                <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'original')" class="senst-download-option">Tải bản gốc (@(string.IsNullOrEmpty(Model.FileType) ? "Unknown" : Model.FileType))</a>
+                <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'original')" class="senst-download-option">
+                  <i class="fa fa-file-o"></i> Tải bản gốc (@(string.IsNullOrEmpty(Model.FileType) ? "Unknown" : Model.FileType.ToUpper()))
+                </a>
               }
             </div>
           </div>
@@ -351,22 +358,17 @@
   </div>
 
 @section Scripts {
-    <!-- Load PDF.js trực tiếp từ CDN với phiên bản cụ thể và đầy đủ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pRrKqA6GiCqLVz2IS/lhX4MJ2F3ZATMjTE0SJZeNJVHHHOHHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- PDF.js từ CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
-    <!-- Quan trọng: Thiết lập worker path trước khi sử dụng PDF.js -->
+    <!-- Cấu hình PDF.js -->
     <script>
-        console.log("Setting up PDF.js worker");
-        
-        // Định nghĩa PDF.js
-        window.pdfjsLib = pdfjsLib;
-        
-        // Thiết lập worker path từ CDN tương ứng
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-        
-        console.log("PDF.js setup completed");
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            console.log("PDF.js loaded and configured");
+        }
     </script>
     
-    <!-- Sau đó mới load document.js -->
+    <!-- Load document.js -->
     <script src="~/assets/js/document.js" asp-append-version="true"></script>
 }

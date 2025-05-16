@@ -5249,8 +5249,44 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\documents\\11.pdf",
+      "PackagePath": "staticwebassets\\uploads\\documents\\11.pdf"
+    },
+    {
       "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\documents\\ke.pdf",
       "PackagePath": "staticwebassets\\uploads\\documents\\ke.pdf"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c1.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c1.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c2.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c2.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c3.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c3.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c4.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c4.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c5.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c5.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c6.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c6.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c7.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c7.png"
+    },
+    {
+      "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\images\\category\\c8.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\category\\c8.png"
     },
     {
       "Id": "D:\\hakathon\\hakathon\\wwwroot\\uploads\\originals\\ke.docx",
