@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("hakathon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63bc05b62b38810d75a7ac9045669d50f58858a8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77e751715b3cf0934dafedca5cf70571a336f32b")]
 [assembly: System.Reflection.AssemblyProductAttribute("hakathon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("hakathon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

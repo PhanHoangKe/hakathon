@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSearch();
 });
 
+// Khởi tạo chức năng chuyển đổi giữa chế độ xem lưới và danh sách
 function initViewToggle() {
     const gridViewBtn = document.querySelector('.sensr-grid-view');
     const listViewBtn = document.querySelector('.sensr-list-view');
@@ -40,6 +41,7 @@ function initViewToggle() {
     }
 }
 
+// Khởi tạo nút xem thêm cho bộ lọc
 function initFilterShowMore() {
     const showMoreButtons = document.querySelectorAll('.sensr-show-more');
     
@@ -65,6 +67,35 @@ function initFilterShowMore() {
     });
 }
 
+// Xem tài liệu và tăng lượt xem
+function viewDocument(documentId) {
+    fetch(`/Document/IncrementViewCount/${documentId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Tăng lượt xem thành công. Lượt xem hiện tại: ${data.viewCount}`);
+            
+            const viewCountElements = document.querySelectorAll(`.sensr-document-views[data-id="${documentId}"]`);
+            viewCountElements.forEach(element => {
+                element.innerHTML = `<i class="fas fa-eye"></i> ${data.viewCount}`;
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi khi tăng lượt xem:', error);
+    })
+    .finally(() => {
+        window.location.href = `/Home/Document/${documentId}`;
+    });
+}
+
+// Khởi tạo các hành động cho thẻ tài liệu
 function initDocumentCardActions() {
     const actionButtons = document.querySelectorAll('.sensr-action-btn');
     
@@ -80,15 +111,12 @@ function initDocumentCardActions() {
 
             switch(action) {
                 case 'view':
-                    // Redirect to document details page
-                    window.location.href = `/Home/Document/${documentId}`;
+                    viewDocument(documentId);
                     break;
                 case 'download':
-                    // Call download function
                     downloadDocument(documentId);
                     break;
                 case 'favorite':
-                    // Toggle favorite
                     toggleFavorite(documentId, this);
                     break;
             }
@@ -107,15 +135,12 @@ function initDocumentCardActions() {
 
             switch(action) {
                 case 'view':
-                    // Redirect to document details page
-                    window.location.href = `/Home/Document/${documentId}`;
+                    viewDocument(documentId);
                     break;
                 case 'download':
-                    // Call download function
                     downloadDocument(documentId);
                     break;
                 case 'favorite':
-                    // Toggle favorite
                     toggleFavorite(documentId, this);
                     break;
             }
@@ -123,6 +148,120 @@ function initDocumentCardActions() {
     });
 }
 
+// Khởi tạo yêu thích tài liệu
+function toggleFavorite(documentId, button) {
+    fetch(`/FavoriteDocument/ToggleFavorite`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+        },
+        body: new URLSearchParams({ documentId: documentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const iconElement = button.querySelector('i');
+            if (data.isFavorite) {
+                iconElement.classList.remove('far');
+                iconElement.classList.add('fas');
+                iconElement.style.color = 'red';
+            } else {
+                iconElement.classList.remove('fas');
+                iconElement.classList.add('far');
+                iconElement.style.color = '';
+            }
+        } else {
+            if (!data.isAuthenticated) {
+                alert(data.message || "Vui lòng đăng nhập để sử dụng chức năng này.");
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi khi thực hiện yêu thích:', error);
+    });
+}
+
+// Tải tài liệu theo ID
+function downloadDocument(documentId, type = 'pdf') {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/Document/Download/${documentId}`;
+
+    const typeInput = document.createElement('input');
+    typeInput.type = 'hidden';
+    typeInput.name = 'type';
+    typeInput.value = type;
+    form.appendChild(typeInput);
+ 
+    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+    if (tokenElement) {
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = tokenElement.value;
+        form.appendChild(tokenInput);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+        document.body.removeChild(form);
+    }, 100);
+
+    trackDownload(documentId, type);
+    
+    return false; 
+}
+
+// Theo dõi lượt tải
+function trackDownload(documentId, type) {
+    const downloadCountElement = document.querySelector(`.sensr-row-downloads[data-id="${documentId}"]`);
+    if (downloadCountElement) {
+        const currentCount = parseInt(downloadCountElement.textContent.replace(/[^\d]/g, '')) || 0;
+        downloadCountElement.innerHTML = `<i class="fas fa-download"></i> ${currentCount + 1}`;
+    }
+}
+
+// Khởi tạo các nút tải
+function initDownloadButtons() {
+    const gridDownloadBtns = document.querySelectorAll('.sensr-download-btn');
+    gridDownloadBtns.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const documentId = this.getAttribute('data-id');
+            downloadDocument(documentId, 'pdf');
+        });
+    });
+
+    const listDownloadBtns = document.querySelectorAll('.sensr-download-doc');
+    listDownloadBtns.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const documentId = this.getAttribute('data-id');
+            downloadDocument(documentId, 'pdf');
+        });
+    });
+
+    const detailDownloadBtn = document.getElementById('detail-download-btn');
+    if (detailDownloadBtn) {
+        detailDownloadBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            const documentId = this.getAttribute('data-id');
+            const fileType = this.getAttribute('data-type') || 'pdf';
+            downloadDocument(documentId, fileType);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initDownloadButtons();
+});
+
+// Khởi tạo chức năng xóa thẻ lọc
 function initFilterTagRemoval() {
     const removeTags = document.querySelectorAll('.sensr-remove-tag');
     
@@ -140,6 +279,7 @@ function initFilterTagRemoval() {
     });
 }
 
+// Khởi tạo nút xóa tất cả bộ lọc
 function initClearFilters() {
     const clearButton = document.querySelector('.sensr-clear-filters');
     
@@ -159,6 +299,7 @@ function initClearFilters() {
     });
 }
 
+// Khởi tạo chức năng tải thêm tài liệu
 function initLoadMore() {
     const loadMoreBtn = document.querySelector('.sensr-load-more-btn');
     
@@ -201,6 +342,7 @@ function initLoadMore() {
     });
 }
 
+// Khởi tạo chức năng tìm kiếm
 function initSearch() {
     const searchForms = document.querySelectorAll('.sensr-search-bar');
     
@@ -243,6 +385,7 @@ function initSearch() {
     });
 }
 
+// Cập nhật số lượng kết quả hiển thị
 function updateResultCount(totalCount) {
     const resultCountElement = document.querySelector('.sensr-result-count');
     if (!resultCountElement) return;
