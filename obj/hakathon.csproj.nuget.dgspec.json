@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\hakathon\\hakathon\\hakathon.csproj": {}
+    "D:\\Hackathon\\hakathon\\hakathon.csproj": {}
   },
   "projects": {
-    "D:\\hakathon\\hakathon\\hakathon.csproj": {
+    "D:\\Hackathon\\hakathon\\hakathon.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\hakathon\\hakathon\\hakathon.csproj",
+        "projectUniqueName": "D:\\Hackathon\\hakathon\\hakathon.csproj",
         "projectName": "hakathon",
-        "projectPath": "D:\\hakathon\\hakathon\\hakathon.csproj",
-        "packagesPath": "C:\\Users\\kedep\\.nuget\\packages\\",
-        "outputPath": "D:\\hakathon\\hakathon\\obj\\",
+        "projectPath": "D:\\Hackathon\\hakathon\\hakathon.csproj",
+        "packagesPath": "C:\\Users\\Cayman\\.nuget\\packages\\",
+        "outputPath": "D:\\Hackathon\\hakathon\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kedep\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Cayman\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -73,7 +73,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,0 +1,53 @@
+<!-- Main content (không bao gồm header, menu và footer) -->
+<main class="sensy-profile-container" data-activetab="@TempData["ActiveTab"]">
+
+    @if (TempData["ChangePasswordError"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ChangePasswordError"]</div>
+    }
+    else if (TempData["ChangePasswordSuccess"] != null)
+    {
+        <div class="alert alert-success">@TempData["ChangePasswordSuccess"]</div>
+    }
+
+    @await Component.InvokeAsync("Profile")
+</main>
+
+@section Scripts {
+    <script>
+        function initProfileTabs() {
+            const profileTabs = document.querySelectorAll('.sensy-profile-nav-item');
+            const tabContents = document.querySelectorAll('.sensy-profile-tab');
+
+            const mainContainer = document.querySelector('.sensy-profile-container');
+            const activeTabId = mainContainer ? mainContainer.getAttribute('data-activetab') : null;
+
+            profileTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === activeTabId) {
+                    tab.classList.add('active');
+                }
+            });
+
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === activeTabId) {
+                    content.classList.add('active');
+                }
+            });
+
+            profileTabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    profileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    const target = this.getAttribute('data-tab');
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initProfileTabs);
+    </script>
+}
