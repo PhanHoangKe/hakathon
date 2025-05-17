@@ -50,7 +50,7 @@ namespace hakathon.Controllers
             {
                 _context.tblUserProfiles.Add(profile);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Profile", "Home");
+                return RedirectToAction("Profile", "Profile");
             }
 
             return View("Create", profile);
@@ -80,7 +80,7 @@ namespace hakathon.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Profile", "Home");
+            return RedirectToAction("Profile", "Profile");
         }
 
         [HttpPost]
