@@ -15,6 +15,7 @@ namespace hakathon.Models
         public int UserID { get; set; }
         public int DocumentID { get; set; }
         public DateTime DateAdded { get; set; } = DateTime.Now;
+        public int? MenuID { get; set; }
         public tblUsers User { get; set; }
         public tblDocuments Document { get; set; }
     }

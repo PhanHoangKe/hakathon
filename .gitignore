@@ -1,1 +1,18 @@
-﻿.vs/
+# Visual Studio
+.vs/
+obj/
+bin/
+*.user
+*.suo
+*.cache
+
+# Build
+*.exe
+*.dll
+*.pdb
+
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+project.assets.json

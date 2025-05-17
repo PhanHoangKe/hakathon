@@ -24,7 +24,7 @@ namespace hakathon.Models
         public int ViewCount { get; set; } = 0;
         public int DownloadCount { get; set; } = 0;
         public bool IsApproved { get; set; } = false;
-        public int UploadedByUserID { get; set; }
+        public int UserID { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; } = DateTime.Now;

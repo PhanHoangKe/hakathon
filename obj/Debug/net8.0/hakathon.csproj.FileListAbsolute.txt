@@ -258,6 +258,7 @@ D:\hakathon\hakathon\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resou
 D:\hakathon\hakathon\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\hakathon\hakathon\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\hakathon\hakathon\obj\Debug\net8.0\hakathon.sourcelink.json
+<<<<<<< HEAD
 D:\Hackathon\hakathon\bin\Debug\net8.0\appsettings.Development.json
 D:\Hackathon\hakathon\bin\Debug\net8.0\appsettings.json
 D:\Hackathon\hakathon\bin\Debug\net8.0\hakathon.staticwebassets.runtime.json
@@ -518,3 +519,20 @@ D:\Hackathon\hakathon\obj\Debug\net8.0\refint\hakathon.dll
 D:\Hackathon\hakathon\obj\Debug\net8.0\hakathon.pdb
 D:\Hackathon\hakathon\obj\Debug\net8.0\hakathon.genruntimeconfig.cache
 D:\Hackathon\hakathon\obj\Debug\net8.0\ref\hakathon.dll
+=======
+D:\hakathon\hakathon\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itextsharp.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.barcodes.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.bouncy-castle-connector.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.forms.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.io.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.kernel.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.layout.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.pdfa.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.pdfua.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.sign.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.styledxmlparser.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.svg.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\itext.commons.dll
+D:\hakathon\hakathon\bin\Debug\net8.0\Microsoft.DotNet.PlatformAbstractions.dll
+>>>>>>> main
