@@ -4,3 +4,4 @@ obj/
 *.user
 *.db
 *.log
+*.csproj.user
