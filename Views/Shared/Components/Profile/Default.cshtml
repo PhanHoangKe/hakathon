@@ -19,8 +19,12 @@
                         <input type="file" id="sensy-avatar-upload" accept="image/*" style="display: none;">
                     </div>
                 </div>
+            @if (Model != null)
+            {
                 <h2 class="sensy-profile-name" id="sensy-user-name">@Model.FullName</h2>
-            <p class="sensy-profile-email" id="sensy-user-email">@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</p>
+                <p class="sensy-profile-email" id="sensy-user-email">@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</p>
+            }
+               
             </div>
             <ul class="sensy-profile-nav">
                 <li class="sensy-profile-nav-item active" data-tab="sensy-personal-info">
