@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace hakathon.Models
 {
-    [Table("tblFavorites")]
-    public class tblFavorites
+    [Table("viewFavoriteDocumentMenu")]
+    public class viewFavoriteDocumentMenu
     {
         [Key]
         public int FavoriteID { get; set; }

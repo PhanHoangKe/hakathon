@@ -41,7 +41,8 @@ namespace hakathon.Models
         public DbSet<tblChatbotMessages> tblChatbotMessages { get; set; }
         public DbSet<tblChatbotConversations> tblChatbotConversations { get; set; }
         public DbSet<viewCategoryMenu> viewCategoryMenus { get; set; }
-  
+        public DbSet<viewFavoriteDocumentMenu> viewFavoriteDocumentMenus { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<tblUsersRoles>()

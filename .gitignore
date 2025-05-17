@@ -1,3 +1,6 @@
-﻿.vs/
+.vs/
 bin/
 obj/
+*.user
+*.db
+*.log

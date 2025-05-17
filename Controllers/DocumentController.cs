@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using hakathon.Models;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
 
 namespace hakathon.Controllers
 {
@@ -18,120 +21,103 @@ namespace hakathon.Controllers
             _context = context;
         }
 
-        // Hiển thị trang chủ với danh sách tài liệu mới nhất
         public IActionResult Index(int page = 1, int pageSize = 12)
         {
-            // Trả về view và Component Category sẽ xử lý phần còn lại
             return View();
         }
 
-        // Xem chi tiết tài liệu
         public async Task<IActionResult> Details(int id)
         {
-            var document = await _context.tblDocuments
-                .Where(d => d.DocumentID == id && d.IsApproved && d.IsActive)
-                .Include(d => d.DocumentAuthor)
-                    .ThenInclude(da => da.Author)
-                .Include(d => d.Category)
-                .Include(d => d.Publisher)
-                .FirstOrDefaultAsync();
-
-            if (document == null)
-            {
-                return NotFound();
-            }
-
-            // Tăng số lượt xem
-            document.ViewCount++;
-            _context.Update(document);
-            await _context.SaveChangesAsync();
-
-            // Lấy đánh giá của tài liệu
-            var ratings = await _context.tblDocumentRatings
-                .Where(r => r.DocumentID == id)
-                .ToListAsync();
-
-            ViewBag.AverageRating = ratings.Any() ? ratings.Average(r => r.Rating) : 0;
-            ViewBag.RatingCount = ratings.Count;
-            
-            // Kiểm tra xem người dùng đã thêm vào yêu thích chưa
-            // Giả sử userId được lấy từ session hoặc cookie
-            int userId = 1; // Mẫu - Bạn cần thay thế với user ID thực tế từ authentication
-            
-            var isFavorite = await _context.tblFavorites
-                .AnyAsync(f => f.DocumentID == id && f.UserID == userId);
-                
-            ViewBag.IsFavorite = isFavorite;
+            // Sử dụng ViewComponent để hiển thị thông tin tài liệu
             ViewBag.DocumentId = id;
-
-            return View(document);
-        }
-        
-        // Xem tài liệu trực tiếp
-        public async Task<IActionResult> View(int id)
-        {
-            var document = await _context.tblDocuments
-                .FirstOrDefaultAsync(d => d.DocumentID == id && d.IsApproved && d.IsActive);
-
-            if (document == null)
-            {
-                return NotFound();
-            }
-
-            // Tăng số lượt xem
-            document.ViewCount++;
-            _context.Update(document);
-            await _context.SaveChangesAsync();
-
-            // Trả về view với URL của file PDF
-            ViewBag.PdfUrl = document.FilePDFPath;
-            ViewBag.DocumentTitle = document.Title;
-            
             return View();
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> IncrementViewCount(int id)
+        {
+            try
+            {
+                var document = await _context.tblDocuments
+                    .FirstOrDefaultAsync(d => d.DocumentID == id && d.IsApproved && d.IsActive);
 
-        // API để tải tài liệu
+                if (document == null)
+                {
+                    return NotFound(new { success = false, message = "Không tìm thấy tài liệu" });
+                }
+
+                document.ViewCount++;
+                _context.Update(document);
+                await _context.SaveChangesAsync();
+
+                return Json(new { 
+                    success = true, 
+                    viewCount = document.ViewCount,
+                    message = "Tăng lượt xem thành công" 
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in IncrementViewCount: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "Lỗi server" });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Download(int id, string type = "pdf")
         {
-            var document = await _context.tblDocuments
-                .FirstOrDefaultAsync(d => d.DocumentID == id && d.IsApproved && d.IsActive);
-
-            if (document == null)
+            try
             {
-                return NotFound();
-            }
+                var document = await _context.tblDocuments
+                    .FirstOrDefaultAsync(d => d.DocumentID == id && d.IsApproved && d.IsActive);
+        
+                if (document == null)
+                {
+                    Console.WriteLine($"[ERROR] Document with ID {id} not found or not approved/active");
+                    return NotFound(new { success = false, message = "Không tìm thấy tài liệu" });
+                }
+        
+                string filePath;
+                string contentType;
+                string fileName;
+        
+                if (type == "original" && !string.IsNullOrEmpty(document.FileOriginalPath))
+                {
+                    filePath = document.FileOriginalPath;
+                    contentType = GetContentType(document.FileType);
+                    fileName = Path.GetFileName(document.FileOriginalPath);
+                    Console.WriteLine($"[INFO] Serving original file: {filePath}");
+                }
+                else
+                {
+                    filePath = document.FilePDFPath;
+                    contentType = "application/pdf";
+                    fileName = Path.GetFileName(document.FilePDFPath);
+                    Console.WriteLine($"[INFO] Serving PDF file: {filePath}");
+                }
 
-            // Tăng số lượt tải
-            document.DownloadCount++;
-            _context.Update(document);
-            await _context.SaveChangesAsync();
+                if (!System.IO.File.Exists(filePath))
+                {
+                    Console.WriteLine($"[ERROR] File not found at path: {filePath}");
+                    return NotFound(new { success = false, message = "Không tìm thấy file tài liệu" });
+                }
 
-            string filePath;
-            string contentType;
-            string fileName;
+                document.DownloadCount++;
+                _context.Update(document);
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"[INFO] Download count for document {id} incremented to {document.DownloadCount}");
 
-            if (type == "original" && !string.IsNullOrEmpty(document.FileOriginalPath))
-            {
-                filePath = document.FileOriginalPath;
-                contentType = GetContentType(document.FileType);
-                fileName = Path.GetFileName(document.FileOriginalPath);
-            }
-            else
-            {
-                filePath = document.FilePDFPath;
-                contentType = "application/pdf";
-                fileName = Path.GetFileName(document.FilePDFPath);
-            }
+                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
-            // Trả về file
-            if (System.IO.File.Exists(filePath))
-            {
-                var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
+
                 return File(fileBytes, contentType, fileName);
             }
-
-            return NotFound();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Exception in Download: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "Lỗi khi tải xuống tài liệu" });
+            }
         }
 
         private string GetContentType(string fileType)
@@ -157,15 +143,17 @@ namespace hakathon.Controllers
             }
         }
 
-        // API để thêm đánh giá
         [HttpPost]
         public async Task<IActionResult> AddRating(int documentId, int rating, string comment)
         {
-            // Giả sử userId được lấy từ session hoặc cookie
-            int userId = 1; // Mẫu
+            int? userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return Unauthorized(new { success = false, message = "Vui lòng đăng nhập để đánh giá" });
+            }
 
             var existingRating = await _context.tblDocumentRatings
-                .FirstOrDefaultAsync(r => r.DocumentID == documentId && r.UserID == userId);
+                .FirstOrDefaultAsync(r => r.DocumentID == documentId && r.UserID == userId.Value);
 
             if (existingRating != null)
             {
@@ -179,7 +167,7 @@ namespace hakathon.Controllers
                 _context.tblDocumentRatings.Add(new tblDocumentRatings
                 {
                     DocumentID = documentId,
-                    UserID = userId,
+                    UserID = userId.Value,
                     Rating = rating,
                     Comment = comment,
                     RatingDate = DateTime.Now
@@ -188,7 +176,6 @@ namespace hakathon.Controllers
 
             await _context.SaveChangesAsync();
 
-            // Tính điểm trung bình mới
             var averageRating = await _context.tblDocumentRatings
                 .Where(r => r.DocumentID == documentId)
                 .AverageAsync(r => r.Rating);
@@ -196,20 +183,28 @@ namespace hakathon.Controllers
             return Json(new { success = true, averageRating });
         }
 
-        // API để thêm/xóa yêu thích
         [HttpPost]
         public async Task<IActionResult> ToggleFavorite([FromBody] FavoriteRequest request)
         {
             int documentId = request.DocumentId;
-            
-            // Giả sử userId được lấy từ session hoặc cookie
-            int userId = 1; // Mẫu - Cần thay thế bằng userId thực từ authentication
-
+        
+            int? userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return Unauthorized(new { success = false, message = "Vui lòng đăng nhập để thêm vào yêu thích." });
+            }
+        
+            var document = await _context.tblDocuments.FindAsync(documentId);
+            if (document == null)
+            {
+                return NotFound(new { success = false, message = "Tài liệu không tồn tại." });
+            }
+        
             var favorite = await _context.tblFavorites
-                .FirstOrDefaultAsync(f => f.DocumentID == documentId && f.UserID == userId);
-
+                .FirstOrDefaultAsync(f => f.DocumentID == documentId && f.UserID == userId.Value);
+        
             bool isFavorite;
-
+        
             if (favorite != null)
             {
                 _context.tblFavorites.Remove(favorite);
@@ -220,123 +215,165 @@ namespace hakathon.Controllers
                 _context.tblFavorites.Add(new tblFavorites
                 {
                     DocumentID = documentId,
-                    UserID = userId,
-                    DateAdded = DateTime.Now
+                    UserID = userId.Value,
+                    DateAdded = DateTime.Now,
+                    MenuID = document.MenuID 
                 });
                 isFavorite = true;
             }
-
+        
             await _context.SaveChangesAsync();
-
+        
             return Json(new { success = true, isFavorite });
         }
-        
-        // Class để deserialize yêu cầu từ AJAX
+
         public class FavoriteRequest
         {
             public int DocumentId { get; set; }
         }
 
         [HttpGet]
-    public IActionResult GetPdfPreview(int id)
-    {
-        try {
-            // Log để debug
-            System.Console.WriteLine($"GetPdfPreview called for document ID: {id}");
-            
-            // Path tới file PDF mẫu trong wwwroot
-            string hardcodedPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents", "ke.pdf");
-            
-            // Kiểm tra file tồn tại
-            if (System.IO.File.Exists(hardcodedPath))
+        public IActionResult GetPdfPreview(int id)
+        {
+            try
             {
-                System.Console.WriteLine($"Found PDF file at: {hardcodedPath}");
-                var fileBytes = System.IO.File.ReadAllBytes(hardcodedPath);
-                return File(fileBytes, "application/pdf");
+                Console.WriteLine($"[INFO] GetPdfPreview called for document ID: {id}");
+
+                var document = _context.tblDocuments
+                    .FirstOrDefault(d => d.DocumentID == id && d.IsApproved && d.IsActive);
+
+                string pdfPath;
+
+                if (document != null && !string.IsNullOrEmpty(document.FilePDFPath) && System.IO.File.Exists(document.FilePDFPath))
+                {
+                    pdfPath = document.FilePDFPath;
+                }
+                else
+                {
+                    pdfPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents", "ke.pdf");
+                }
+
+                if (System.IO.File.Exists(pdfPath))
+                {
+                    byte[] limitedPdfBytes = CreateLimitedPdf(pdfPath, 3);
+                    return File(limitedPdfBytes, "application/pdf");
+                }
+                else
+                {
+                    Console.WriteLine($"[WARN] PDF file not found at: {pdfPath}");
+
+                    string directoryPath = Path.GetDirectoryName(pdfPath);
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Console.WriteLine($"[INFO] Creating directory: {directoryPath}");
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    return File(GenerateEmptyPdf(), "application/pdf");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Exception in GetPdfPreview: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        private byte[] CreateLimitedPdf(string sourcePdfPath, int maxPages)
+        {
+            try
+            {
+                using var outputStream = new MemoryStream();
+                using var sourcePdf = new PdfDocument(new PdfReader(sourcePdfPath));
+                using var destinationPdf = new PdfDocument(new PdfWriter(outputStream));
+        
+                int totalPages = sourcePdf.GetNumberOfPages();
+                int pagesToCopy = Math.Min(totalPages, maxPages);
+        
+                Console.WriteLine($"[INFO] Source PDF has {totalPages} pages, copying {pagesToCopy}");
+        
+                sourcePdf.CopyPagesTo(1, pagesToCopy, destinationPdf);
+        
+                destinationPdf.Close(); 
+        
+                return outputStream.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Error creating limited PDF: {ex.Message}");
+        
+                try
+                {
+                    return System.IO.File.ReadAllBytes(sourcePdfPath);
+                }
+                catch
+                {
+                    return GenerateEmptyPdf();
+                }
+            }
+        }
+        
+        private byte[] GenerateEmptyPdf()
+        {
+            using var memoryStream = new MemoryStream();
+            using var writer = new PdfWriter(memoryStream);
+            using var pdfDoc = new PdfDocument(writer);
+        
+            pdfDoc.AddNewPage(); 
+        
+            return memoryStream.ToArray();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> TrackViewProgress(int documentId, int currentPage, int viewDuration)
+        {
+            int? userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return Unauthorized(new { success = false, message = "Vui lòng đăng nhập để lưu tiến trình xem" });
+            }
+
+            var viewHistory = await _context.tblViewHistories
+                .FirstOrDefaultAsync(vh => vh.UserID == userId.Value && vh.DocumentID == documentId);
+                
+            if (viewHistory == null)
+            {
+                viewHistory = new tblViewHistory
+                {
+                    UserID = userId.Value,
+                    DocumentID = documentId,
+                    ViewDate = DateTime.Now,
+                    LastPageViewed = currentPage,
+                    ViewDuration = viewDuration
+                };
+                
+                _context.tblViewHistories.Add(viewHistory);
             }
             else
             {
-                System.Console.WriteLine($"PDF file not found at: {hardcodedPath}");
+                viewHistory.LastPageViewed = currentPage;
+                viewHistory.ViewDuration += viewDuration;
+                viewHistory.ViewDate = DateTime.Now; 
                 
-                // Tạo thư mục nếu chưa tồn tại
-                string directoryPath = Path.GetDirectoryName(hardcodedPath);
-                if (!Directory.Exists(directoryPath))
-                {
-                    System.Console.WriteLine($"Creating directory: {directoryPath}");
-                    Directory.CreateDirectory(directoryPath);
-                }
-                
-                // Trả về một file PDF rỗng hoặc mẫu nếu file không tồn tại
-                byte[] emptyPdfBytes = GenerateEmptyPdf();
-                return File(emptyPdfBytes, "application/pdf");
+                _context.tblViewHistories.Update(viewHistory);
             }
+            
+            await _context.SaveChangesAsync();
+            
+            return Json(new { success = true });
         }
-        catch (Exception ex)
-        {
-            System.Console.WriteLine($"Error in GetPdfPreview: {ex.Message}");
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
-    
-    // Hàm tạo PDF rỗng đơn giản (cần thêm thư viện iTextSharp hoặc tương tự trong dự án thực tế)
-    private byte[] GenerateEmptyPdf()
-    {
-        // Đây là một PDF rỗng cơ bản, minimal valid PDF
-        string minimalPdf = "%PDF-1.4\n" +
-                           "1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n" +
-                           "2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n" +
-                           "3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R/Resources<<>>>>endobj\n" +
-                           "xref\n" +
-                           "0 4\n" +
-                           "0000000000 65535 f\n" +
-                           "0000000009 00000 n\n" +
-                           "0000000056 00000 n\n" +
-                           "0000000111 00000 n\n" +
-                           "trailer<</Size 4/Root 1 0 R>>\n" +
-                           "startxref\n" +
-                           "188\n" +
-                           "%%EOF";
-        
-        return System.Text.Encoding.ASCII.GetBytes(minimalPdf);
-    }
 
-        [HttpPost]
-public async Task<IActionResult> TrackViewProgress(int documentId, int currentPage, int viewDuration)
-{
-    // Get current user ID - in a real app, this would come from authentication
-    int userId = 1; // Example user ID
-    
-    // Check if there's an existing view history for this user and document
-    var viewHistory = await _context.tblViewHistories
-        .FirstOrDefaultAsync(vh => vh.UserID == userId && vh.DocumentID == documentId);
-        
-    if (viewHistory == null)
-    {
-        // Create new view history
-        viewHistory = new tblViewHistory
+        private int? GetCurrentUserId()
         {
-            UserID = userId,
-            DocumentID = documentId,
-            ViewDate = DateTime.Now,
-            LastPageViewed = currentPage,
-            ViewDuration = viewDuration
-        };
-        
-        _context.tblViewHistories.Add(viewHistory);
-    }
-    else
-    {
-        // Update existing view history
-        viewHistory.LastPageViewed = currentPage;
-        viewHistory.ViewDuration += viewDuration;
-        viewHistory.ViewDate = DateTime.Now; // Update to most recent view
-        
-        _context.tblViewHistories.Update(viewHistory);
-    }
-    
-    await _context.SaveChangesAsync();
-    
-    return Json(new { success = true });
-}
+            if (User.Identity.IsAuthenticated)
+            {
+                var claimsPrincipal = User as ClaimsPrincipal;
+                string userIdStr = claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdStr, out int parsedId))
+                {
+                    return parsedId;
+                }
+            }
+            return null;
+        }
     }
 }
