@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("hakathon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4840f04f1f2d52f9de54af061a98dcc56e56e95f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cc773e50392a5a1a6cb58c00a2f839890f09e5c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("hakathon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("hakathon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

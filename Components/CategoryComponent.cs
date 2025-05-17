@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using hakathon.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace hakathon.Components
 {
@@ -20,6 +21,18 @@ namespace hakathon.Components
 
         public async Task<IViewComponentResult> InvokeAsync(int page = 1, int pageSize = 12)
         {
+            int? userId = null;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var claimsPrincipal = User as ClaimsPrincipal;
+                var userIdClaim = claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedId))
+                {
+                    userId = parsedId;
+                }
+            }
+
             // Lấy danh sách danh mục
             var categories = await _context.viewCategoryMenus
                 .Where(c => c.IsActive)
@@ -36,6 +49,16 @@ namespace hakathon.Components
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+                
+            // Lấy danh sách đã yêu thích
+            var favoriteDocumentIds = new List<int>();
+                if (userId.HasValue)
+                {
+                    favoriteDocumentIds = await _context.tblFavorites
+                        .Where(f => f.UserID == userId.Value)
+                        .Select(f => f.DocumentID)
+                        .ToListAsync();
+                }
 
             // Lấy tổng số tài liệu
             var totalDocuments = await _context.tblDocuments
@@ -69,6 +92,8 @@ namespace hakathon.Components
 
             // Thiết lập ViewBag
             ViewBag.Documents = documents;
+            ViewBag.FavoriteDocumentIds = favoriteDocumentIds;
+            ViewBag.UserID = userId;
             ViewBag.Authors = authors;
             ViewBag.CategoryCounts = categoryCounts;
             ViewBag.AuthorCounts = authorCounts;
