@@ -1,0 +1,39 @@
+
+@model IList<viewDocumentAuthor>
+
+
+<section class="sense-newest">
+    <div class="sense-container">
+        <div class="sense-section-title">
+            <h2>Tài liệu mới nhất</h2>
+            <p>Cập nhật những tài liệu vừa được đăng tải trên hệ thống</p>
+        </div>
+        <div class="sense-doc-grid">
+            @foreach (var item in Model)
+            {
+                <div class="sense-doc-card">
+                    <div class="sense-doc-thumbnail">
+                        <img src="@(item.ImagePath ?? "/images/no-image.png")">
+                        <span class="sense-doc-category">
+                           
+                        </span>
+                        <div class="sense-new-badge">Mới</div>
+                    </div>
+                    <div class="sense-doc-info">
+                        <h3>@item.CategoryName</h3>
+                        <p class="sense-doc-author">@item.AuthorName</p> <!-- Nếu bạn có bảng Authors thì thay bằng tên tác giả -->
+                        <div class="sense-doc-meta">
+                            <span><i class="fas fa-calendar"></i> @item.CreatedDate.ToString("dd/MM/yyyy")</span>
+                            <span><i class="fas fa-download"></i> 0</span> <!-- Nếu có lượt tải thì thay ở đây -->
+                            <span><i class="fas fa-star"></i> 0.0</span> <!-- Nếu có rating thì thay ở đây -->
+                        </div>
+                        <a href="" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="sense-center">
+            <a href="tai-lieu" class="sense-btn sense-btn-primary">Xem thêm tài liệu</a>
+        </div>
+    </div>
+</section>

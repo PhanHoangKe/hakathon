@@ -1,0 +1,68 @@
+@using hakathon.Models;
+@model IList<tblDocumentAudio>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Âm Thanh</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="DocumentAudio" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Âm Thanh
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID Âm Thanh</th>
+                                    <th class="text-center">ID Tài Liệu</th>
+                                    <th class="text-center">Đường Dẫn Âm Thanh</th>
+                                    <th class="text-center">Thời Lượng (giây)</th>
+                                    <th class="text-center">Ngày Tạo</th>
+                                    <th class="text-center">Model Tạo</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="table-row">
+                                        <td class="text-center" scope="row">@item.AudioID</td>
+                                        <td class="text-center" scope="row">@item.document?.Title</td>
+                                        <td class="text-left text-primary" scope="row">
+                                            @if (!string.IsNullOrEmpty(item.AudioPath))
+                                            {
+                                                <a href="@item.AudioPath" target="_blank">@item.AudioPath</a>
+                                            }
+                                        </td>
+                                        <td class="text-center" scope="row">@item.Duration</td>
+                                        <td class="text-center" scope="row">@item.GeneratedDate?.ToString("dd/mm/yy")</td>
+                                        <td class="text-center" scope="row">@item.GeneratedByModel</td>
+                                        <td class="text-center" scope="row">
+                                            <a asp-area="Admin" asp-controller="DocumentAudio" asp-action="Edit"
+                                               asp-route-id="@item.AudioID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa âm thanh"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="DocumentAudio" asp-action="Delete"
+                                               asp-route-id="@item.AudioID" class="btn btn-danger btn-sm"
+                                               title="Xóa âm thanh" onclick="return confirm('Bạn có chắc chắn muốn xóa âm thanh này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

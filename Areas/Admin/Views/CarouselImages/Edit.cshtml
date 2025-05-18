@@ -1,0 +1,74 @@
+@model hakathon.Models.tblCarouselImages
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Sửa bảng lưu trữ ảnh</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Edit">
+            <div class="form-row row">
+                <input type="text" class="form-contro" asp-for="ImageID" type="hidden">
+                <div class="form-group col-md-6 mb-3">
+                    <lable>Nhập tiêu đề ảnh</lable>
+                    <input type="text" class="form-control" asp-for="ImageTitle" placeholder="Nhập tiêu đề ảnh...">
+                    <span asp-validation-for="ImageTitle" class="alert-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Đường dẫn ảnh</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-success" type="button" onclick="openDialog()">Choose an
+                                image</button>
+                        </div>
+                        <input type="text" class="form-control" asp-for="ImagePath" id="file_input"
+                            aria-describedby="button-addon2">
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Mô tả ảnh</label>
+                    <input type="text" class="form-control" asp-for="Description" placeholder="Mô tả ảnh...">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label> URL khi người dùng bấm vào ảnh</label>
+                    <input type="text" class="form-control" asp-for="LinkURL" placeholder="URL khi người dùng bấm vào ảnh...">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Thứ tự hiện thị </label>
+                    <input type="text" class="form-control" asp-for="DisplayOrder" placeholder="Thứ tự hiện thị...">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày tạo</label>
+                    <input type="text" class="form-control" asp-for="CreatedDate" placeholder="Ngày tạo...">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày sửa</label>
+                    <input type="text" class="form-control" asp-for="ModifiedDate" placeholder="Ngày sửa...">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>
+                        @Html.CheckBox("IsActive", Model.IsActive)
+                        Hiện thị
+                    </label>
+                </div>
+            </div>
+            <a asp-controller="CarouselImages" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Lưu thông tin
+            </button>
+        </form>
+    </div>
+</main>
+
+@{
+    var summerNote = new hakathon.Areas.Admin.Models.SummerNote("#Contents");
+    <partial name="_SummerNote" model="summerNote" />
+}

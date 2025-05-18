@@ -1,0 +1,37 @@
+@model hakathon.Models.tblMenu
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa menu</h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa menu này? Hành động này không thể hoàn tác.</p>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label asp-for="MenuID" class="form-label">Mã Menu</label>
+                <input type="text" class="form-control border-danger" asp-for="MenuID" disabled />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="MenuName" class="form-label">Tên Menu</label>
+                <input type="text" class="form-control border-danger" asp-for="MenuName" disabled />
+            </div>
+        </div>
+        
+        <form asp-action="Delete" method="Post">
+            <input type="hidden" asp-for="MenuID" />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a class="btn btn-lg btn-secondary" href="javascript:history.back()">
+                    <i class="bi bi-arrow-left-circle"></i> Hủy
+                </a>
+
+                <button type="submit" class="btn btn-lg btn-danger">
+                    <i class="bi bi-trash"></i> Xác nhận xóa
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

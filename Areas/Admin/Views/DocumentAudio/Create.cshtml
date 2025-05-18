@@ -1,0 +1,54 @@
+@model hakathon.Models.tblDocumentAudio
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Thêm âm thanh</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <label >ID Tài Liệu</label>
+                    <input type="number" class="form-control" asp-for="DocumentID" placeholder="Nhập ID tài liệu (nếu có)...">
+                    <span asp-validation-for="DocumentID" class="text-danger"></span> 
+                     
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Đường Dẫn Âm Thanh</label>
+                    <input type="file" class="form-control" asp-for="AudioPath">
+                    <span asp-validation-for="AudioPath" class="text-danger"></span>
+                    <small class="form-text text-muted">Chọn tệp âm thanh để tải lên.</small>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Thời Lượng (giây)</label>
+                    <input type="number" class="form-control" asp-for="Duration" placeholder="Nhập thời lượng âm thanh (giây)...">
+                    <span asp-validation-for="Duration" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày Tạo</label>
+                    <input type="text" class="form-control" asp-for="GeneratedDate">
+                    <span asp-validation-for="GeneratedDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Model Tạo</label>
+                    <input type="text" class="form-control" asp-for="GeneratedByModel" placeholder="Nhập model tạo âm thanh (nếu có)...">
+                    <span asp-validation-for="GeneratedByModel" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="DocumentAudio" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Lưu thông tin
+            </button>
+        </form>
+    </div>
+</main>

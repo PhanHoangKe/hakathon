@@ -1,0 +1,59 @@
+@model hakathon.Models.tblSystemConfig
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Thêm Mới Cấu Hình Hệ Thống</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create">
+            <div class="form-row row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="ConfigKey">Khóa Cấu Hình</label>
+                    <input type="text" class="form-control" asp-for="ConfigKey" placeholder="Nhập khóa cấu hình...">
+                    <span asp-validation-for="ConfigKey" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="ConfigValue">Giá Trị</label>
+                    <input type="text" class="form-control" asp-for="ConfigValue" placeholder="Nhập giá trị...">
+                    <span asp-validation-for="ConfigValue" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Description">Mô Tả</label>
+                    <textarea class="form-control" asp-for="Description" rows="3" placeholder="Nhập mô tả..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="DataType">Kiểu Dữ Liệu</label>
+                    <input type="text" class="form-control" asp-for="DataType" placeholder="Ví dụ: string, int, bool...">
+                    <span asp-validation-for="DataType" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="ModifiedDate">Ngày Sửa</label>
+                    <input type="text" class="form-control" asp-for="ModifiedDate">
+                    <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="ModifiedByUserID">Người Sửa</label>
+                    <input type="number" class="form-control" asp-for="ModifiedByUserID" placeholder="Nhập ID người sửa...">
+                    <span asp-validation-for="ModifiedByUserID" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="SystemConfig" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Lưu thông tin
+            </button>
+        </form>
+    </div>
+</main>

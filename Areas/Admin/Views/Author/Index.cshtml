@@ -1,0 +1,73 @@
+@using hakathon.Models;
+@model IList<tblAuthors>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh sách tác giả</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Author"
+                            asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm tác giả
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Họ tên tác giả</th>
+                                    <th class="text-center">Tiểu sử</th>
+                                    <th class="text-center">Thư điện tử</th>
+                                    <th class="text-center">Ngày nhập</th>
+                                    <th class="text-center">Ngày sửa</th>
+                                    <th class="text-center">Hiện thị</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="table-row">
+                                        <td class="text-center" scope="row">@item.AuthorID</td>
+                                        <td class="text-left text-primary" scope="row">
+                                            <a asp-area="Admin" asp-controller="Author" asp-action="Details"
+                                                asp-route-id="@item.AuthorID">@item.AuthorName</a>
+                                        </td>
+                                        <td class="text-center" scope="row">@item.Biography</td>
+                                        <td class="text-center" scope="row">@item.Email</td>
+                                        <td class="text-center" scope="row">@item.CreatedDate</td>
+                                         <td class="text-center" scope="row">@item.ModifiedDate</td>
+                                        <td class="text-center" scope="row">@item.IsActive
+                                         
+                                        </td>
+                                        <td class="text-center" scope="row">
+                                            <a asp-area="Admin" asp-controller="Author" asp-action="Edit"
+                                                asp-route-id="@item.AuthorID" class="btn btn-primary btn-sm"
+                                                title="Chỉnh sửa danh mục tác giả"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="Author" asp-action="Delete"
+                                                asp-route-id="@item.AuthorID" class="btn btn-danger btn-sm"
+                                                title="Xóa danh mục tác giả"
+                                                onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục tác giả này không?');"><i
+                                                    class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

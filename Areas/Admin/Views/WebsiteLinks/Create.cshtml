@@ -1,0 +1,78 @@
+@model hakathon.Models.tblWebsiteLinks
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Thêm Liên Kết</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create">
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <label >Tên Liên Kết</label>
+                    <input type="text" class="form-control" asp-for="LinkName" placeholder="Nhập tên liên kết...">
+                    <span asp-validation-for="LinkName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>URL</label>
+                    <input type="url" class="form-control" asp-for="URL" placeholder="Nhập địa chỉ URL...">
+                    <span asp-validation-for="URL" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-12 mb-3">
+                    <label>Mô Tả</label>
+                    <textarea class="form-control" asp-for="Description" rows="3" placeholder="Nhập mô tả..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>ID Liên Kết Cha</label>
+                    <input type="number" class="form-control" asp-for="ParentLinkID" placeholder="Nhập ID liên kết cha (nếu có)...">
+                    <span asp-validation-for="ParentLinkID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Thứ Tự Hiển Thị</label>
+                    <input type="number" class="form-control" asp-for="DisplayOrder" placeholder="Nhập thứ tự hiển thị...">
+                    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" asp-for="IsActive">
+                        <label class="form-check-label">Hoạt Động</label>
+                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>ID Vai Trò Yêu Cầu</label>
+                    <input type="number" class="form-control" asp-for="RequiredRoleID" placeholder="Nhập ID vai trò yêu cầu (nếu có)...">
+                    <span asp-validation-for="RequiredRoleID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày Tạo</label>
+                    <input type="datetime-local" class="form-control" asp-for="CreatedDate">
+                    <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày Sửa</label>
+                    <input type="datetime-local" class="form-control" asp-for="ModifiedDate">
+                    <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="WebsiteLinks" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Lưu thông tin
+            </button>
+        </form>
+    </div>
+</main>

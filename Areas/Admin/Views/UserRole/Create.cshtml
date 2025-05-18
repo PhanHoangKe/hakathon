@@ -1,0 +1,36 @@
+@model hakathon.Models.tblUsersRoles
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Thêm Mới Vai Trò Người dùng</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create">
+            <div class="form-row">
+                <div class="form-group col-md-12 mb-3">
+                    <label asp-for="UserID">Mã Vai Trò Người Dùng</label>
+                    <input type="text" class="form-control" asp-for="UserID" placeholder="Nhập MãNgười Dùng...">
+                    <span asp-validation-for="UserID" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12 mb-3">
+                    <label for="RoleID">Mã quyền</label>
+                    <input type="text" class="form-control" asp-for="RoleID" placeholder="Nhập Mã Quyền...">
+                    <span asp-validation-for="RoleID" class="text-danger"></span>
+                </div> 
+            </div>
+            <a asp-controller="UserRole" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Lưu vai trò
+            </button>
+        </form>
+    </div>
+</main>

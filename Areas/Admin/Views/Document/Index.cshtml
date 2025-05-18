@@ -1,0 +1,138 @@
+
+
+
+@using hakathon.Models;
+@model IList<tblDocuments>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh sách tài liệu</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Document"
+                            asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm tài liệu
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Tiêu đề</th>
+                                    <th class="text-center">Mô tả</th>
+                                    <th class="text-center">Danh mục</th>
+                                    <th class="text-center">Nhà xuất bản</th>
+                                    <th class="text-center">Ngày tải lên</th>
+                                    <th class="text-center">File gốc</th>
+                                    <th class="text-center">File PDF</th>
+                                    <th class="text-center">Kích thước</th>
+                                    <th class="text-center">Loại tệp</th>
+                                    <th class="text-center">Lượt xem</th>
+                                    <th class="text-center">Lượt tải</th>
+                                    <th class="text-center">Phê duyệt</th>
+                                    <th class="text-center">Người tải lên</th>
+                                    <th class="text-center">Ngày tạo</th>
+                                    <th class="text-center">Ngày sửa</th>
+                                    <th class="text-center">Hiển thị</th>
+                                    <th class="text-center">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="table-row">
+                                        <td class="text-center">@item.DocumentID</td>
+                                        <td class="text-left text-primary">
+                                            <a asp-area="Admin" asp-controller="Document" asp-action="Details"
+                                                asp-route-id="@item.DocumentID">@item.Title</a>
+                                        </td>
+                                        <td class="text-center">@item.Description</td>
+                                        <td class="text-center">@item.Category?.CategoryName</td>
+                                        <td class="text-center">@item.Publisher?.PublisherName</td>
+                                        <td class="text-center">@item.UploadDate.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-center">@item.FileOriginalPath</td>
+                                        <td class="text-center">@item.FilePDFPath</td>
+                                        <td class="text-center">@item.FileSize</td>
+                                        <td class="text-center">@item.FileType</td>
+                                        <td class="text-center">@item.ViewCount</td>
+                                        <td class="text-center">@item.DownloadCount</td>
+
+                                        <td class="text-center">
+                                            @if (item.IsApproved)
+                                            {
+                                                <span class="badge bg-success">Đã duyệt</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Chưa duyệt</span>
+                                            }
+                                        </td>
+
+                                        <td class="text-center">@item.UserID</td>
+                                        <td class="text-center">@item.CreatedDate.ToString("dd/MM/yy")</td>
+                                        <td class="text-center">@item.ModifiedDate.ToString("dd/MM/yy")</td>
+
+                                        <td class="text-center">
+                                            @if (item.IsActive == true)
+                                            {
+                                                <span class="badge bg-success">True</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Fasle</span>
+                                            }
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a asp-area="Admin" asp-controller="Document" asp-action="Edit"
+                                                asp-route-id="@item.DocumentID" class="btn btn-primary btn-sm"
+                                                title="Chỉnh sửa">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <a asp-area="Admin" asp-controller="Document" asp-action="Delete"
+                                                asp-route-id="@item.DocumentID" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Bạn có chắc muốn xóa tài liệu này không?')"
+                                                title="Xóa">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+
+                                            @if (item.IsApproved)
+                                            {
+                                                <a asp-area="Admin" asp-controller="Document" asp-action="Unapprove"
+                                                    asp-route-id="@item.DocumentID" class="btn btn-warning btn-sm"
+                                                    title="Bỏ phê duyệt">
+                                                    <i class="bi bi-x-circle"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-area="Admin" asp-controller="Document" asp-action="Approve"
+                                                    asp-route-id="@item.DocumentID" class="btn btn-success btn-sm"
+                                                    title="Phê duyệt">
+                                                    <i class="bi bi-check-circle"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

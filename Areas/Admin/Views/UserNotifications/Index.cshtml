@@ -1,0 +1,79 @@
+@using System.Collections.Generic
+@using hakathon.Models;
+@model List<tblUserNotifications>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Thông Báo Người Dùng</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="UserNotifications" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Thông Báo
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th>Người Dùng</th>
+                                    <th>Loại Thông Báo</th>
+                                    <th>Nội Dung</th>
+                                    <th>ID Liên Quan</th>
+                                    <th>Loại Liên Quan</th>
+                                    <th class="text-center">Đã Đọc</th>
+                                    <th>Ngày Tạo</th>
+                                    <th>Ngày Đọc</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center" scope="row">@item.NotificationID</td>
+                                        <td>@item.UserID</td>
+                                        <td>@item.NotificationType</td>
+                                        <td>@item.NotificationContent</td>
+                                        <td>@item.RelatedID</td>
+                                        <td>@item.RelatedType</td>
+                                        <td class="text-center">
+                                            @if (item.IsRead.HasValue && item.IsRead.Value)
+                                            {
+                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-x-circle-fill text-danger"></i>
+                                            }
+                                        </td>
+                                        <td>@item.CreatedDate?.ToString("dd/MM/yyyy ")</td>
+                                        <td>@item.ReadDate?.ToString("dd/MM/yyyy ")</td>
+                                        <td class="text-center">
+                                            <a asp-area="Admin" asp-controller="UserNotifications" asp-action="Edit"
+                                               asp-route-id="@item.NotificationID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa thông báo"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="UserNotifications" asp-action="Delete"
+                                               asp-route-id="@item.NotificationID" class="btn btn-danger btn-sm"
+                                               title="Xóa thông báo" onclick="return confirm('Bạn có chắc chắn muốn xóa thông báo này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

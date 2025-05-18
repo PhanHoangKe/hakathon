@@ -1,0 +1,61 @@
+@using System.Collections.Generic
+@using hakathon.Models;
+@model List<tblDocumentTags>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Quản Lý Thẻ Tài Liệu</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="DocumentTags" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Liên Kết
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID Tài Liệu</th>
+                                    <th class="text-center">ID Thẻ</th>
+                                    <th class="text-center">Tên Tài Liệu</th>
+                                    <th class="text-center">Tên Thẻ</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">@item.DocumentID</td>
+                                        <td class="text-center">@item.TagID</td>
+                                        <td class="text-center">@item.document?.Title</td>
+                                        <td class="text-center">@item.tag?.TagName</td>
+                                        <td class="text-center">
+                                            <a asp-area="Admin" asp-controller="DocumentTags" asp-action="Edit"
+                                               asp-route-id="@item.DocumentID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa lượt tải"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="DocumentTags" asp-action="Delete"
+                                               asp-route-documentId="@item.DocumentID" asp-route-tagId="@item.TagID"
+                                               class="btn btn-danger btn-sm"
+                                               title="Xóa liên kết" onclick="return confirm('Bạn có chắc chắn muốn xóa liên kết này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

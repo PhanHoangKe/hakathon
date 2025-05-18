@@ -1,0 +1,39 @@
+@model IList<tblMenu>
+
+<nav class="sense-nav">
+    <div class="sense-container">
+        <ul class="sense-menu">
+          @foreach (var menu in Model.Where(m => m.Levels == 1).OrderBy(m => m.MenuOrder))
+            {
+                var subMenus = Model.Where(s => s.ParentID == menu.MenuID).OrderBy(s => s.MenuOrder).ToList();
+
+                if (subMenus.Any())
+                {
+                    <li class="has-submenu">
+                        <!-- Hiển thị icon trước tên menu -->
+                        <a href="#"><i class="@menu.Icon"></i> @menu.MenuName</a>
+                        <ul class="sense-submenu">
+                            @foreach (var sub in subMenus)
+                            {
+                                <li><a href="@sub.Link"><i class="fas fa-angle-right"></i> @sub.MenuName</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                     <li>
+                        <!-- Hiển thị icon trước tên menu -->
+                        <a href="@Url.Action(menu.Link, "Home")"><i class="@menu.Icon"></i> @menu.MenuName</a>
+                    </li> 
+                    
+                    
+                }
+                
+
+            }  
+            
+            
+        </ul>
+    </div>
+</nav>

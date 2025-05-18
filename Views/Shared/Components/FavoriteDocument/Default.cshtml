@@ -1,0 +1,89 @@
+@model List<hakathon.Models.viewFavoriteDocumentMenu>
+<div class="sensu-container">
+        <div class="sensu-favorite-header">
+            <h1 class="sensu-favorite-title">Tài liệu yêu thích</h1>
+            <p class="sensu-favorite-subtitle">Danh sách tài liệu bạn đã đánh dấu yêu thích</p>
+        </div>
+
+        <!-- Filter and sort options -->
+        <div class="sensu-favorite-controls">
+            <div class="sensu-favorite-search">
+                <input type="text" placeholder="Tìm kiếm trong danh sách yêu thích..." class="sensu-favorite-search-input">
+                <button class="sensu-favorite-search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="sensu-favorite-sort">
+                <select class="sensu-favorite-sort-select">
+                    <option value="recent">Mới nhất</option>
+                    <option value="name">Theo tên</option>
+                    <option value="author">Theo tác giả</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Favorite documents list -->
+        <div class="sensu-favorite-list">
+            @foreach (var item in Model)
+            {
+                var doc = item.Document;
+                var authors = doc.DocumentAuthor?.Select(a => a.Author.AuthorName).ToList() ?? new List<string>();
+        
+                <div class="sensu-favorite-item">
+                    <div class="sensu-favorite-item-image">
+                        <img src="@(doc.Category?.ImagePath ?? "/api/placeholder/150/200")" alt="Tài liệu" width="150" height="200" />
+                    </div>
+                    <div class="sensu-favorite-item-content">
+                        <h3 class="sensu-favorite-item-title">@doc.Title</h3>
+                        <div class="sensu-favorite-item-meta">
+                            <span class="sensu-favorite-item-author">Tác giả: @string.Join(", ", authors)</span>
+                            <span class="sensu-favorite-item-date">Ngày thêm: @item.DateAdded.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <p class="sensu-favorite-item-desc">@doc.Description</p>
+                        <div class="sensu-favorite-item-tags">
+                            <span class="sensu-tag">@doc.Category?.CategoryName</span>
+                            <!-- Có thể thêm các tag khác nếu có -->
+                        </div>
+                        <div class="sensu-favorite-item-actions">
+                            <button class="sensu-btn sensu-btn-view" onclick="location.href='/Documents/@doc.DocumentID'">
+                                <i class="fas fa-eye"></i> Xem chi tiết
+                            </button>
+                            <a href="/Documents/Download/@doc.DocumentID" class="sensu-btn sensu-btn-download">
+                                <i class="fas fa-download"></i> Tải xuống
+                            </a>
+                            <button class="sensu-btn sensu-btn-unfavorite" data-id="@item.FavoriteID">
+                                <i class="fas fa-heart-broken"></i> Bỏ yêu thích
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Empty state (hidden by default) -->
+        <div class="sensu-favorite-empty" style="display: none;">
+            <div class="sensu-favorite-empty-icon">
+                <i class="far fa-heart"></i>
+            </div>
+            <h3>Bạn chưa có tài liệu yêu thích nào</h3>
+            <p>Hãy khám phá thư viện và đánh dấu yêu thích những tài liệu bạn quan tâm</p>
+            <a href="document-list.html" class="sensu-btn sensu-btn-primary">Khám phá thư viện</a>
+        </div>
+
+        <!-- Pagination -->
+        <div class="sensu-favorite-pagination">
+            <button class="sensu-pagination-prev" disabled>
+                <i class="fas fa-chevron-left"></i> Trước
+            </button>
+            <div class="sensu-pagination-numbers">
+                <button class="sensu-pagination-number active">1</button>
+                <button class="sensu-pagination-number">2</button>
+                <button class="sensu-pagination-number">3</button>
+                <span class="sensu-pagination-ellipsis">...</span>
+                <button class="sensu-pagination-number">10</button>
+            </div>
+            <button class="sensu-pagination-next">
+                Sau <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>

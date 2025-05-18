@@ -1,0 +1,51 @@
+@model hakathon.Models.tblChatbotMessages
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Chỉnh Sửa Tin Nhắn Chatbot</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Edit">
+            <input type="hidden" asp-for="MessageID" />
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="ConversationID">ID Hội Thoại</label>
+                    <input type="number" class="form-control" asp-for="ConversationID" placeholder="Nhập ID hội thoại (nếu có)...">
+                    <span asp-validation-for="ConversationID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="IsUserMessage">Tin Nhắn Người Dùng?</label>
+                    <select class="form-control" asp-for="IsUserMessage">
+                        <option value="true">Có</option>
+                        <option value="false">Không</option>
+                    </select>
+                    <span asp-validation-for="IsUserMessage" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-12 mb-3">
+                    <label asp-for="MessageText">Nội Dung Tin Nhắn</label>
+                    <textarea class="form-control" asp-for="MessageText" rows="3" placeholder="Nhập nội dung tin nhắn..."></textarea>
+                    <span asp-validation-for="MessageText" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="MessageTime">Thời Gian Gửi</label>
+                    <input type="datetime-local" class="form-control" asp-for="MessageTime">
+                    <span asp-validation-for="MessageTime" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="ChatbotMessages" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-save-fill"></i> Lưu thay đổi
+            </button>
+        </form>
+    </div>
+</main>

@@ -1,0 +1,592 @@
+
+@model hakathon.Models.tblUsers;
+@using hakathon.Utilities;
+
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - SenseLib</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f0f2f5;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            display: flex;
+            width: 900px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .login-left {
+            width: 40%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+        }
+
+        .logo-container svg {
+            width: 80px;
+            height: 80px;
+            fill: white;
+        }
+
+        .logo-container h1 {
+            margin-top: 15px;
+            font-size: 24px;
+        }
+
+        .illustration {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .illustration svg {
+            width: 150px;
+            height: 150px;
+            stroke: white;
+        }
+
+        .illustration .slogan {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-right {
+            width: 60%;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .form-group label i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .password-input {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 10px;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #2980b9;
+        }
+
+        .login-button i {
+            margin-right: 10px;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .captcha-section {
+            display: none;
+        }
+
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #captchaCanvas {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .refresh-captcha {
+            margin-left: 10px;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="logo-container">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.5L2 9l10 6.5L22 9l-10-6.5z"/>
+                    <path d="M2 17l10 6.5L22 17"/>
+                    <path d="M2 12l10 6.5L22 12"/>
+                </svg>
+                <h1>SenseLib</h1>
+                <p>Thư viện tri thức</p>
+            </div>
+            <div class="illustration">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7l6-3 6 3 6-3v12l-6 3-6-3-6 3V7z"/>
+                    <path d="M9 4v12"/>
+                    <path d="M15 7v12"/>
+                </svg>
+                <div class="slogan">
+                    <h2>Khám phá tri thức, mở rộng tầm nhìn</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <div class="login-form">
+                <h2>Đăng nhập</h2>
+                <p class="welcome-message">Chào mừng đến với SenseLib! Vui lòng đăng nhập</p>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username"><i class="fa fa-user"></i>Tên đăng nhập</label>
+                        <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fa fa-lock"></i>Mật khẩu</label>
+                        <div class="password-input">
+                            <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required >
+                            <span class="toggle-password" id="togglePassword">
+                                <i class="fa fa-eye" id="eyeIcon"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group captcha-section" id="captchaSection">
+                        <label for="captchaInput"><i class="fa fa-shield-alt"></i>Mã xác nhận</label>
+                        <div class="captcha-container">
+                            <canvas id="captchaCanvas" width="200" height="70"></canvas>
+                            <button type="button" id="refreshCaptcha" class="refresh-captcha" title="Làm mới mã xác nhận">
+                                <i class="fa fa-redo"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="captchaInput" name="captchaInput" placeholder="Nhập mã xác nhận">
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Ghi nhớ đăng nhập</label>
+                        </div>
+                        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage"></div>
+                    
+                    <button type="submit" class="login-button">
+                        <i class="fa fa-sign-in-alt"></i>Đăng nhập
+                    </button>
+                </form>
+                
+                <div class="login-footer">
+                    <p>Chưa có tài khoản? <a href="/Register" class="register-link">Đăng ký ngay</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Khai báo các biến toàn cục
+    const loginForm = document.getElementById('loginForm');
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+    const errorMessage = document.getElementById('errorMessage');
+    const togglePassword = document.getElementById('togglePassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const rememberCheckbox = document.getElementById('remember');
+    
+    // CAPTCHA variables
+    let captchaText = '';
+    let loginFailCount = 0;
+    
+    // Khôi phục số lần đăng nhập thất bại từ localStorage
+    if (localStorage.getItem('loginFailCount')) {
+        loginFailCount = parseInt(localStorage.getItem('loginFailCount'));
+        
+        // Hiển thị CAPTCHA nếu cần thiết
+        if (loginFailCount >= 3) {
+            showCaptcha();
+        }
+    }
+    
+    // ===== CAPTCHA FUNCTIONS =====
+    
+    // Hàm hiển thị phần CAPTCHA
+    function showCaptcha() {
+        const captchaSection = document.getElementById('captchaSection');
+        captchaSection.style.display = 'block';
+        generateCaptcha();
+    }
+    
+    // Hàm ẩn phần CAPTCHA
+    function hideCaptcha() {
+        const captchaSection = document.getElementById('captchaSection');
+        captchaSection.style.display = 'none';
+    }
+    
+    // Hàm tạo mã CAPTCHA
+    function generateCaptcha() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+        captchaText = '';
+        
+        for (let i = 0; i < 6; i++) {
+            captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        // Vẽ CAPTCHA vào canvas
+        const canvas = document.getElementById('captchaCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Nền canvas
+        ctx.fillStyle = '#f0f2f5';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Thiết lập font và style
+        ctx.font = 'bold 24px Arial';
+        ctx.fillStyle = '#3498db';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Vẽ các dòng nhiễu
+        for (let i = 0; i < 10; i++) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 200}, 0.5)`;
+            ctx.lineWidth = Math.random() * 2;
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.stroke();
+        }
+        
+        // Vẽ các điểm nhiễu
+        for (let i = 0; i < 50; i++) {
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 200}, 0.5)`;
+            ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Vẽ từng ký tự vào canvas với hiệu ứng nghiêng và khoảng cách khác nhau
+        for (let i = 0; i < captchaText.length; i++) {
+            ctx.save();
+            ctx.translate(20 + i * 30, canvas.height / 2);
+            ctx.rotate((Math.random() - 0.5) * 0.5);
+            ctx.fillStyle = `rgb(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 200})`;
+            ctx.fillText(captchaText.charAt(i), 0, 0);
+            ctx.restore();
+        }
+    }
+    
+    // Hàm kiểm tra CAPTCHA
+    function validateCaptcha(inputText) {
+        return inputText === captchaText;
+    }
+    
+    // ===== EVENT LISTENERS =====
+    
+    // Xử lý nút làm mới CAPTCHA
+    const refreshButton = document.getElementById('refreshCaptcha');
+    if (refreshButton) {
+        refreshButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            generateCaptcha();
+        });
+    }
+    
+    // Xử lý hiện/ẩn mật khẩu
+    if (togglePassword) {
+        togglePassword.addEventListener('click', function() {
+            if (password.type === 'password') {
+                password.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                password.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+    }
+    
+    // Kiểm tra và tải dữ liệu đăng nhập đã lưu (nếu có)
+    if (localStorage.getItem('rememberedUser')) {
+        const savedUser = JSON.parse(localStorage.getItem('rememberedUser'));
+        username.value = savedUser.username;
+        rememberCheckbox.checked = true;
+    }
+    
+    // Lưu tùy chọn ghi nhớ đăng nhập
+    rememberCheckbox.addEventListener('change', function() {
+        if (this.checked && username.value.trim()) {
+            const userToSave = {
+                username: username.value.trim()
+            };
+            localStorage.setItem('rememberedUser', JSON.stringify(userToSave));
+        } else {
+            localStorage.removeItem('rememberedUser');
+        }
+    });
+    
+    // Hiệu ứng nổi bật cho input khi focus
+    const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('input-focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('input-focused');
+        });
+    });
+    
+    // ===== FORM SUBMISSION =====
+    
+    // Xử lý đăng nhập
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Reset thông báo lỗi
+        errorMessage.textContent = '';
+        
+        // Kiểm tra và xác thực đăng nhập
+        if (!username.value.trim()) {
+            errorMessage.textContent = 'Vui lòng nhập tên đăng nhập!';
+            username.focus();
+            return;
+        }
+        
+        if (!password.value.trim()) {
+            errorMessage.textContent = 'Vui lòng nhập mật khẩu!';
+            password.focus();
+            return;
+        }
+        
+        // Kiểm tra CAPTCHA nếu cần
+        let captchaValid = true;
+        if (loginFailCount >= 3) {
+            const captchaInput = document.getElementById('captchaInput');
+            if (!captchaInput.value.trim()) {
+                errorMessage.textContent = 'Vui lòng nhập mã xác nhận CAPTCHA!';
+                captchaInput.focus();
+                return;
+            }
+            
+            captchaValid = validateCaptcha(captchaInput.value);
+            if (!captchaValid) {
+                errorMessage.textContent = 'Mã CAPTCHA không chính xác. Vui lòng thử lại.';
+                generateCaptcha();
+                captchaInput.value = '';
+                captchaInput.focus();
+                return;
+            }
+        }
+        
+        // Lấy giá trị của checkbox ghi nhớ đăng nhập
+        const rememberMe = rememberCheckbox.checked;
+        
+        // Gửi request đăng nhập đến server
+        const loginBtn = loginForm.querySelector('.login-button');
+        const originalText = loginBtn.innerHTML;
+        loginBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
+        loginBtn.disabled = true;
+        
+        // Gọi API đăng nhập
+        fetch('/Login/Login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                username: username.value,
+                password: password.value,
+                remember: rememberMe,
+                captchaInput: document.getElementById('captchaInput')?.value || ''
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Đăng nhập thành công, reset số lần đăng nhập sai
+                loginFailCount = 0;
+                localStorage.setItem('loginFailCount', loginFailCount);
+                
+                // Animation trước khi chuyển hướng
+                loginBtn.innerHTML = '<i class="fa fa-check"></i> Đăng nhập thành công';
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 800);
+            } else {
+                // Đăng nhập thất bại
+                errorMessage.textContent = data.message;
+                loginBtn.innerHTML = originalText;
+                loginBtn.disabled = false;
+                
+                // Tăng số lần đăng nhập sai
+                loginFailCount++;
+                localStorage.setItem('loginFailCount', loginFailCount);
+                
+                // Hiển thị CAPTCHA nếu cần thiết
+                if (loginFailCount >= 3) {
+                    showCaptcha();
+                    generateCaptcha();
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi:', error);
+            errorMessage.textContent = 'Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.';
+            loginBtn.innerHTML = originalText;
+            loginBtn.disabled = false;
+        });
+    });
+    function logout() {
+        $.ajax({
+            url: '/Login/Logout',
+            type: 'POST',
+            dataType: 'json',
+            success: function(result) {
+                if (result.success) {
+                    window.location.href = result.redirect || 'http://localhost:5186';
+                } else {
+                    console.error('Logout process returned an error.');
+                    // Fallback to the homepage if there's an issue
+                    window.location.href = 'http://localhost:5186';
+                }
+            },
+            error: function(error) {
+                console.error('Logout failed:', error);
+                // Fallback to the homepage if there's an error
+                window.location.href = 'http://localhost:5186';
+            }
+        });
+        return false; // Prevent default link behavior
+    }
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+@model IList<viewDocumentAuthor>
+
+<section class="sense-featured">
+    <div class="sense-container">
+        <div class="sense-section-title">
+            <h2>Tài liệu nổi bật</h2>
+            <p>Những tài liệu được đánh giá cao và yêu thích nhiều nhất</p>
+        </div>
+        <div class="sense-doc-grid">
+            @foreach (var item in Model)
+            {
+                <div class="sense-doc-card">
+                    <div class="sense-doc-thumbnail">
+                        <img src="@(item.ImagePath ?? "/images/no-image.png")" alt="@item.CategoryName" />
+                        <span class="sense-doc-category">@item.CategoryName</span>
+                    </div>
+                    <div class="sense-doc-info">
+                        <h3>@(item.Description?.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</h3>
+                        <p class="sense-doc-author">Tác giả: @item.AuthorName</p>
+                        <div class="sense-doc-meta">
+                            <span><i class="fas fa-eye"></i> @(item.ViewCount ?? 0)</span>
+                            <span><i class="fas fa-download"></i> @(item.DownloadCount ?? 0)</span>
+                            <span><i class="fas fa-star"></i> 4.5</span>
+                        </div>
+                        <a href="/tai-lieu/chi-tiet/@item.CategoryID" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="sense-center">
+            <a href="" class="sense-btn sense-btn-primary">Xem thêm tài liệu</a>
+        </div>
+    </div>
+</section>
+  @* <span><i class="fas fa-star"></i> @((item.Rating ?? 0).ToString("0.0"))</span> *@

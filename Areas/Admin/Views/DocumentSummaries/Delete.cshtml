@@ -1,0 +1,41 @@
+@model hakathon.Models.tblDocumentSummaries
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa tóm tắt</h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa tóm tắt tài liệu này?</p>
+        <div class="mb-3">
+            <label asp-for="DocumentID" class="form-label">ID Tài Liệu</label>
+            <input type="text" class="form-control border-danger" asp-for="DocumentID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SummaryText" class="form-label">Nội Dung Tóm Tắt</label>
+            <textarea class="form-control border-danger" asp-for="SummaryText" rows="5" disabled></textarea>
+        </div>
+        <div class="mb-3">
+            <label asp-for="GeneratedDate" class="form-label">Ngày Tạo</label>
+            <input type="text" class="form-control border-danger" asp-for="GeneratedDate" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="GeneratedByModel" class="form-label">Model Tạo</label>
+            <input type="text" class="form-control border-danger" asp-for="GeneratedByModel" disabled />
+        </div>
+
+        <form asp-action="Delete" method="Post">
+            <input type="hidden" asp-for="SummaryID" />
+            <div class="d-flex justify-content-between mt-4">
+                <a class="btn btn-lg btn-secondary" asp-action="Index">
+                    <i class="bi bi-arrow-left-circle"></i> Hủy
+                </a>
+                <button type="submit" class="btn btn-lg btn-danger">
+                    <i class="bi bi-trash"></i> Xác nhận xóa
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

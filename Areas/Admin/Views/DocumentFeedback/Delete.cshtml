@@ -1,0 +1,61 @@
+@model hakathon.Models.tblDocumentFeedback
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa phản hồi</h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa phản hồi này?</p>
+        <div class="mb-3">
+            <label asp-for="DocumentID" class="form-label">ID Tài Liệu</label>
+            <input type="text" class="form-control border-danger" asp-for="DocumentID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="UserID" class="form-label">ID Người Dùng</label>
+            <input type="text" class="form-control border-danger" asp-for="UserID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="FeedbackType" class="form-label">Loại Phản Hồi</label>
+            <input type="text" class="form-control border-danger" asp-for="FeedbackType" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="FeedbackContent" class="form-label">Nội Dung Phản Hồi</label>
+            <textarea class="form-control border-danger" asp-for="FeedbackContent" rows="3" disabled></textarea>
+        </div>
+        <div class="mb-3">
+            <label asp-for="FeedbackDate" class="form-label">Ngày Phản Hồi</label>
+            <input type="text" class="form-control border-danger" asp-for="FeedbackDate" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="IsResolved" class="form-label">Đã Giải Quyết?</label>
+             <input type="text" class="form-control border-danger" asp-for="IsResolved" disabled />
+        </div>
+         <div class="mb-3">
+            <label asp-for="ResolvedByUserID" class="form-label">ID Người Giải Quyết</label>
+            <input type="text" class="form-control border-danger" asp-for="ResolvedByUserID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="ResolvedDate" class="form-label">Ngày Giải Quyết</label>
+            <input type="text" class="form-control border-danger" asp-for="ResolvedDate" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="ResponseContent" class="form-label">Nội Dung Phản Hồi</label>
+            <textarea class="form-control border-danger" asp-for="ResponseContent" rows="3" disabled></textarea>
+        </div>
+
+        <form asp-action="Delete" method="Post">
+            <input type="hidden" asp-for="FeedbackID" />
+            <div class="d-flex justify-content-between mt-4">
+                <a class="btn btn-lg btn-secondary" asp-action="Index">
+                    <i class="bi bi-arrow-left-circle"></i> Hủy
+                </a>
+                <button type="submit" class="btn btn-lg btn-danger">
+                    <i class="bi bi-trash"></i> Xác nhận xóa
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

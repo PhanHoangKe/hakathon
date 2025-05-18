@@ -1,0 +1,74 @@
+@using System.Collections.Generic
+@using hakathon.Models;
+@model List<tblUserProfiles>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Hồ Sơ Người Dùng</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="UserProfiles" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Hồ Sơ
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID Người Dùng</th>
+                                    <th>Họ và Tên</th>
+                                    <th>Ảnh Đại Diện</th>
+                                    <th>Tiểu Sử</th>
+                                    <th>Điện Thoại</th>
+                                    <th>Địa Chỉ</th>
+                                    <th class="text-center">Ngày Sinh</th>
+                                    <th class="text-center">Ngày Đăng Ký</th>
+                                    <th class="text-center">Đăng Nhập Cuối</th>
+                                    <th class="text-center">Lỗi ĐN</th>
+                                    <th class="text-center">Khóa Đến</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center" scope="row">@item.UserID</td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.ProfilePicture</td>
+                                        <td>@item.Bio</td>
+                                        <td>@item.Phone</td>
+                                        <td>@item.Address</td>
+                                        <td class="text-center">@item.DateOfBirth?.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-center">@item.RegisterDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-center">@item.LastLoginDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-center">@item.FailedLoginCount</td>
+                                        <td class="text-center">@item.LockoutEndDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-center">
+                                            <a asp-area="Admin" asp-controller="UserProfiles" asp-action="Edit"
+                                               asp-route-id="@item.UserID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa hồ sơ"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="UserProfiles" asp-action="Delete"
+                                               asp-route-id="@item.UserID" class="btn btn-danger btn-sm"
+                                               title="Xóa hồ sơ" onclick="return confirm('Bạn có chắc chắn muốn xóa hồ sơ người dùng này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

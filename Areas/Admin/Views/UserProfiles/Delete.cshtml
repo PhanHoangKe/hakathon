@@ -1,0 +1,45 @@
+@model hakathon.Models.tblUserProfiles
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa hồ sơ người dùng</h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa hồ sơ của người dùng này?</p>
+        <div class="mb-3">
+            <label asp-for="UserID" class="form-label">ID Người Dùng</label>
+            <input type="text" class="form-control border-danger" asp-for="UserID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label">Họ và Tên</label>
+            <input type="text" class="form-control border-danger" asp-for="FullName" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Điện Thoại</label>
+            <input type="text" class="form-control border-danger" asp-for="Phone" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label">Địa Chỉ</label>
+            <input type="text" class="form-control border-danger" asp-for="Address" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="DateOfBirth" class="form-label">Ngày Sinh</label>
+            <input type="text" class="form-control border-danger" asp-for="DateOfBirth" disabled />
+        </div>
+
+        <form asp-action="Delete" method="Post">
+            <input type="hidden" asp-for="UserID" />
+            <div class="d-flex justify-content-between mt-4">
+                <a class="btn btn-lg btn-secondary" asp-action="Index">
+                    <i class="bi bi-arrow-left-circle"></i> Hủy
+                </a>
+                <button type="submit" class="btn btn-lg btn-danger">
+                    <i class="bi bi-trash"></i> Xác nhận xóa
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

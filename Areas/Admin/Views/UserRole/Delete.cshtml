@@ -1,0 +1,39 @@
+@model hakathon.Models.tblUsersRoles
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa </h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa vai trò người dùng này?</p>
+
+        <div class="mb-3">
+            <label asp-for="UserID" class="form-label">ID người dùng</label>
+            <input type="text" class="form-control border-danger" asp-for="UserID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="RoleID" class="form-label">ID Quyền</label>
+            <input type="text" class="form-control border-danger" asp-for="RoleID" disabled />
+        </div>
+
+        <form asp-action="Delete" method="post">
+            @* Gửi 2 giá trị khóa chính dưới dạng hidden *@
+            <input type="hidden" asp-for="UserID" />
+            <input type="hidden" asp-for="RoleID" />
+
+            @* Thêm token chống CSRF *@
+            @Html.AntiForgeryToken()
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" name="UserID" value="@Model.UserID" />
+                <input type="hidden" name="RoleID" value="@Model.RoleID" />
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+            </form>
+
+        </form>
+    </div>
+</main>

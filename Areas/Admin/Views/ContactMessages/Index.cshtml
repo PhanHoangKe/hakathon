@@ -1,0 +1,64 @@
+@using System.Collections.Generic
+@using hakathon.Models;
+@model List<tblContactMessages>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Tin Nhắn Liên Hệ</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th>Người Gửi</th>
+                                    <th>Email</th>
+                                    <th>Tiêu Đề</th>
+                                    <th>Nội Dung</th>
+                                    <th class="text-center">Người Gửi (ID)</th>
+                                    <th class="text-center">Đã Đọc</th>
+                                    <th class="text-center">Đã Trả Lời</th>
+                                    <th class="text-center">Ngày Gửi</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center" scope="row">@item.MessageID</td>
+                                        <td>@item.SenderName</td>
+                                        <td>@item.SenderEmail</td>
+                                        <td>@item.Subject</td>
+                                        <td>@item.MessageText</td>
+                                        <td class="text-center">@item.UserID</td>
+                                        <td class="text-center">@item.IsRead</td>
+                                        <td class="text-center">@item.IsReplied</td>
+                                        <td class="text-center">@item.MessageDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-center">
+                                            <a asp-area="Admin" asp-controller="ContactMessage" asp-action="Edit"
+                                               asp-route-id="@item.MessageID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa tin nhắn"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="ContactMessage" asp-action="Delete"
+                                               asp-route-id="@item.MessageID" class="btn btn-danger btn-sm"
+                                               title="Xóa tin nhắn" onclick="return confirm('Bạn có chắc chắn muốn xóa tin nhắn này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

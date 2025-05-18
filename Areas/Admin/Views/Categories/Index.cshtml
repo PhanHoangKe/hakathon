@@ -1,0 +1,70 @@
+@using hakathon.Models;
+@model IList<tblCategories>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách danh mục tài liệu</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Categories" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm danh mục tài liệu
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Tên tài liệu</th>
+                                    <th class="text-center">Mô tả</th>
+                                    <th class="text-center">Ngày tạo</th>
+                                    <th class="text-center">Ngày sửa đổi</th>
+                                    <th class="text-center">Hiện thị</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="table-row">
+                                        <td class="text-center" scope="row">@item.CategoryID</td>
+                                        <td class="text-left text-primary" scope="row">
+                                            <a asp-area="Admin" 
+                                               asp-controller="Categories" 
+                                               asp-action="Details"
+                                               asp-route-id="@item.CategoryID">@item.CategoryName</a>
+                                        </td>
+                                        <td class="text-center" scope="row">@item.Description</td>
+                                        <td class="text-center" scope="row">@item.CreatedDate</td>
+                                        <td class="text-center" scope="row">@item.ModifiedDate</td>
+                                        <td class="text-center" scope="row">@item.IsActive.
+                                           
+                                        </td>
+                                        <td class="text-center" scope="row">
+                                            <a asp-area="Admin" asp-controller="Categories" asp-action="Edit" 
+                                               asp-route-id="@item.CategoryID" class="btn btn-primary btn-sm" 
+                                               title="Chỉnh sửa danh mục tài liệu"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="Categories" asp-action="Delete" 
+                                               asp-route-id="@item.CategoryID" class="btn btn-danger btn-sm" 
+                                               title="Xóa danh mục tài liệu" onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục tài liệu này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

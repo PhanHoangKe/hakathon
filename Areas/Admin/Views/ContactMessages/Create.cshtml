@@ -1,0 +1,75 @@
+@model hakathon.Models.tblContactMessages
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Gửi Tin Nhắn Liên Hệ Mới</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create">
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="SenderName">Tên Của Bạn</label>
+                    <input type="text" class="form-control" asp-for="SenderName" placeholder="Nhập tên của bạn...">
+                    <span asp-validation-for="SenderName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="SenderEmail">Email Của Bạn</label>
+                    <input type="email" class="form-control" asp-for="SenderEmail" placeholder="Nhập email của bạn...">
+                    <span asp-validation-for="SenderEmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-12 mb-3">
+                    <label asp-for="Subject">Tiêu Đề</label>
+                    <input type="text" class="form-control" asp-for="Subject" placeholder="Nhập tiêu đề...">
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-12 mb-3">
+                    <label asp-for="MessageText">Nội Dung Tin Nhắn</label>
+                    <textarea class="form-control" asp-for="MessageText" rows="5" placeholder="Nhập nội dung tin nhắn..."></textarea>
+                    <span asp-validation-for="MessageText" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="UserID">ID Người Dùng (nếu có)</label>
+                    <input type="number" class="form-control" asp-for="UserID" placeholder="Nhập ID người dùng...">
+                    <span asp-validation-for="UserID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" asp-for="IsRead">
+                        <label class="form-check-label">Đã Đọc</label>
+                        <span asp-validation-for="IsRead" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" asp-for="IsReplied">
+                        <label class="form-check-label">Đã Trả Lời</label>
+                        <span asp-validation-for="IsReplied" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="MessageDate">Ngày Gửi</label>
+                    <input type="datetime-local" class="form-control" asp-for="MessageDate">
+                    <span asp-validation-for="MessageDate" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="ContactMessage" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-send-fill"></i> Gửi tin nhắn
+            </button>
+        </form>
+    </div>
+</main>

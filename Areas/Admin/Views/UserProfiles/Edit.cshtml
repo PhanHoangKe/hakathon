@@ -1,0 +1,84 @@
+@model hakathon.Models.tblUserProfiles
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Chỉnh Sửa Hồ Sơ Người Dùng</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Edit">
+            <input type="hidden" asp-for="UserID" />
+            <div class="form-row row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="FullName">Họ và Tên</label>
+                    <input type="text" class="form-control" asp-for="FullName" placeholder="Nhập họ và tên...">
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="ProfilePicture">Ảnh Đại Diện</label>
+                    <input type="text" class="form-control" asp-for="ProfilePicture" placeholder="Nhập đường dẫn ảnh...">
+                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Bio">Tiểu Sử</label>
+                    <textarea class="form-control" asp-for="Bio" rows="3" placeholder="Nhập tiểu sử..."></textarea>
+                    <span asp-validation-for="Bio" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Phone">Điện Thoại</label>
+                    <input type="tel" class="form-control" asp-for="Phone" placeholder="Nhập số điện thoại...">
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Address">Địa Chỉ</label>
+                    <input type="text" class="form-control" asp-for="Address" placeholder="Nhập địa chỉ...">
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="DateOfBirth">Ngày Sinh</label>
+                    <input type="date" class="form-control" asp-for="DateOfBirth">
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="RegisterDate">Ngày Đăng Ký</label>
+                    <input type="datetime-local" class="form-control" asp-for="RegisterDate">
+                    <span asp-validation-for="RegisterDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="LastLoginDate">Đăng Nhập Cuối</label>
+                    <input type="datetime-local" class="form-control" asp-for="LastLoginDate">
+                    <span asp-validation-for="LastLoginDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="FailedLoginCount">Lỗi Đăng Nhập</label>
+                    <input type="number" class="form-control" asp-for="FailedLoginCount" placeholder="Nhập số lần lỗi đăng nhập...">
+                    <span asp-validation-for="FailedLoginCount" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="LockoutEndDate">Khóa Đến</label>
+                    <input type="datetime-local" class="form-control" asp-for="LockoutEndDate">
+                    <span asp-validation-for="LockoutEndDate" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="UserProfiles" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-save-fill"></i> Lưu thay đổi
+            </button>
+        </form>
+    </div>
+</main>

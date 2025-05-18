@@ -1,0 +1,59 @@
+@using hakathon.Models;
+@model IList<tblDownloadHistory>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Lượt Tải Xuống</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="DowloadHistory" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Lượt Tải Xuống
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID Tải Xuống</th>
+                                    <th class="text-center">ID Người Dùng</th>
+                                    <th class="text-center">ID Tài Liệu</th>
+                                    <th class="text-center">Ngày Tải Xuống</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="table-row">
+                                        <td class="text-center" scope="row">@item.DownloadID</td>
+                                        <td class="text-center" scope="row">@item.user?.UserName</td>
+                                        <td class="text-center" scope="row">@item.document?.Title</td>
+                                        <td class="text-center" scope="row">@item.DownloadDate</td>
+                                        <td class="text-center" scope="row">
+                                            <a asp-area="Admin" asp-controller="DowloadHistory" asp-action="Edit"
+                                               asp-route-id="@item.DownloadID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa lượt tải"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="DowloadHistory" asp-action="Delete"
+                                               asp-route-id="@item.DownloadID" class="btn btn-danger btn-sm"
+                                               title="Xóa lượt tải" onclick="return confirm('Bạn có chắc chắn muốn xóa lượt tải này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

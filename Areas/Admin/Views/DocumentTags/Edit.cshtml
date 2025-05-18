@@ -1,0 +1,37 @@
+@model hakathon.Models.tblDocumentTags
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Chỉnh Sửa Liên Kết Thẻ - Tài Liệu (Ít Khi Cần Thiết)</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Edit">
+            <input type="hidden" asp-for="DocumentID" />
+            <input type="hidden" asp-for="TagID" />
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="DocumentID">ID Tài Liệu</label>
+                    <input type="number" class="form-control" asp-for="DocumentID" placeholder="Nhập ID tài liệu (nếu có)...">
+                    <span asp-validation-for="DocumentID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label for="TagID">ID Thẻ</label>
+                    <input type="number" class="form-control" asp-for="TagID" placeholder="Nhập ID the (nếu có)...">
+                    <span asp-validation-for="TagID" class="text-danger"></span>
+                </div>
+                </div>
+            <a asp-controller="DocumentTags" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-save-fill"></i> Lưu Thay Đổi
+            </button>
+        </form>
+    </div>
+</main>

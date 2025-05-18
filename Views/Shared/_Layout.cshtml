@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - hakathon</title>
+    <link rel="stylesheet" href="~/assets/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/hakathon.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="vi">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SenseLib - Tri thức cho cộng đồng</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+        <!-- HEADER -->
+        <header class="sense-header">
+            <div class="sense-container">
+                <div class="sense-header-wrapper">
+                    <div class="sense-logo">
+                        <a href="#">
+                            <img src="/api/placeholder/150/50" alt="SenseLib Logo">
+                            <span>SenseLib</span>
+                        </a>
+                    </div>
+                    <div class="sense-search">
+                        <form action="#" method="GET">
+                            <input type="text" placeholder="Tìm kiếm tài liệu...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                    <div class="sense-user-actions">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="user-dropdown">
+                                <a href="#" class="user-menu-toggle">
+                                    <i class="bi bi-person-circle"></i> @User.Identity.Name <i
+                                        class="bi bi-chevron-down"></i>
+                                </a>
+                                <ul class="user-dropdown-menu">
+                                    <li><a href="@Url.Action("Profile", "Home")"><i class="bi bi-person"></i> Trang cá
+                                            nhân</a></li>
+                                    <li><a href="javascript:void(0);" onclick="logout();"><i
+                                                class="bi bi-box-arrow-right"></i> Đăng xuất</a></li>
+                                    <script>
+                                        function logout() {
+                                            $.ajax({
+                                                url: '/Login/Logout',
+                                                type: 'POST',
+                                                dataType: 'json',
+                                                success: function (result) {
+                                                    if (result.success) {
+                                                        window.location.href = result.redirect || '/';
+                                                    } else {
+                                                        alert('Có lỗi khi đăng xuất. Vui lòng thử lại.');
+                                                        window.location.href = '/';
+                                                    }
+                                                },
+                                                error: function (error) {
+                                                    console.error('Logout failed:', error);
+                                                    window.location.href = '/';
+                                                }
+                                            });
+                                            return false;
+                                        }
+                                    </script>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", "Login")" class="sense-btn sense-btn-outline">
+                                <i class="fas fa-user"></i> Đăng nhập
+                            </a>
+                            <a href="@Url.Action("Index", "Register")" class="sense-btn sense-btn-primary">
+                                <i class="fas fa-user-plus"></i> Đăng ký
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- NAVIGATION -->
+        @await Component.InvokeAsync("MenuView")
+
+        <!-- HERO SECTION -->
+        @* <section class="sense-hero">
+            <div class="sense-slider">
+                <div class="sense-slide active">
+                    <img src="/api/placeholder/1200/400" alt="Slide 1">
+                    <div class="sense-slide-content">
+                        <h2>Chào mừng đến với SenseLib</h2>
+                        <p>Kho tàng tri thức số dành cho cộng đồng học tập và nghiên cứu</p>
+                        <a href="#" class="sense-btn sense-btn-primary">Khám phá ngay</a>
+                    </div>
+                </div>
+                <div class="sense-slide">
+                    <img src="/api/placeholder/1200/400" alt="Slide 2">
+                    <div class="sense-slide-content">
+                        <h2>Tích hợp AI hiện đại</h2>
+                        <p>Trải nghiệm tính năng tóm tắt nội dung và chuyển văn bản thành giọng nói</p>
+                        <a href="#" class="sense-btn sense-btn-primary">Tìm hiểu thêm</a>
+                    </div>
+                </div>
+                <div class="sense-slide">
+                    <img src="/api/placeholder/1200/400" alt="Slide 3">
+                    <div class="sense-slide-content">
+                        <h2>Chia sẻ tri thức</h2>
+                        <p>Đăng tải và chia sẻ tài liệu của bạn với cộng đồng</p>
+                        <a href="#" class="sense-btn sense-btn-primary">Đăng tải ngay</a>
+                    </div>
+                </div>
+                <button class="sense-slider-control prev" aria-label="Previous slide"><i
+                        class="fas fa-chevron-left"></i></button>
+                <button class="sense-slider-control next" aria-label="Next slide"><i
+                        class="fas fa-chevron-right"></i></button>
+                <div class="sense-slider-dots">
+                    <span class="sense-dot active" data-index="0"></span>
+                    <span class="sense-dot" data-index="1"></span>
+                    <span class="sense-dot" data-index="2"></span>
+                </div>
+            </div>
+        </section> *@
+        @RenderBody()
+
+        <!-- CATEGORY SECTION -->
+        @* <section class="sense-categories">
+            <div class="sense-container">
+                <div class="sense-section-title">
+                    <h2>Danh mục tài liệu</h2>
+                    <p>Khám phá tài liệu theo chủ đề bạn quan tâm</p>
+                </div>
+                <div class="sense-category-grid">
+                    <div class="sense-category-card">
+                        <div class="sense-category-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Công nghệ thông tin</h3>
+                        <p>Lập trình, AI, Mạng máy tính</p>
+                        <a href="#" class="sense-btn sense-btn-outline">Xem tài liệu</a>
+                    </div>
+                    <div class="sense-category-card">
+                        <div class="sense-category-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3>Toán học</h3>
+                        <p>Đại số, Giải tích, Thống kê</p>
+                        <a href="#" class="sense-btn sense-btn-outline">Xem tài liệu</a>
+                    </div>
+                    <div class="sense-category-card">
+                        <div class="sense-category-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3>Khoa học tự nhiên</h3>
+                        <p>Vật lý, Hóa học, Sinh học</p>
+                        <a href="#" class="sense-btn sense-btn-outline">Xem tài liệu</a>
+                    </div>
+                    <div class="sense-category-card">
+                        <div class="sense-category-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3>Khoa học xã hội</h3>
+                        <p>Lịch sử, Văn hóa, Kinh tế</p>
+                        <a href="#" class="sense-btn sense-btn-outline">Xem tài liệu</a>
+                    </div>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- FEATURED DOCUMENTS -->
+        @* <section class="sense-featured">
+            <div class="sense-container">
+                <div class="sense-section-title">
+                    <h2>Tài liệu nổi bật</h2>
+                    <p>Những tài liệu được đánh giá cao và yêu thích nhiều nhất</p>
+                </div>
+                <div class="sense-doc-grid">
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu 1">
+                            <span class="sense-doc-category">Công nghệ</span>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Nhập môn Trí tuệ nhân tạo</h3>
+                            <p class="sense-doc-author">Tác giả: Nguyễn Văn A</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-eye"></i> 1.2k</span>
+                                <span><i class="fas fa-download"></i> 856</span>
+                                <span><i class="fas fa-star"></i> 4.8</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu 2">
+                            <span class="sense-doc-category">Giáo dục</span>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Phương pháp học tập hiệu quả</h3>
+                            <p class="sense-doc-author">Tác giả: Trần Thị B</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-eye"></i> 980</span>
+                                <span><i class="fas fa-download"></i> 740</span>
+                                <span><i class="fas fa-star"></i> 4.6</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu 3">
+                            <span class="sense-doc-category">Kinh tế</span>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Quản trị doanh nghiệp thời đại số</h3>
+                            <p class="sense-doc-author">Tác giả: Lê Văn C</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-eye"></i> 750</span>
+                                <span><i class="fas fa-download"></i> 520</span>
+                                <span><i class="fas fa-star"></i> 4.5</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu 4">
+                            <span class="sense-doc-category">Y học</span>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Cẩm nang sức khỏe gia đình</h3>
+                            <p class="sense-doc-author">Tác giả: Phạm Thị D</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-eye"></i> 630</span>
+                                <span><i class="fas fa-download"></i> 410</span>
+                                <span><i class="fas fa-star"></i> 4.3</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sense-center">
+                    <a href="#" class="sense-btn sense-btn-primary">Xem thêm tài liệu</a>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- NEWEST DOCUMENTS -->
+        @* <section class="sense-newest">
+            <div class="sense-container">
+                <div class="sense-section-title">
+                    <h2>Tài liệu mới nhất</h2>
+                    <p>Cập nhật những tài liệu vừa được đăng tải trên hệ thống</p>
+                </div>
+                <div class="sense-doc-grid">
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu mới 1">
+                            <span class="sense-doc-category">Vật lý</span>
+                            <div class="sense-new-badge">Mới</div>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Cơ học lượng tử hiện đại</h3>
+                            <p class="sense-doc-author">Tác giả: Hoàng Văn E</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-calendar"></i> 12/05/2025</span>
+                                <span><i class="fas fa-download"></i> 124</span>
+                                <span><i class="fas fa-star"></i> 4.7</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu mới 2">
+                            <span class="sense-doc-category">Lịch sử</span>
+                            <div class="sense-new-badge">Mới</div>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Việt Nam trong thế kỷ XXI</h3>
+                            <p class="sense-doc-author">Tác giả: Đỗ Thị F</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-calendar"></i> 10/05/2025</span>
+                                <span><i class="fas fa-download"></i> 95</span>
+                                <span><i class="fas fa-star"></i> 4.4</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu mới 3">
+                            <span class="sense-doc-category">Ngoại ngữ</span>
+                            <div class="sense-new-badge">Mới</div>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Phương pháp học tiếng Anh hiệu quả</h3>
+                            <p class="sense-doc-author">Tác giả: Ngô Văn G</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-calendar"></i> 09/05/2025</span>
+                                <span><i class="fas fa-download"></i> 180</span>
+                                <span><i class="fas fa-star"></i> 4.8</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                    <div class="sense-doc-card">
+                        <div class="sense-doc-thumbnail">
+                            <img src="/api/placeholder/300/400" alt="Tài liệu mới 4">
+                            <span class="sense-doc-category">Tin học</span>
+                            <div class="sense-new-badge">Mới</div>
+                        </div>
+                        <div class="sense-doc-info">
+                            <h3>Lập trình Web với React</h3>
+                            <p class="sense-doc-author">Tác giả: Vũ Văn H</p>
+                            <div class="sense-doc-meta">
+                                <span><i class="fas fa-calendar"></i> 07/05/2025</span>
+                                <span><i class="fas fa-download"></i> 210</span>
+                                <span><i class="fas fa-star"></i> 4.9</span>
+                            </div>
+                            <a href="#" class="sense-btn sense-btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sense-center">
+                    <a href="#" class="sense-btn sense-btn-primary">Xem thêm tài liệu</a>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- AI FEATURE SECTION -->
+        @* <section class="sense-ai-features">
+            <div class="sense-container">
+                <div class="sense-section-title">
+                    <h2>Tính năng trí tuệ nhân tạo</h2>
+                    <p>Nâng cao trải nghiệm đọc và nghiên cứu của bạn</p>
+                </div>
+                <div class="sense-feature-grid">
+                    <div class="sense-feature-card">
+                        <div class="sense-feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Tóm tắt nội dung</h3>
+                        <p>Tóm tắt nội dung tài liệu dài thành những điểm chính, giúp bạn nắm bắt thông tin nhanh chóng
+                            và hiệu quả.</p>
+                    </div>
+                    <div class="sense-feature-card">
+                        <div class="sense-feature-icon">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <h3>Chuyển văn bản thành giọng nói</h3>
+                        <p>Nghe nội dung tài liệu với giọng đọc tự nhiên, hỗ trợ việc học ngay cả khi đang di chuyển.
+                        </p>
+                    </div>
+                    <div class="sense-feature-card">
+                        <div class="sense-feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Chatbot hỏi đáp thông minh</h3>
+                        <p>Đặt câu hỏi và nhận câu trả lời thông minh dựa trên nội dung của tài liệu bạn đang đọc.</p>
+                    </div>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- UPLOAD DOCUMENT SECTION -->
+        @* <section class="sense-upload">
+            <div class="sense-container">
+                <div class="sense-upload-banner">
+                    <div class="sense-upload-content">
+                        <h2>Chia sẻ tri thức của bạn</h2>
+                        <p>Đóng góp tài liệu và kiến thức của bạn cho cộng đồng SenseLib</p>
+                        <a href="#" class="sense-btn sense-btn-light">Đăng tải tài liệu ngay</a>
+                    </div>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- TESTIMONIALS -->
+        @* <section class="sense-testimonials">
+            <div class="sense-container">
+                <div class="sense-section-title">
+                    <h2>Người dùng nói gì về SenseLib</h2>
+                    <p>Phản hồi từ cộng đồng người dùng</p>
+                </div>
+                <div class="sense-testimonial-slider">
+                    <div class="sense-testimonial active">
+                        <div class="sense-testimonial-content">
+                            <p>"SenseLib đã thay đổi cách tôi học tập và nghiên cứu. Tính năng tóm tắt nội dung bằng AI
+                                giúp tôi tiết kiệm rất nhiều thời gian."</p>
+                        </div>
+                        <div class="sense-testimonial-author">
+                            <img src="/api/placeholder/60/60" alt="User 1">
+                            <div>
+                                <h4>Nguyễn Thị Minh</h4>
+                                <p>Sinh viên Đại học</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sense-testimonial">
+                        <div class="sense-testimonial-content">
+                            <p>"Chatbot hỏi đáp là công cụ tuyệt vời giúp tôi hiểu sâu hơn về các tài liệu chuyên ngành
+                                phức tạp. Cảm ơn SenseLib!"</p>
+                        </div>
+                        <div class="sense-testimonial-author">
+                            <img src="/api/placeholder/60/60" alt="User 2">
+                            <div>
+                                <h4>Trần Văn Hùng</h4>
+                                <p>Giảng viên</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sense-testimonial">
+                        <div class="sense-testimonial-content">
+                            <p>"Tính năng chuyển văn bản thành giọng nói giúp tôi có thể tiếp cận nội dung tài liệu ngay
+                                cả khi đang di chuyển. Rất tiện lợi!"</p>
+                        </div>
+                        <div class="sense-testimonial-author">
+                            <img src="/api/placeholder/60/60" alt="User 3">
+                            <div>
+                                <h4>Lê Thị Hoa</h4>
+                                <p>Nghiên cứu sinh</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="sense-testimonial-control prev" aria-label="Previous testimonial"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <button class="sense-testimonial-control next" aria-label="Next testimonial"><i
+                            class="fas fa-chevron-right"></i></button>
+                    <div class="sense-testimonial-dots">
+                        <span class="sense-dot active" data-index="0"></span>
+                        <span class="sense-dot" data-index="1"></span>
+                        <span class="sense-dot" data-index="2"></span>
+                    </div>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- NEWSLETTER -->
+        @* <section class="sense-newsletter">
+            <div class="sense-container">
+                <div class="sense-newsletter-container">
+                    <div class="sense-newsletter-content">
+                        <h2>Đăng ký nhận thông báo</h2>
+                        <p>Cập nhật những tài liệu mới nhất và tính năng mới của SenseLib</p>
+                    </div>
+                    <form class="sense-newsletter-form">
+                        <input type="email" placeholder="Nhập email của bạn" required>
+                        <button type="submit" class="sense-btn">Đăng ký</button>
+                    </form>
+                </div>
+            </div>
+        </section> *@
+
+        <!-- FOOTER -->
+        <footer class="sense-footer">
+            <div class="sense-container">
+                <div class="sense-footer-grid">
+                    <div class="sense-footer-col">
+                        <div class="sense-footer-logo">
+                            <img src="/api/placeholder/150/50" alt="SenseLib Logo">
+                            <span>SenseLib</span>
+                        </div>
+                        <p>Thư viện số thông minh - Tri thức cho cộng đồng</p>
+                        <div class="sense-social">
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="sense-footer-col">
+                        <h3>Liên kết nhanh</h3>
+                        <ul>
+                            <li><a href="#">Trang chủ</a></li>
+                            <li><a href="#">Danh sách tài liệu</a></li>
+                            <li><a href="#">Đăng tải tài liệu</a></li>
+                            <li><a href="#">Tài liệu yêu thích</a></li>
+                            <li><a href="#">Giới thiệu</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="sense-footer-col">
+                        <h3>Danh mục phổ biến</h3>
+                        <ul>
+                            <li><a href="#">Công nghệ thông tin</a></li>
+                            <li><a href="#">Khoa học tự nhiên</a></li>
+                            <li><a href="#">Khoa học xã hội</a></li>
+                            <li><a href="#">Kinh tế - Quản trị</a></li>
+                            <li><a href="#">Y học - Sức khỏe</a></li>
+                            <li><a href="#">Ngoại ngữ</a></li>
+                        </ul>
+                    </div>
+                    <div class="sense-footer-col">
+                        <h3>Thông tin liên hệ</h3>
+                        <ul class="sense-contact-info">
+                            <li><i class="fas fa-map-marker-alt"></i> 182 Lê Duẩn, TP. Vinh, Nghệ An</li>
+                            <li><i class="fas fa-phone"></i> (+84) 238 3855 452</li>
+                            <li><i class="fas fa-envelope"></i> senselib@vinhuni.edu.vn</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sense-copyright">
+                    <p>&copy; 2025 SenseLib - Trường Đại học Vinh. Tất cả các quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+        <script src="~/assets/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/assets/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+
+    </html>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+@using System.Collections.Generic
+@using hakathon.Models;
+@model List<tblChatbotConversations>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh Sách Hội Thoại Chatbot</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="ChatbotConversations" asp-action="Create">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm Hội Thoại
+                        </a>
+                    </div>
+
+                    <div class="card-body mt-4">
+                        <table class="table table-hover table-bordered datatable" style="background-color: white;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">ID Hội Thoại</th>
+                                    <th class="text-center">ID Người Dùng</th>
+                                    <th class="text-center">ID Tài Liệu</th>
+                                    <th class="text-center">Thời Gian Bắt Đầu</th>
+                                    <th class="text-center">Thời Gian Tin Nhắn Cuối</th>
+                                    <th class="text-center">Chức Năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center" scope="row">@item.ConversationID</td>
+                                        <td class="text-center">@item.UserID</td>
+                                        <td class="text-center">@item.DocumentID</td>
+                                        <td class="text-center">@item.StartTime?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                        <td class="text-center">@item.LastMessageTime?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                        <td class="text-center">
+                                            <a asp-area="Admin" asp-controller="ChatbotConversations" asp-action="Edit"
+                                               asp-route-id="@item.ConversationID" class="btn btn-primary btn-sm"
+                                               title="Chỉnh sửa hội thoại"><i class="bi bi-pencil"></i></a>
+                                            <a asp-area="Admin" asp-controller="ChatbotConversations" asp-action="Delete"
+                                               asp-route-id="@item.ConversationID" class="btn btn-danger btn-sm"
+                                               title="Xóa hội thoại" onclick="return confirm('Bạn có chắc chắn muốn xóa hội thoại này không?');"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

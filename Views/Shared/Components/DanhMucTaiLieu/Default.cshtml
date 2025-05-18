@@ -1,0 +1,23 @@
+@model IList<tblCategories>
+
+<section class="sense-categories">
+    <div class="sense-container">
+        <div class="sense-section-title">
+            <h2>Danh mục tài liệu</h2>
+            <p>Khám phá tài liệu theo chủ đề bạn quan tâm</p>
+        </div>
+        <div class="sense-category-grid">
+            @foreach (var item in Model)
+            {
+                <div class="sense-category-card">
+                    <div class="sense-category-icon">
+                        <img src="@(item.ImagePath ?? "/images/category-default.png")" alt="@item.CategoryName" style="width:50px;height:50px;" />
+                    </div>
+                    <h3>@item.CategoryName</h3>
+                    <p>@item.Description</p>
+                    <a href="/tai-lieu/danh-muc/@item.CategoryID" class="sense-btn sense-btn-outline">Xem tài liệu</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,40 @@
+@model hakathon.Models.tblComments
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa bình luận</h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa menu này? Hành động này không thể hoàn tác.</p>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label asp-for="CommentID" class="form-label">Mã bình luận</label>
+                <input type="text" class="form-control border-danger" asp-for="CommentID" disabled />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CommentText" class="form-label">Nội dung đề</label>
+                <input type="text" class="form-control border-danger" asp-for="CommentText" disabled />
+            </div>
+        </div>
+        
+        <form asp-action="Delete" method="Post">
+            <input type="hidden" asp-for="CommentID" />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a class="btn btn-lg btn-secondary" href="javascript:history.back()">
+                    <i class="bi bi-arrow-left-circle"></i> Hủy
+                </a>
+
+                <button type="submit" class="btn btn-lg btn-danger">
+                    <i class="bi bi-trash"></i> Xác nhận xóa
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+

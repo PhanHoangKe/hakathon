@@ -1,0 +1,56 @@
+@model hakathon.Models.tblAuthors
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Sửa thông tin tác giả</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Edit">
+            <div class="form-row row">
+                <input type="text" class="form-contro" asp-for="AuthorID" type="hidden">
+                
+                <div class="form-group col-md-6 mb-3">
+                    <label>Họ tên tác giả</label>
+                    <input type="text" class="form-control" asp-for="AuthorName" placeholder="Họ tên tác giả...">
+
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Tiểu sử</label>
+                    <input type="text" class="form-control" asp-for="Biography" placeholder="Nhập tiểu sự...">
+
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Thư điện tử</label>
+                    <input type="text" class="form-control" asp-for="Email" placeholder="Nhập thư điện tử...">
+
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày nhập</label>
+                    <input type="text" class="form-control" asp-for="CreatedDate" placeholder="Ngày nhập...">
+
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Ngày sửa</label>
+                    <input type="text" class="form-control" asp-for="ModifiedDate" placeholder="Ngày cập nhậtnhật...">
+
+                </div>
+                 <div class="form-group col-md-6 mb-3">
+                    <label>
+                        @Html.CheckBox("IsActive", Model.IsActive)
+                        Hiện thị
+                    </label>
+                </div>
+            </div>
+            <a asp-controller="Author" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Lưu thông tin
+            </button>
+        </form>
+    </div>
+</main>

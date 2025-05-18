@@ -1,0 +1,263 @@
+@model hakathon.Models.tblUsers;
+@using hakathon.Utilities;
+
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - SenseLib</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f6f9;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-left {
+            width: 40%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container svg {
+            width: 60px;
+            height: 60px;
+            fill: white;
+        }
+
+        .logo-container h1 {
+            margin-top: 15px;
+            font-size: 26px;
+        }
+
+        .illustration svg {
+            width: 120px;
+            height: 120px;
+            stroke: white;
+            margin-top: 20px;
+        }
+
+        .slogan h2 {
+            font-size: 18px;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        .login-right {
+            width: 60%;
+            padding: 40px 30px;
+        }
+
+        .login-form h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-check-label a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .small {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .text-danger {
+            color: red;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .error-message h4 {
+            font-size: 16px;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="logo-container text-center">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.5L2 9l10 6.5L22 9l-10-6.5z" />
+                    <path d="M2 17l10 6.5L22 17" />
+                    <path d="M2 12l10 6.5L22 12" />
+                </svg>
+                <h1>SenseLib</h1>
+                <p>Thư viện tri thức</p>
+            </div>
+            <div class="illustration text-center">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7l6-3 6 3 6-3v12l-6 3-6-3-6 3V7z" />
+                    <path d="M9 4v12" />
+                    <path d="M15 7v12" />
+                </svg>
+                <div class="slogan">
+                    <h2>Khám phá tri thức,<br />mở rộng tầm nhìn</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-right">
+            <div class="login-form">
+                <h2>Đăng ký</h2>
+                <p class="welcome-message">Chào mừng đến với SenseLib! Vui lòng tạo tài khoản.</p>
+
+                <form asp-controller="Register" asp-action="Index" method="post" class="needs-validation" novalidate>
+                    <div class="form-group">
+                        <label for="yourName" class="form-label">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="yourName" name="username" asp-for="UserName"
+                            required>
+                        <div class="invalid-feedback">Vui lòng nhập tên đăng nhập!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yourEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="yourEmail" name="email" asp-for="Email" required>
+                        <div class="invalid-feedback">Vui lòng nhập email!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yourPassword" class="form-label">Mật khẩu</label>
+                        <input type="password" class="form-control" id="yourPassword" name="password" asp-for="Password"
+                            required>
+                        <div class="invalid-feedback" id="passwordError">Vui lòng nhập mật khẩu ít nhất 4 ký tự và chứa
+                            1 ký tự đặc biệt!</div>
+                    </div>
+
+
+                    <input asp-for="IsActive" type="hidden" value="true" />
+
+                    <div class="error-message text-center text-danger">
+                        <h4>@Functions._Message</h4>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="acceptTerms" required>
+                        <label class="form-check-label" for="acceptTerms">Tôi đồng ý <a href="#">các điều
+                                khoản</a></label>
+                        <div class="invalid-feedback">Bạn phải đồng ý trước khi đăng ký.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Tạo tài khoản</button>
+
+                    <div class="col-12">
+                        <p class="text-center mt-5 mb-0" style="font-size: 16px;">
+                            Bạn đã có tài khoản?
+                            <a href="/Login"
+                                style="color: var(--secondary-color); font-weight: 600; font-size: 17px;">Đăng nhập</a>
+                        </p>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Nội dung form ở đây -->
+
+
+
+</body>
+
+</html>

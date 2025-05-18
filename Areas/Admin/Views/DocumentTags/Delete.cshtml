@@ -1,0 +1,39 @@
+@model hakathon.Models.tblDocumentTags
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa liên kết</h1>
+    </div>
+    <div class="container bg-light p-5 shadow-lg rounded">
+        <p class="lead text-success">Bạn có chắc chắn muốn xóa liên kết giữa tài liệu và thẻ này?</p>
+
+        <div class="mb-3">
+            <label asp-for="DocumentID" class="form-label">ID Tài Liệu</label>
+            <input type="text" class="form-control border-danger" asp-for="DocumentID" disabled />
+        </div>
+        <div class="mb-3">
+            <label asp-for="TagID" class="form-label">ID Thẻ</label>
+            <input type="text" class="form-control border-danger" asp-for="TagID" disabled />
+        </div>
+
+        <form asp-action="Delete" method="post">
+            @* Gửi 2 giá trị khóa chính dưới dạng hidden *@
+            <input type="hidden" asp-for="DocumentID" />
+            <input type="hidden" asp-for="TagID" />
+
+            @* Thêm token chống CSRF *@
+            @Html.AntiForgeryToken()
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" name="documentId" value="@Model.DocumentID" />
+                <input type="hidden" name="tagId" value="@Model.TagID" />
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+            </form>
+
+        </form>
+    </div>
+</main>

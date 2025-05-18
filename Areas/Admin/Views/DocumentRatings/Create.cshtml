@@ -1,0 +1,53 @@
+@model hakathon.Models.tblDocumentRatings
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Thêm Mới Đánh Giá Tài Liệu</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create">
+            <div class="form-row row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="DocumentID">ID Tài Liệu</label>
+                    <input type="number" class="form-control" asp-for="DocumentID" placeholder="Nhập ID tài liệu (nếu có)...">
+                    <span asp-validation-for="DocumentID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="UserID">ID Người Dùng</label>
+                    <input type="number" class="form-control" asp-for="UserID" placeholder="Nhập ID người dùng (nếu có)...">
+                    <span asp-validation-for="UserID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Rating">Điểm Đánh Giá (1-5)</label>
+                    <input type="number" class="form-control" asp-for="Rating" min="1" max="5" placeholder="Nhập điểm đánh giá (1-5)...">
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="RatingDate">Ngày Đánh Giá</label>
+                    <input type="datetime-local" class="form-control" asp-for="RatingDate">
+                    <span asp-validation-for="RatingDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Comment">Bình Luận</label>
+                    <textarea class="form-control" asp-for="Comment" rows="1" placeholder="Nhập bình luận (nếu có)..."></textarea>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <a asp-controller="DocumentRating" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Quay lại
+            </a>
+
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-star-fill"></i> Lưu đánh giá
+            </button>
+        </form>
+    </div>
+</main>
