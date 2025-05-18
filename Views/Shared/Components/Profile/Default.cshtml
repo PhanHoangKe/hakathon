@@ -1,355 +1,582 @@
 ﻿@using Newtonsoft.Json
 @model hakathon.Models.tblUserProfiles
+@{
+    var viewhistories = ViewBag.ViewHistories as List<hakathon.Models.tblViewHistory> ?? new List<hakathon.Models.tblViewHistory>();
+    int itemsPerPageVH = 1;
+    int totalPagesVH = (int)Math.Ceiling((double)viewhistories.Count / itemsPerPageVH);
+
+    var downloadHistories = ViewBag.DownloadHistories as List<hakathon.Models.tblDownloadHistory> ?? new List<hakathon.Models.tblDownloadHistory>();
+    int itemsPerPageDH = 3;
+    int totalPagesDH = (int)Math.Ceiling((double)downloadHistories.Count / itemsPerPageDH);
+
+    var ratinghistories = ViewBag.RatingHistories as List<hakathon.Models.tblDocumentRatings> ?? new List<hakathon.Models.tblDocumentRatings>();
+    int itemsPerPageRH = 3;
+    int totalPagesRH = (int)Math.Ceiling((double)ratinghistories.Count / itemsPerPageRH);
+
+    var transactionHistories = ViewBag.TransactionHistories as List<hakathon.Models.tblTransactionHistory> ?? new List<hakathon.Models.tblTransactionHistory>();
+
+    int page = 0;
+}
 
 <div class="sensy-profile-header">
-    <h1 class="sensy-profile-title">Trang cá nhân</h1>
+	<h1 class="sensy-profile-title">Trang cá nhân</h1>
 </div>
 
 
-    <div class="sensy-profile-wrapper">
-        <!-- Sidebar navigation -->
-        <div class="sensy-profile-sidebar">
-            <div class="sensy-profile-user-info">
-                <div class="sensy-profile-avatar">
-                    <img src="/api/placeholder/150/150" alt="Avatar người dùng" id="sensy-user-avatar">
-                    <div class="sensy-profile-avatar-edit">
-                        <label for="sensy-avatar-upload">
-                            <i class="sensy-icon-camera"></i>
-                        </label>
-                        <input type="file" id="sensy-avatar-upload" accept="image/*" style="display: none;">
-                    </div>
-                </div>
-            @if (Model != null)
-            {
-                <h2 class="sensy-profile-name" id="sensy-user-name">@Model.FullName</h2>
-                <p class="sensy-profile-email" id="sensy-user-email">@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</p>
-            }
-               
-            </div>
-            <ul class="sensy-profile-nav">
-                <li class="sensy-profile-nav-item active" data-tab="sensy-personal-info">
-                    <i class="sensy-icon-user"></i> Thông tin cá nhân
-                </li>
-                <li class="sensy-profile-nav-item" data-tab="sensy-change-password">
-                    <i class="sensy-icon-lock"></i> Đổi mật khẩu
-                </li>
-                <li class="sensy-profile-nav-item" data-tab="sensy-activity-history">
-                    <i class="sensy-icon-history"></i> Lịch sử hoạt động
-                </li>
-            </ul>
-        </div>
+<div class="sensy-profile-wrapper">
+	<!-- Sidebar navigation -->
+	<div class="sensy-profile-sidebar">
+		<div class="sensy-profile-user-info">
+			<div class="sensy-profile-avatar">
+				<img src="/api/placeholder/150/150" alt="Avatar người dùng" id="sensy-user-avatar">
+				<div class="sensy-profile-avatar-edit">
+					<label for="sensy-avatar-upload">
+						<i class="sensy-icon-camera"></i>
+					</label>
+					<input type="file" id="sensy-avatar-upload" accept="image/*" style="display: none;">
+				</div>
+			</div>
+			@if (Model != null)
+			{
+				<h2 class="sensy-profile-name" id="sensy-user-name">@Model.FullName</h2>
+				<h2 class="sensy-profile-name text-danger fw-bold display-4" id="sensy-user-point">
+  @Model.Point điểm
+</h2>
+				<p class="sensy-profile-email" id="sensy-user-email">@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</p>
+			}
 
-    
-        <!-- Content area -->
-        <div class="sensy-profile-content">
-            <!-- Thông tin cá nhân tab -->
-        @if (Model == null)
-        {
-            <div class="alert alert-danger">
-                <strong>Thông báo:</strong> Bạn chưa cập nhật hồ sơ cá nhân.
-            </div>
-
-            <a class="btn btn-primary"
-               asp-controller="Profile"
-               asp-action="Create"
-               asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
-                Cập nhật hồ sơ ngay
-            </a>
-        }
-        else
-        {
-            <div class="sensy-profile-tab active" id="sensy-personal-info">
-                <div class="sensy-profile-section">
-                    <h3 class="sensy-profile-section-title">Thông tin cá nhân</h3>
-                    <form id="profileForm" class="sensy-profile-form" asp-action="Edit" asp-controller="Profile" method="post">
-                        <div class="sensy-form-group">
-                            <label asp-for="FullName">Họ và tên</label>
-                            <input type="text" class="sensy-form-control" asp-for="FullName" />
-                        </div>
-
-                        <div class="sensy-form-group">
-                            <label asp-for="Bio">Tiểu sử</label>
-                            <input type="text" class="sensy-form-control" asp-for="Bio" />
-                        </div>
-
-                        <div class="sensy-form-group">
-                            <label asp-for="Phone">Số điện thoại</label>
-                            <input type="tel" class="sensy-form-control" asp-for="Phone" />
-                        </div>
-
-                        <div class="sensy-form-group">
-                            <label asp-for="DateOfBirth">Ngày sinh</label>
-                            <input type="date" class="sensy-form-control" asp-for="DateOfBirth" />
-                        </div>
-
-                        <div class="sensy-form-group">
-                            <label asp-for="Address">Địa chỉ</label>
-                            <input type="text" class="sensy-form-control" asp-for="Address" />
-                        </div>
-
-                        @if (!string.IsNullOrEmpty(Model.ProfilePicture))
-                        {
-                            <div class="sensy-form-actions">
-                                <img src="@Url.Content(Model.ProfilePicture)" alt="Ảnh đại diện" style="max-width:150px;" />
-                            </div>
-                        }
-
-                        <div class="sensy-form-group">
-                            <button id="submitBtn" type="submit" class="sensy-btn sensy-btn-primary">Lưu thay đổi</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            }
-
-        <div class="sensy-profile-tab" id="sensy-change-password">
-            <div class="sensy-profile-section">
-                <h3 class="sensy-profile-section-title">Đổi mật khẩu</h3>
-
-                @{
-                    hakathon.Models.ChangePasswordViewModel changePassModel = new hakathon.Models.ChangePasswordViewModel();
-
-                    if (TempData["ChangePasswordModel"] != null)
-                    {
-                        var json = TempData["ChangePasswordModel"].ToString();
-                        changePassModel = JsonConvert.DeserializeObject<hakathon.Models.ChangePasswordViewModel>(json);
-                    }
-                }
-
-                @await Html.PartialAsync("~/Views/Profile/ChangePassword.cshtml", changePassModel)
+		</div>
+		<ul class="sensy-profile-nav">
+			<li class="sensy-profile-nav-item active" data-tab="sensy-personal-info">
+				<i class="sensy-icon-user"></i> Thông tin cá nhân
+			</li>
+			<li class="sensy-profile-nav-item" data-tab="sensy-change-password">
+				<i class="sensy-icon-lock"></i> Đổi mật khẩu
+			</li>
+			<li class="sensy-profile-nav-item" data-tab="sensy-activity-history">
+				<i class="sensy-icon-history"></i> Lịch sử hoạt động
+			</li>
+			<li class="sensy-profile-nav-item" data-tab="sensy-payment">
+				<i ></i> Điểm tích luỹ
+			</li>
+			<li class="sensy-profile-nav-item" data-tab="sensy-document">
+				<i ></i> Tài liệu
+			</li>
+		</ul>
+	</div>
 
 
-            </div>
-        </div>
+	<!-- Content area -->
+	<div class="sensy-profile-content">
+		<!-- Thông tin cá nhân tab -->
+		
+		
+			<div class="sensy-profile-tab" id="sensy-personal-info">
+			@if (Model == null)
+		{
+			<div class="alert alert-danger">
+				<strong>Thông báo:</strong> Bạn chưa cập nhật hồ sơ cá nhân.
+			</div>
+
+			<a class="sensy-btn sensy-btn-primary"
+			   asp-controller="Profile"
+			   asp-action="Create"
+			   asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
+				Cập nhật hồ sơ ngay
+			</a>
+		}else
+		{
+				<div class="sensy-profile-section">
+					<h3 class="sensy-profile-section-title">Thông tin cá nhân</h3>
+					<form id="profileForm" class="sensy-profile-form" asp-action="Edit" asp-controller="Profile" method="post">
+						<div class="sensy-form-group">
+							<label asp-for="FullName">Họ và tên</label>
+							<input type="text" class="sensy-form-control" asp-for="FullName" />
+						</div>
+
+						<div class="sensy-form-group">
+							<label asp-for="Bio">Tiểu sử</label>
+							<input type="text" class="sensy-form-control" asp-for="Bio" />
+						</div>
+
+						<div class="sensy-form-group">
+							<label asp-for="Phone">Số điện thoại</label>
+							<input type="tel" class="sensy-form-control" asp-for="Phone" />
+						</div>
+
+						<div class="sensy-form-group">
+							<label asp-for="DateOfBirth">Ngày sinh</label>
+							<input type="date" class="sensy-form-control" asp-for="DateOfBirth" />
+						</div>
+
+						<div class="sensy-form-group">
+							<label asp-for="Address">Địa chỉ</label>
+							<input type="text" class="sensy-form-control" asp-for="Address" />
+						</div>
+
+						<div class="sensy-form-group">
+							<button id="submitBtn" type="submit" class="sensy-btn sensy-btn-primary">Lưu thay đổi</button>
+						</div>
+					</form>
+				</div>
+				}
+			</div>
+		
+
+		<div class="sensy-profile-tab" id="sensy-change-password">
+			<div class="sensy-profile-section">
+				<h3 class="sensy-profile-section-title">Đổi mật khẩu</h3>
+
+				@{
+					hakathon.Models.ChangePasswordViewModel changePassModel = new hakathon.Models.ChangePasswordViewModel();
+
+					if (TempData["ChangePasswordModel"] != null)
+					{
+						var json = TempData["ChangePasswordModel"].ToString();
+						changePassModel = JsonConvert.DeserializeObject<hakathon.Models.ChangePasswordViewModel>(json);
+					}
+				}
+
+				@await Html.PartialAsync("~/Views/Profile/ChangePassword.cshtml", changePassModel)
 
 
-            <!-- Lịch sử hoạt động tab -->
-            <div class="sensy-profile-tab" id="sensy-activity-history">
-                <div class="sensy-profile-section">
-                    <h3 class="sensy-profile-section-title">Lịch sử hoạt động</h3>
+			</div>
+		</div    
 
-                    <!-- Tab navigation for activity history -->
-                    <div class="sensy-activity-tabs">
-                        <button class="sensy-activity-tab active" data-activity="sensy-viewed">Đã xem</button>
-                        <button class="sensy-activity-tab" data-activity="sensy-downloaded">Đã tải xuống</button>
-                        <button class="sensy-activity-tab" data-activity="sensy-rated">Đã đánh giá</button>
-                        <button class="sensy-activity-tab" data-activity="sensy-comments">Bình luận</button>
-                    </div>
 
-                    <!-- Viewed documents -->
-                    <div class="sensy-activity-content active" id="sensy-viewed">
-                        <div class="sensy-activity-list">
-                            <!-- Sample viewed document items -->
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Tài liệu về Kinh tế vĩ mô</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã xem lúc: 12/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem lại</a>
-                                </div>
-                            </div>
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Hướng dẫn sử dụng Excel nâng cao</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã xem lúc: 10/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem lại</a>
-                                </div>
-                            </div>
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Báo cáo thị trường 2025</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã xem lúc: 05/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem lại</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sensy-pagination">
-                            <button class="sensy-pagination-prev">Trước</button>
-                            <span class="sensy-pagination-info">Trang 1/3</span>
-                            <button class="sensy-pagination-next">Sau</button>
-                        </div>
-                    </div>
+		<!-- Lịch sử hoạt động tab -->
+		<div class="sensy-profile-tab" id="sensy-activity-history">
+			<div class="sensy-profile-section">
+				<h3 class="sensy-profile-section-title">Lịch sử hoạt động</h3>
 
-                    <!-- Downloaded documents -->
-                    <div class="sensy-activity-content" id="sensy-downloaded">
-                        <div class="sensy-activity-list">
-                            <!-- Sample downloaded document items -->
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Báo cáo tài chính Q1 2025</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã tải lúc: 11/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Tải lại</a>
-                                </div>
-                            </div>
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Sổ tay hướng dẫn quản lý</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã tải lúc: 09/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Tải lại</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sensy-pagination">
-                            <button class="sensy-pagination-prev">Trước</button>
-                            <span class="sensy-pagination-info">Trang 1/1</span>
-                            <button class="sensy-pagination-next" disabled>Sau</button>
-                        </div>
-                    </div>
+				<!-- Tab navigation for activity history -->
+				<div class="sensy-activity-tabs">
+					<button class="sensy-activity-tab active" data-activity="sensy-viewed">Đã xem</button>
+					<button class="sensy-activity-tab" data-activity="sensy-downloaded">Đã tải xuống</button>
+					<button class="sensy-activity-tab" data-activity="sensy-rated">Đã đánh giá</button>
+					<button class="sensy-activity-tab" data-activity="sensy-comments">Bình luận</button>
+				</div>
 
-                    <!-- Rated documents -->
-                    <div class="sensy-activity-content" id="sensy-rated">
-                        <div class="sensy-activity-list">
-                            <!-- Sample rated document items -->
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Công nghệ thông tin 2025</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-rating">
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star"></i>
-                                        </span>
-                                        <span class="sensy-activity-date">Đã đánh giá lúc: 08/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
-                                </div>
-                            </div>
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Sách hướng dẫn lập trình Python</a></h4>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-rating">
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star active"></i>
-                                            <i class="sensy-icon-star"></i>
-                                            <i class="sensy-icon-star"></i>
-                                        </span>
-                                        <span class="sensy-activity-date">Đã đánh giá lúc: 04/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sensy-pagination">
-                            <button class="sensy-pagination-prev">Trước</button>
-                            <span class="sensy-pagination-info">Trang 1/1</span>
-                            <button class="sensy-pagination-next" disabled>Sau</button>
-                        </div>
-                    </div>
+				<!-- Viewed documents -->
+				<div class="sensy-activity-content active" id="sensy-viewed">
+					@if (viewhistories != null && viewhistories.Count > 0)
+					{
 
-                    <!-- Comments -->
-                    <div class="sensy-activity-content" id="sensy-comments">
-                        <div class="sensy-activity-list">
-                            <!-- Sample comment items -->
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Hướng dẫn SEO 2025</a></h4>
-                                    <p class="sensy-comment-text">"Tài liệu rất hữu ích và dễ hiểu. Cảm ơn tác giả!"</p>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã bình luận lúc: 11/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
-                                </div>
-                            </div>
-                            <div class="sensy-activity-item">
-                                <div class="sensy-activity-info">
-                                    <h4><a href="#">Chiến lược marketing online</a></h4>
-                                    <p class="sensy-comment-text">"Tôi đã áp dụng các chiến lược này và thấy hiệu quả rõ rệt. Đề xuất cho mọi người cùng đọc."</p>
-                                    <p class="sensy-activity-meta">
-                                        <span class="sensy-activity-date">Đã bình luận lúc: 07/05/2025</span>
-                                    </p>
-                                </div>
-                                <div class="sensy-activity-actions">
-                                    <a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sensy-pagination">
-                            <button class="sensy-pagination-prev">Trước</button>
-                            <span class="sensy-pagination-info">Trang 1/1</span>
-                            <button class="sensy-pagination-next" disabled>Sau</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+						for (int i = 0; i < viewhistories.Count; i += itemsPerPageVH)
+						{
+							<div class="sensy-activity-list" style="display:@(page == 0 ? "block" : "none")" data-page="@(page)">
+								@for (int j = 0; j < itemsPerPageVH && i + j < viewhistories.Count; j++)
+								{
+									var item = viewhistories[i + j];
+									<div class="sensy-activity-item">
+										<div class="sensy-activity-info">
+											<h4>
+												<a href="@Url.Action("Document", "Home", new { id = item.DocumentID })">
+													@(item.Document?.Title ?? "Tài liệu chưa xác định")
+												</a>
+											</h4>
+											<p class="sensy-activity-meta">
+												<span class="sensy-activity-date">
+													Đã xem lúc: @item.ViewDate.ToString("dd/MM/yyyy HH:mm")
+												</span>
+											</p>
+										</div>
+										<div class="sensy-activity-actions">
+											<a href="@Url.Action("Document", "Home", new { id = item.DocumentID })" class="sensy-btn sensy-btn-outline">Xem lại</a>
+										</div>
+									</div>
+								}
+							</div>
+							page++;
+						}
+
+						<div class="sensy-pagination">
+							<button class="sensy-pagination-prev">Trước</button>
+							<span class="sensy-pagination-info">Trang 1/1</span>
+							<button class="sensy-pagination-next" disabled>Sau</button>
+						</div>
+					}
+					else
+					{
+						<p>Chưa có tài liệu nào được xem.</p>
+					}
+				</div>
+
+
+
+				<!-- Downloaded documents -->
+				<div class="sensy-activity-content" id="sensy-downloaded">
+					@if (downloadHistories != null && downloadHistories.Count > 0)
+					{
+
+						for (int i = 0; i < downloadHistories.Count; i += itemsPerPageDH)
+						{
+							<div class="sensy-activity-list" style="display:@(page == 0 ? "block" : "none")" data-page="@(page)">
+								@for (int j = 0; j < itemsPerPageDH && i + j < downloadHistories.Count; j++)
+								{
+									var item = downloadHistories[i + j];
+									<div class="sensy-activity-item">
+										<div class="sensy-activity-info">
+											<h4>
+												<a href="@Url.Action("Document", "Home", new { id = item.DocumentID })">
+													@(item.Document?.Title ?? "Tài liệu chưa xác định")
+												</a>
+											</h4>
+											<p class="sensy-activity-meta">
+												<span class="sensy-activity-date">Đã tải lúc: @item.DownloadDate.ToString("dd/MM/yyyy HH:mm")</span>
+											</p>
+										</div>
+										<div class="sensy-activity-actions">
+											<a onclick="downloadDocument(@item.DocumentID, 'original')" class="sensy-btn sensy-btn-outline">Tải lại</a>
+										</div>
+									</div>
+								}
+							</div>
+							page++;
+						}
+
+						<div class="sensy-pagination">
+							<button class="sensy-pagination-prev">Trước</button>
+							<span class="sensy-pagination-info">Trang 1/1</span>
+							<button class="sensy-pagination-next" disabled>Sau</button>
+						</div>
+					}
+					else
+					{
+						<p>Chưa có tài liệu nào được tải xuống.</p>
+					}
+				</div>
+
+
+				<!-- Rated documents -->
+				<div class="sensy-activity-content" id="sensy-rated">
+					@if (ratinghistories != null && ratinghistories.Count > 0)
+					{
+						for (int i = 0; i < ratinghistories.Count; i += itemsPerPageRH)
+						{
+							<div class="sensy-activity-list" style="display:@(page == 0 ? "block" : "none")" data-page="@(page)">
+								@for (int j = 0; j < itemsPerPageRH && i + j < ratinghistories.Count; j++)
+								{
+									var item = ratinghistories[i + j];
+									<div class="sensy-activity-item">
+										<div class="sensy-activity-info">
+											<h4>
+												<a href="@Url.Action("Document", "Home", new { id = item.DocumentID })">
+													@(item.Document?.Title ?? "Tài liệu chưa xác định")
+												</a>
+											</h4>
+											<p class="sensy-activity-meta">
+												<span class="sensy-activity-rating">
+													@for (int star = 1; star <= 5; star++)
+													{
+														if (star <= item.Rating)
+														{
+															<i class="sensy-icon-star active"></i>
+														}
+														else
+														{
+															<i class="sensy-icon-star"></i>
+														}
+													}
+												</span>
+												<span class="sensy-activity-date">
+													Đã đánh giá lúc: @item.RatingDate.ToString("dd/MM/yyyy HH:mm")
+												</span>
+											</p>
+										</div>
+										<div class="sensy-activity-actions">
+											<a href="@Url.Action("Document", "Home", new { id = item.DocumentID })" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+										</div>
+									</div>
+								}
+							</div>
+							page++;
+						}
+
+						<div class="sensy-pagination">
+							<button class="sensy-pagination-prev">Trước</button>
+							<span class="sensy-pagination-info">Trang 1/1</span>
+							<button class="sensy-pagination-next" disabled>Sau</button>
+						</div>
+					}
+					else
+					{
+						<p>Chưa có tài liệu nào được đánh giá.</p>
+					}
+				</div>
+
+				<!-- Comments -->
+				<div class="sensy-activity-content" id="sensy-comments">
+					<div class="sensy-activity-list">
+						<!-- Sample comment items -->
+						<div class="sensy-activity-item">
+							<div class="sensy-activity-info">
+								<h4><a href="#">Hướng dẫn SEO 2025</a></h4>
+								<p class="sensy-comment-text">"Tài liệu rất hữu ích và dễ hiểu. Cảm ơn tác giả!"</p>
+								<p class="sensy-activity-meta">
+									<span class="sensy-activity-date">Đã bình luận lúc: 11/05/2025</span>
+								</p>
+							</div>
+							<div class="sensy-activity-actions">
+								<a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+							</div>
+						</div>
+						<div class="sensy-activity-item">
+							<div class="sensy-activity-info">
+								<h4><a href="#">Chiến lược marketing online</a></h4>
+								<p class="sensy-comment-text">"Tôi đã áp dụng các chiến lược này và thấy hiệu quả rõ rệt. Đề xuất cho mọi người cùng đọc."</p>
+								<p class="sensy-activity-meta">
+									<span class="sensy-activity-date">Đã bình luận lúc: 07/05/2025</span>
+								</p>
+							</div>
+							<div class="sensy-activity-actions">
+								<a href="#" class="sensy-btn sensy-btn-outline">Xem tài liệu</a>
+							</div>
+						</div>
+					</div>
+					<div class="sensy-pagination">
+						<button class="sensy-pagination-prev">Trước</button>
+						<span class="sensy-pagination-info">Trang 1/1</span>
+						<button class="sensy-pagination-next" disabled>Sau</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="sensy-profile-tab" id="sensy-payment">
+			<div class="sensy-profile-section">
+			@if(Model != null){
+				<h3 class="sensy-profile-section-title">Điểm tích luỹ</h3>
+				<h4 class="fw-bold mb-4">Điểm hiện tại: @(Model?.Point ?? 0) điểm</h4>
+				<h5>Lịch sử giao dịch</h5>
+
+				 <table class="table table-striped table-bordered">
+						<thead class="table-dark">
+							<tr>
+							  <th>ID</th>
+							  <th>Loại hành động</th>
+							  <th>Ngày</th>
+							  <th>Mô tả</th>
+							  <th>ID Tài liệu</th>
+							</tr>
+						 </thead>
+						 <tbody>
+							@if (transactionHistories != null && transactionHistories.Any())
+							{
+							  foreach (var item in transactionHistories)
+							  {
+								<tr>
+								  <td>@item.TransactionID</td>
+								  <td>@item.ActionType</td>
+								  <td>@item.ActionDate.ToString("dd/MM/yyyy HH:mm")</td>
+								  <td>@item.Description</td>
+								  <td>@(item.DocumentID?.ToString() ?? "-")</td>
+								</tr>
+							  }
+							}
+							else
+							{
+							  <tr>
+								<td colspan="5" class="text-center">Chưa có lịch sử giao dịch</td>
+							  </tr>
+							}
+						 </tbody>
+				</table>
+						<button class="sensy-btn sensy-btn-primary" id="btnAddPoints">Nạp thêm điểm</button>
+					}else
+					{
+						<a class="sensy-btn sensy-btn-primary"
+			   asp-controller="Profile"
+			   asp-action="Create"
+			   asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
+				Cập nhật hồ sơ ngay để tích điểm
+			</a>	
+					}
+			</div>
+		</div
+
+	</div>
+
+<div class="sensy-profile-tab" id="sensy-document">
+    <div class="sensy-profile-section">
+	@if(Model != null){
+        <h3 class="mb-4">Tải tài liệu lên</h3>
+       <form asp-action="UploadDocument" asp-controller="Profile" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label>Tiêu đề</label>
+        <input type="text" name="title" class="form-control" required />
     </div>
-<body data-activetab="@TempData["ActiveTab"]">
-    </body>
-<script>
-    document.getElementById('profileForm').addEventListener('submit', function () {
+    <div class="mb-3">
+        <label>Mô tả</label>
+        <textarea name="description" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label>Thể loại</label>
+        <select name="categoryId" class="form-control" required>
+            @if (ViewBag.Categories != null)
+{
+    foreach (var category in ViewBag.Categories)
+    {
+        <option value="@category.CategoryID">@category.CategoryName</option>
+    }
+}
+else
+{
+    <option disabled>Không có danh mục</option>
+}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>File tài liệu (.pdf, .docx)</label>
+        <input type="file" name="file" class="form-control" accept=".pdf,.docx" required />
+    </div>
+    <button type="submit" class="sensy-btn sensy-btn-primary">Upload</button>
+</form>
+		<hr />
+
+
+		<table class="table table-striped table-bordered" id="user-documents-list">
+	<h3>Danh sách tài liệu đã upload</h3>
+    <thead class="table-dark">
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Mô tả</th>
+            <th>Ngày tải lên</th>
+            <th>Loại file</th>
+            <th>Trạng thái</th>
+            <th>File</th>
+        </tr>
+    </thead>
+    <tbody>
         
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Đang lưu...';
+    </tbody>
+</table>
+    
+	}else
+					{
+						<a class="sensy-btn sensy-btn-primary"
+			   asp-controller="Profile"
+			   asp-action="Create"
+			   asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
+				Cập nhật hồ sơ ngay để upload
+			</a>	
+					}
+					</div>
+</div>
 
-        const inputs = this.querySelectorAll('input, textarea');
-        inputs.forEach(function (el) {
-            el.readOnly = true;
-        });
-    });
+</div>
 
-    function initProfileTabs() {
-        const profileTabs = document.querySelectorAll('.sensy-profile-nav-item');
-        const tabContents = document.querySelectorAll('.sensy-profile-tab');
 
-        profileTabs.forEach(tab => {
-            tab.addEventListener('click', function () {
-                profileTabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
+<script src="~/assets/js/document.js" asp-append-version="true"></script>
 
-                tabContents.forEach(content => content.classList.remove('active'));
+<script>
+	async function loadUserDocuments() {
+  try {
+    const response = await fetch('/Profile/GetUserDocuments');
+    if (!response.ok) {
+      throw new Error('Lỗi khi tải dữ liệu tài liệu');
+    }
+    const documents = await response.json();
 
-                const target = this.getAttribute('data-tab');
-                document.getElementById(target).classList.add('active');
-            });
-        });
-
-        const activeTab = document.body.getAttribute('data-activetab');
-        if (activeTab) {
-            const tabBtn = document.querySelector(`[data-tab="${activeTab}"]`);
-            const tabContent = document.getElementById(activeTab);
-
-            if (tabBtn && tabContent) {
-                profileTabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-
-                tabBtn.classList.add('active');
-                tabContent.classList.add('active');
-            }
-        }
+    const container = document.getElementById('user-documents-list');
+    if (documents.length === 0) {
+      container.innerHTML = '<p>Chưa có tài liệu nào được upload.</p>';
+      return;
     }
 
+    // Tạo HTML danh sách tài liệu
+    let html = '';
+documents.forEach(doc => {
+  html += `<tr>
+    <td>${doc.Title}</td>
+    <td>${doc.Description || '-'}</td>
+    <td>${new Date(doc.UploadDate).toLocaleString()}</td>
+    <td>${doc.FileType || '-'}</td>
+    <td>${doc.IsActive ? 'Đã duyệt' : 'Chờ duyệt'}</td>
+    <td><a href="${doc.FileOriginalPath}" target="_blank">Xem/Tải file</a></td>
+  </tr>`;
+});
 
-    document.addEventListener('DOMContentLoaded', function () {
-        initProfileTabs();
-    });
+const tbody = document.querySelector('#user-documents-list tbody');
+tbody.innerHTML = html;
+  } catch (error) {
+    document.getElementById('user-documents-list').innerHTML = `<p class="text-danger">${error.message}</p>`;
+  }
+}
+
+
+	document.getElementById('profileForm').addEventListener('submit', function () {
+
+		const submitBtn = document.getElementById('submitBtn');
+		submitBtn.disabled = true;
+		submitBtn.innerText = 'Đang lưu...';
+
+		const inputs = this.querySelectorAll('input, textarea');
+		inputs.forEach(function (el) {
+			el.readOnly = true;
+		});
+	});
+	
+
+	function initPagination() {
+		const activityContents = document.querySelectorAll('.sensy-activity-content');
+
+		activityContents.forEach(content => {
+			const lists = content.querySelectorAll('.sensy-activity-list');
+			const prevButton = content.querySelector('.sensy-pagination-prev');
+			const nextButton = content.querySelector('.sensy-pagination-next');
+			const paginationInfo = content.querySelector('.sensy-pagination-info');
+
+			if (!lists.length || !prevButton || !nextButton || !paginationInfo) return;
+
+			let currentPage = 0;
+			const totalPages = lists.length;
+
+			function updatePage() {
+				lists.forEach((list, index) => {
+					list.style.display = index === currentPage ? 'block' : 'none';
+				});
+
+				paginationInfo.textContent = `Trang ${currentPage + 1}/${totalPages}`;
+				prevButton.disabled = currentPage === 0;
+				nextButton.disabled = currentPage === totalPages - 1;
+			}
+
+			prevButton.addEventListener('click', () => {
+				if (currentPage > 0) {
+					currentPage--;
+					updatePage();
+				}
+			});
+
+			nextButton.addEventListener('click', () => {
+				if (currentPage < totalPages - 1) {
+					currentPage++;
+					updatePage();
+				}
+			});
+
+			updatePage();
+		});
+	}
+
+	
+	document.addEventListener('DOMContentLoaded', function() {
+  initPagination();
+		loadUserDocuments();
+});
+
+
 </script>
+<style>
+  .transaction-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  .transaction-list li {
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #ddd;
+  }
+</style>

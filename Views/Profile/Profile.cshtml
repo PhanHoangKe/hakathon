@@ -38,6 +38,8 @@
 
             profileTabs.forEach(tab => {
                 tab.addEventListener('click', function () {
+                    document.querySelectorAll('.alert').forEach(alert => alert.remove());
+
                     profileTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
 
@@ -48,6 +50,12 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', initProfileTabs);
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.body.setAttribute('data-activetab', @Html.Raw(Json.Serialize(TempData["ActiveTab"])));
+
+
+            initProfileTabs();
+        });
     </script>
 }

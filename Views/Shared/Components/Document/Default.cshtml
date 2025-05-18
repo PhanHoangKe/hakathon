@@ -1,4 +1,8 @@
 @model hakathon.Models.tblDocuments
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
+}
+
 <div class="senst-container">
     <!-- Document Header Section -->
     <div class="senst-document-header">
@@ -65,7 +69,7 @@
 </button>
           <div class="senst-dropdown">
             <button class="senst-btn senst-btn-download">
-              <i class="fa fa-download"></i> Tải xuống
+              <i class="fa fa-download"></i> Tải xuống ( mỗi lượt tải - @Model.Point điểm)
             </button>
             <div class="senst-dropdown-content">
               <a href="javascript:void(0);" onclick="downloadDocument(@Model.DocumentID, 'pdf')" class="senst-download-option">
@@ -357,23 +361,43 @@
     </div>
   </div>
 
-@section Scripts {
-<<<<<<< HEAD
+<script src="~/assets/js/document.js" asp-append-version="true"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pRrKqA6GiCqLVz2IS/lhX4MJ2F3ZATMjTE0SJZeNJVHHHOHHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-=======
-    <!-- PDF.js từ CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
->>>>>>> main
-    
-    <!-- Cấu hình PDF.js -->
     <script>
         if (typeof pdfjsLib !== 'undefined') {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
             console.log("PDF.js loaded and configured");
         }
+        console.log("Đã vào đoạn này");
+        debugger;
+    const isAuthenticated = @Json.Serialize(isAuthenticated);
+    const documentId = parseInt("@Model.DocumentID")
+
+
+        if (isAuthenticated) {
+            document.addEventListener('DOMContentLoaded', () => {
+
+                fetch(`/api/Document/TrackInitialView`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ documentId: documentId })
+                });
+
+
+            setInterval(() => {
+                fetch(`/api/Document/UpdateViewDuration`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ documentId: documentId, secondsViewed: 10 })
+                });
+            }, 10000);
+            });
+
+        }
+
+    
+
     </script>
     
-    <!-- Load document.js -->
-    <script src="~/assets/js/document.js" asp-append-version="true"></script>
-}
+  

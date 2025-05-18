@@ -2,47 +2,40 @@
 
 <main class="sensy-profile-container">
 
-    <div class="sensy-profile-wrapper">
-        <div class="sensy-profile-content">
-<form class="sensy-profile-form" asp-action="Create" asp-controller="Profile" method="post">
+	<div class="sensy-profile-wrapper">
+		<div class="sensy-profile-content">
+			<form class="sensy-profile-form" asp-action="Create" asp-controller="Profile" method="post">
 
-    <div class="sensy-form-group">
-        <label for="FullName">Họ và tên</label>
-        <input type="text" id="FullName" class="sensy-form-control" asp-for="FullName" />
-    </div>
+				<div class="sensy-form-group">
+					<label for="FullName">Họ và tên</label>
+					<input type="text" id="FullName" class="sensy-form-control" asp-for="FullName" />
+				</div>
 
-    <div class="sensy-form-group">
-        <label for="Bio">Tiểu sử</label>
-        <input type="text" id="Bio" class="sensy-form-control" asp-for="Bio" />
-    </div>
+				<div class="sensy-form-group">
+					<label for="Bio">Tiểu sử</label>
+					<input type="text" id="Bio" class="sensy-form-control" asp-for="Bio" />
+				</div>
 
-    <div class="sensy-form-group">
-        <label for="Phone">Số điện thoại</label>
-        <input type="tel" id="Phone" class="sensy-form-control" asp-for="Phone" />
-    </div>
+				<div class="sensy-form-group">
+					<label for="Phone">Số điện thoại</label>
+					<input type="tel" id="Phone" class="sensy-form-control" asp-for="Phone" />
+				</div>
 
-    <div class="sensy-form-group">
-        <label for="DateOfBirth">Ngày sinh</label>
-        <input type="date" id="DateOfBirth" class="sensy-form-control" asp-for="DateOfBirth" />
-    </div>
+				<div class="sensy-form-group">
+					<label for="DateOfBirth">Ngày sinh</label>
+					<input type="date" id="DateOfBirth" class="sensy-form-control" asp-for="DateOfBirth" />
+				</div>
 
-    <div class="sensy-form-group">
-        <label for="Address">Địa chỉ</label>
-        <input type="text" id="Address" class="sensy-form-control" asp-for="Address" />
-    </div>
+				<div class="sensy-form-group">
+					<label for="Address">Địa chỉ</label>
+					<input type="text" id="Address" class="sensy-form-control" asp-for="Address" />
+				</div>
 
-    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
-    {
-        <div class="sensy-form-actions">
-            <img src="@Url.Content(Model.ProfilePicture)" alt="Ảnh đại diện" style="max-width:150px;" />
-        </div>
-    }
+				<div class="sensy-form-group">
+					<button type="submit" class="sensy-btn sensy-btn-primary">Lưu thay đổi</button>
+				</div>
 
-    <div class="sensy-form-group">
-        <button type="submit" class="sensy-btn sensy-btn-primary">Lưu thay đổi</button>
-    </div>
-
-</form>
-</div>
-</div>
+			</form>
+		</div>
+	</div>
 </main>

@@ -22,5 +22,6 @@ namespace hakathon.Models
         public DateTime? LastLoginDate { get; set; }
         public int FailedLoginCount { get; set; } = 0;
         public DateTime? LockoutEndDate { get; set; }
+        public int? Point {  get; set; }
     }
 }

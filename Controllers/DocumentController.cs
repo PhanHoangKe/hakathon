@@ -12,13 +12,16 @@ using iText.Kernel.Pdf.Canvas.Parser;
 
 namespace hakathon.Controllers
 {
+
+    [Route("api/[controller]/[action]")]
     public class DocumentController : Controller
     {
         private readonly DataContext _context;
-
-        public DocumentController(DataContext context)
+	
+		public DocumentController(DataContext context)
         {
             _context = context;
+            
         }
 
         public IActionResult Index(int page = 1, int pageSize = 12)
@@ -28,7 +31,7 @@ namespace hakathon.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            // Sử dụng ViewComponent để hiển thị thông tin tài liệu
+            
             ViewBag.DocumentId = id;
             return View();
         }
@@ -76,8 +79,30 @@ namespace hakathon.Controllers
                     Console.WriteLine($"[ERROR] Document with ID {id} not found or not approved/active");
                     return NotFound(new { success = false, message = "Không tìm thấy tài liệu" });
                 }
-        
-                string filePath;
+
+				var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+				if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+				{
+					return Unauthorized(new { success = false, message = "Người dùng chưa đăng nhập" });
+				}
+
+				var userProfile = await _context.tblUserProfiles.FirstOrDefaultAsync(p => p.UserID == userId);
+				if (userProfile == null)
+				{
+					return NotFound(new { success = false, message = "Không tìm thấy hồ sơ người dùng" });
+				}
+
+				int requiredPoints = document.Point ?? 0;
+
+				if ((userProfile.Point ?? 0) < requiredPoints)
+				{
+					return BadRequest(new { success = false, message = $"Bạn cần {requiredPoints} điểm để tải tài liệu này" });
+				}
+
+				
+				userProfile.Point = (userProfile.Point ?? 0) - requiredPoints;
+
+				string filePath;
                 string contentType;
                 string fileName;
         
@@ -102,12 +127,14 @@ namespace hakathon.Controllers
                     return NotFound(new { success = false, message = "Không tìm thấy file tài liệu" });
                 }
 
-                document.DownloadCount++;
-                _context.Update(document);
-                await _context.SaveChangesAsync();
-                Console.WriteLine($"[INFO] Download count for document {id} incremented to {document.DownloadCount}");
+				document.DownloadCount++;
+				_context.Update(document);
+				_context.Update(userProfile);
+				await _context.SaveChangesAsync();
 
-                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+
+				var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
                 Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
 
@@ -119,6 +146,9 @@ namespace hakathon.Controllers
                 return StatusCode(500, new { success = false, message = "Lỗi khi tải xuống tài liệu" });
             }
         }
+
+        
+
 
         private string GetContentType(string fileType)
         {
@@ -322,58 +352,118 @@ namespace hakathon.Controllers
         
             return memoryStream.ToArray();
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> TrackViewProgress(int documentId, int currentPage, int viewDuration)
+
+        public class TrackViewRequest
         {
-            int? userId = GetCurrentUserId();
+            public int DocumentId { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TrackInitialView([FromBody] TrackViewRequest request)
+        {
+            int documentId = request.DocumentId;
+            int? userId = GetCurrentUserId(); 
             if (!userId.HasValue)
             {
-                return Unauthorized(new { success = false, message = "Vui lòng đăng nhập để lưu tiến trình xem" });
+                return Unauthorized(new { success = false, message = "Vui lòng đăng nhập." });
             }
 
-            var viewHistory = await _context.tblViewHistories
+
+            var existingView = await _context.tblViewHistories
                 .FirstOrDefaultAsync(vh => vh.UserID == userId.Value && vh.DocumentID == documentId);
-                
-            if (viewHistory == null)
+
+            if (existingView != null)
             {
-                viewHistory = new tblViewHistory
+				existingView.ViewDate = DateTime.Now;
+
+				await _context.SaveChangesAsync();
+				return Json(new { success = true, message = "Đã cập nhật thời gian xem lại." });
+			}
+            else
+            {
+                var viewHistory = new tblViewHistory
                 {
                     UserID = userId.Value,
                     DocumentID = documentId,
                     ViewDate = DateTime.Now,
-                    LastPageViewed = currentPage,
-                    ViewDuration = viewDuration
+                    LastPageViewed = 1,
+                    ViewDuration = 0
                 };
-                
+
                 _context.tblViewHistories.Add(viewHistory);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
             }
-            else
-            {
-                viewHistory.LastPageViewed = currentPage;
-                viewHistory.ViewDuration += viewDuration;
-                viewHistory.ViewDate = DateTime.Now; 
-                
-                _context.tblViewHistories.Update(viewHistory);
-            }
-            
-            await _context.SaveChangesAsync();
-            
-            return Json(new { success = true });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> TrackDownload([FromBody] TrackDownloadRequest request)
+        {
+            int documentId = request.DocumentId;
+            int? userId = GetCurrentUserId();
+
+            if (!userId.HasValue)
+                return Unauthorized(new { success = false, message = "Vui lòng đăng nhập." });
+
+            var history = new tblDownloadHistory
+            {
+                UserID = userId.Value,
+                DocumentID = documentId,
+                DownloadDate = DateTime.Now
+            };
+
+            _context.tblDownloadHistories.Add(history);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Ghi nhận tải xuống thành công." });
+        }
+
+        public class TrackDownloadRequest
+        {
+            public int DocumentId { get; set; }
+        }
+
 
         private int? GetCurrentUserId()
         {
-            if (User.Identity.IsAuthenticated)
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
             {
-                var claimsPrincipal = User as ClaimsPrincipal;
-                string userIdStr = claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (int.TryParse(userIdStr, out int parsedId))
-                {
-                    return parsedId;
-                }
+                return userId;
             }
             return null;
         }
-    }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateViewDuration([FromBody] ViewDurationUpdateModel model)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var latestView = await _context.tblViewHistories
+                .Where(v => v.UserID == userId && v.DocumentID == model.DocumentId)
+                .OrderByDescending(v => v.ViewDate)
+                .FirstOrDefaultAsync();
+
+            if (latestView == null)
+                return NotFound("Không tìm thấy lịch sử xem.");
+
+            latestView.ViewDuration = (latestView.ViewDuration ?? 0) + model.SecondsViewed;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { success = true });
+        }
+
+        public class ViewDurationUpdateModel
+        {
+            public int DocumentId { get; set; }
+            public int SecondsViewed { get; set; }
+        }
+
+		
+	}
 }

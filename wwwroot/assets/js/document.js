@@ -1,19 +1,19 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // ===== QUẢN LÝ TAB =====
     initTabs();
-    
+
     // Các chức năng khác sẽ được khởi tạo dựa vào sự sẵn sàng của PDF.js
     checkPdfJsAndInitialize();
-    
+
     // ===== TÓM TẮT AI =====
     initAiSummary();
-    
+
     // ===== HỎI ĐÁP AI =====
     initAiChat();
-    
+
     // ===== ĐÁNH GIÁ & BÌNH LUẬN =====
     initReviews();
-    
+
     // ===== CÁC NÚT HÀNH ĐỘNG =====
     initActionButtons();
 });
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Kiểm tra PDF.js và khởi tạo trình xem PDF khi sẵn sàng
 function checkPdfJsAndInitialize() {
     console.log("Checking if PDF.js is ready");
-    
+
     // Nếu PDF.js đã sẵn sàng, khởi tạo ngay
     if (window.pdfjsLib) {
         console.log("PDF.js is ready, initializing viewer");
@@ -31,11 +31,11 @@ function checkPdfJsAndInitialize() {
         console.log("PDF.js not ready yet, waiting");
         let checkCount = 0;
         const maxChecks = 50; // Tối đa 5 giây (50 * 100ms)
-        
-        const checkInterval = setInterval(function() {
+
+        const checkInterval = setInterval(function () {
             checkCount++;
             console.log(`Checking for PDF.js (attempt ${checkCount}/${maxChecks})`);
-            
+
             if (window.pdfjsLib) {
                 console.log("PDF.js is now ready, initializing viewer");
                 clearInterval(checkInterval);
@@ -43,7 +43,7 @@ function checkPdfJsAndInitialize() {
             } else if (checkCount >= maxChecks) {
                 console.error("PDF.js failed to load after multiple attempts");
                 clearInterval(checkInterval);
-                
+
                 // Hiển thị thông báo lỗi trong canvas
                 const pdfContainer = document.getElementById('pdfRender');
                 if (pdfContainer) {
@@ -64,16 +64,16 @@ function checkPdfJsAndInitialize() {
 function initTabs() {
     const tabItems = document.querySelectorAll('.senst-tab-item');
     const tabPanes = document.querySelectorAll('.senst-tab-pane');
-    
+
     tabItems.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             // Xóa active class từ tất cả các tab
             tabItems.forEach(item => item.classList.remove('active'));
             tabPanes.forEach(pane => pane.classList.remove('active'));
-            
+
             // Thêm active class cho tab được chọn
             this.classList.add('active');
-            
+
             // Hiển thị nội dung tab tương ứng
             const tabId = this.getAttribute('data-tab');
             document.getElementById(tabId).classList.add('active');
@@ -85,14 +85,14 @@ function initTabs() {
 // ===== XEM TRƯỚC TÀI LIỆU - CHI HIỂN THỊ 3 TRANG ĐẦU =====
 function initPdfViewer() {
     console.log("Initializing PDF viewer (limited to 3 pages)");
-    
+
     // Check if we're on the document details page
     const canvas = document.getElementById('pdfRender');
     if (!canvas) {
         console.log("Not on document page, skipping PDF viewer");
         return;
     }
-    
+
     // Show loading message
     const ctx = canvas.getContext('2d');
     canvas.width = 800;
@@ -102,12 +102,12 @@ function initPdfViewer() {
     ctx.fillStyle = '#333';
     ctx.font = '20px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('Đang tải PDF...', canvas.width/2, canvas.height/2);
-    
+    ctx.fillText('Đang tải PDF...', canvas.width / 2, canvas.height / 2);
+
     // Try to get document ID
     const documentId = getDocumentId();
     const pdfUrl = documentId ? `/Document/GetPdfPreview/${documentId}` : '/uploads/documents/ke.pdf';
-    
+
     // Use iframe as fallback if PDF.js fails
     setTimeout(() => {
         if (typeof pdfjsLib === 'undefined' || window.pdfLoadFailed) {
@@ -127,27 +127,27 @@ function getDocumentId() {
     if (!isNaN(lastPart) && lastPart) {
         return lastPart;
     }
-    
+
     // Try to get from data attribute
     const docElement = document.querySelector('[data-document-id], [data-id]');
     if (docElement) {
         return docElement.getAttribute('data-document-id') || docElement.getAttribute('data-id');
     }
-    
+
     // Try global variable
     if (typeof documentId !== 'undefined') {
         return documentId;
     }
-    
+
     return null;
 }
 
 function showPdfWithIframe(url) {
     console.log("Showing PDF with iframe:", url);
-    
+
     const container = document.querySelector('.senst-pdf-container');
     if (!container) return;
-    
+
     // Note: Iframe will show all pages, which is limited by server-side implementation
     container.innerHTML = `
         <div style="width: 100%; height: 600px; background: #f0f0f0; position: relative;">
@@ -162,7 +162,7 @@ function showPdfWithIframe(url) {
             </div>
         </div>
     `;
-    
+
     // Hide PDF controls since we're using iframe
     const controls = document.querySelector('.senst-pdf-controls');
     if (controls) {
@@ -172,29 +172,29 @@ function showPdfWithIframe(url) {
 
 function loadPdfWithPdfJs(url) {
     const loadingTask = pdfjsLib.getDocument(url);
-    
+
     loadingTask.promise.then((pdf) => {
         console.log('PDF loaded successfully with', pdf.numPages, 'pages');
-        
+
         let pdfDoc = pdf;
         let currentPage = 1;
         let scale = 1.0;
-        
+
         // GIỚI HẠN CHỈ 3 TRANG ĐẦU TIÊN
         const maxPages = Math.min(pdf.numPages, 3);
-        
+
         // Update total pages display to show limited pages
         const totalPagesElement = document.getElementById('totalPages');
         if (totalPagesElement) {
             totalPagesElement.textContent = maxPages;
         }
-        
+
         // Render first page
         renderPage(pdfDoc, currentPage, scale);
-        
+
         // Setup controls with limited pages
         setupPdfControls(pdfDoc, currentPage, scale, maxPages);
-        
+
     }).catch((error) => {
         console.error('Error loading PDF:', error);
         window.pdfLoadFailed = true;
@@ -205,26 +205,26 @@ function loadPdfWithPdfJs(url) {
 function renderPage(pdfDoc, pageNum, scale) {
     const canvas = document.getElementById('pdfRender');
     const ctx = canvas.getContext('2d');
-    
+
     // CHỈ RENDER NẾU TRANG NẰM TRONG 3 TRANG ĐẦU
     if (pageNum > 3) {
         console.log(`Page ${pageNum} is beyond limit, not rendering`);
         return;
     }
-    
+
     pdfDoc.getPage(pageNum).then((page) => {
         const viewport = page.getViewport({ scale: scale });
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        
+
         const renderContext = {
             canvasContext: ctx,
             viewport: viewport
         };
-        
+
         page.render(renderContext).promise.then(() => {
             console.log(`Page ${pageNum} rendered`);
-            
+
             // Update current page display
             const currentPageElement = document.getElementById('currentPage');
             if (currentPageElement) {
@@ -239,7 +239,7 @@ function renderPage(pdfDoc, pageNum, scale) {
 function setupPdfControls(pdfDoc, currentPage, scale, maxPages) {
     // Ensure maxPages doesn't exceed 3
     maxPages = Math.min(maxPages || 3, 3);
-    
+
     // Previous page
     const prevBtn = document.getElementById('prevPage');
     if (prevBtn) {
@@ -251,7 +251,7 @@ function setupPdfControls(pdfDoc, currentPage, scale, maxPages) {
             }
         };
     }
-    
+
     // Next page
     const nextBtn = document.getElementById('nextPage');
     if (nextBtn) {
@@ -263,7 +263,7 @@ function setupPdfControls(pdfDoc, currentPage, scale, maxPages) {
             }
         };
     }
-    
+
     // Zoom in
     const zoomInBtn = document.getElementById('zoomIn');
     if (zoomInBtn) {
@@ -272,7 +272,7 @@ function setupPdfControls(pdfDoc, currentPage, scale, maxPages) {
             renderPage(pdfDoc, currentPage, scale);
         };
     }
-    
+
     // Zoom out
     const zoomOutBtn = document.getElementById('zoomOut');
     if (zoomOutBtn) {
@@ -283,7 +283,7 @@ function setupPdfControls(pdfDoc, currentPage, scale, maxPages) {
             }
         };
     }
-    
+
     // Initial controls state
     updateControlsState(currentPage, maxPages);
 }
@@ -291,12 +291,12 @@ function setupPdfControls(pdfDoc, currentPage, scale, maxPages) {
 function updateControlsState(currentPage, maxPages) {
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
-    
+
     if (prevBtn) {
         prevBtn.disabled = currentPage <= 1;
         prevBtn.style.opacity = currentPage <= 1 ? '0.5' : '1';
     }
-    
+
     if (nextBtn) {
         nextBtn.disabled = currentPage >= maxPages;
         nextBtn.style.opacity = currentPage >= maxPages ? '0.5' : '1';
@@ -318,34 +318,34 @@ function initAiSummary() {
     const generateSummaryBtn = document.getElementById('generateSummary');
     const playTTSBtn = document.getElementById('playTTS');
     const audioPlayer = document.getElementById('audioPlayer');
-    
+
     // Hiển thị/ẩn lựa chọn chương
-    summaryType.addEventListener('change', function() {
+    summaryType.addEventListener('change', function () {
         if (this.value === 'chapter') {
             chapterSelection.style.display = 'inline-block';
         } else {
             chapterSelection.style.display = 'none';
         }
     });
-    
+
     // Xử lý tạo tóm tắt
-    generateSummaryBtn.addEventListener('click', function() {
+    generateSummaryBtn.addEventListener('click', function () {
         const type = summaryType.value;
         let summaryTitle, summaryText;
-        
+
         // Hiển thị hiệu ứng đang tải
         document.querySelector('.senst-summary-result').innerHTML = '<div class="senst-loading">Đang tạo tóm tắt...</div>';
-        
+
         // Giả lập thời gian tạo tóm tắt
-        setTimeout(function() {
+        setTimeout(function () {
             if (type === 'full') {
                 summaryTitle = 'Tóm tắt toàn bộ tài liệu:';
                 summaryText = 'Cuốn sách "Lập trình Web với HTML, CSS và JavaScript" là tài liệu toàn diện về phát triển web. Phần đầu giới thiệu về nền tảng web và cách hoạt động của trình duyệt. Các chương tiếp theo tập trung vào HTML để xây dựng cấu trúc, CSS để định dạng và tạo giao diện hấp dẫn. JavaScript được giới thiệu từ cơ bản đến nâng cao để tạo tương tác cho trang web. Phần cuối đề cập đến các framework hiện đại như React, Angular và Vue.js cùng các kỹ thuật tối ưu hiệu suất. Sách phù hợp cho cả người mới học và người muốn nâng cao kỹ năng lập trình web.';
             } else {
                 const chapterNum = document.getElementById('chapterNumber').value;
                 summaryTitle = `Tóm tắt Chương ${chapterNum}:`;
-                
-                switch(parseInt(chapterNum)) {
+
+                switch (parseInt(chapterNum)) {
                     case 1:
                         summaryText = 'Chương 1 giới thiệu về HTML, cú pháp cơ bản và cấu trúc của một trang web. Chương này giải thích các thẻ HTML phổ biến, thuộc tính, và cách tạo liên kết giữa các trang. Phần cuối chương giới thiệu về HTML5 và các thẻ ngữ nghĩa mới.';
                         break;
@@ -357,7 +357,7 @@ function initAiSummary() {
                         break;
                 }
             }
-            
+
             // Cập nhật kết quả tóm tắt
             document.querySelector('.senst-summary-result').innerHTML = `
                 <h4>${summaryTitle}</h4>
@@ -365,13 +365,13 @@ function initAiSummary() {
             `;
         }, 1500);
     });
-    
+
     // Xử lý chức năng Text-to-Speech
-    playTTSBtn.addEventListener('click', function() {
+    playTTSBtn.addEventListener('click', function () {
         // Trong thực tế, đây sẽ là URL đến file audio được tạo ra
         // Ở đây chúng ta giả lập bằng cách hiển thị trình phát audio
         const btnIcon = this.querySelector('i');
-        
+
         if (audioPlayer.style.display === 'none') {
             audioPlayer.style.display = 'block';
             btnIcon.className = 'fa fa-pause';
@@ -392,12 +392,12 @@ function initAiChat() {
     const userQuestion = document.getElementById('userQuestion');
     const sendQuestionBtn = document.getElementById('sendQuestion');
     const suggestionChips = document.querySelectorAll('.senst-chip');
-    
+
     // Hàm thêm tin nhắn vào khung chat
     function addMessage(content, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = isUser ? 'senst-message senst-message-user' : 'senst-message senst-message-bot';
-        
+
         if (!isUser) {
             const avatarDiv = document.createElement('div');
             avatarDiv.className = 'senst-message-avatar';
@@ -407,29 +407,29 @@ function initAiChat() {
             avatarDiv.appendChild(avatarImg);
             messageDiv.appendChild(avatarDiv);
         }
-        
+
         const contentDiv = document.createElement('div');
         contentDiv.className = 'senst-message-content';
         contentDiv.innerHTML = `<p>${content}</p>`;
         messageDiv.appendChild(contentDiv);
-        
+
         chatMessages.appendChild(messageDiv);
-        
+
         // Cuộn xuống tin nhắn mới nhất
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    
+
     // Xử lý gửi câu hỏi
     function sendQuestion() {
         const question = userQuestion.value.trim();
-        
+
         if (question) {
             // Thêm câu hỏi của người dùng vào chat
             addMessage(question, true);
-            
+
             // Xóa nội dung input
             userQuestion.value = '';
-            
+
             // Hiển thị trạng thái đang nhập
             const typingDiv = document.createElement('div');
             typingDiv.className = 'senst-message senst-message-bot senst-typing';
@@ -447,15 +447,15 @@ function initAiChat() {
             `;
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            
+
             // Giả lập thời gian trả lời
-            setTimeout(function() {
+            setTimeout(function () {
                 // Xóa trạng thái đang nhập
                 chatMessages.removeChild(typingDiv);
-                
+
                 // Trả lời từ AI (giả lập)
                 let answer = '';
-                
+
                 if (question.toLowerCase().includes('chương 1')) {
                     answer = 'Chương 1 của tài liệu nói về cơ bản của HTML. Nó bao gồm cách tạo cấu trúc trang web, các thẻ HTML cơ bản, và cách liên kết giữa các trang. Chương này cũng giới thiệu về HTML5 và các thẻ ngữ nghĩa mới.';
                 } else if (question.toLowerCase().includes('bao nhiêu chương')) {
@@ -465,26 +465,26 @@ function initAiChat() {
                 } else {
                     answer = 'Cảm ơn câu hỏi của bạn. Dựa trên nội dung của tài liệu "Lập trình Web với HTML, CSS và JavaScript", tôi có thể trả lời rằng sách này được thiết kế để giúp người đọc từ cơ bản đến nâng cao trong việc phát triển web. Mỗi chương được xây dựng trên kiến thức từ các chương trước và bao gồm nhiều ví dụ thực tế.';
                 }
-                
+
                 // Thêm câu trả lời của AI vào chat
                 addMessage(answer);
             }, 1500);
         }
     }
-    
+
     // Xử lý sự kiện click nút gửi
     sendQuestionBtn.addEventListener('click', sendQuestion);
-    
+
     // Xử lý sự kiện nhấn Enter trong ô input
-    userQuestion.addEventListener('keypress', function(e) {
+    userQuestion.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             sendQuestion();
         }
     });
-    
+
     // Xử lý sự kiện cho các gợi ý
     suggestionChips.forEach(chip => {
-        chip.addEventListener('click', function() {
+        chip.addEventListener('click', function () {
             userQuestion.value = this.textContent;
             sendQuestion();
         });
@@ -498,29 +498,29 @@ function initReviews() {
     const submitReviewBtn = document.querySelector('.senst-btn-submit');
     const moreReviewsBtn = document.querySelector('.senst-btn-more');
     const reviewsList = document.querySelector('.senst-reviews-list');
-    
+
     // Xử lý chọn số sao
     let selectedRating = 0;
-    
+
     starInputs.forEach(star => {
         // Hiệu ứng hover
-        star.addEventListener('mouseover', function() {
+        star.addEventListener('mouseover', function () {
             const rating = parseInt(this.getAttribute('data-rating'));
             highlightStars(rating);
         });
-        
+
         // Trở về trạng thái đã chọn khi rời chuột
-        star.addEventListener('mouseout', function() {
+        star.addEventListener('mouseout', function () {
             highlightStars(selectedRating);
         });
-        
+
         // Chọn đánh giá
-        star.addEventListener('click', function() {
+        star.addEventListener('click', function () {
             selectedRating = parseInt(this.getAttribute('data-rating'));
             highlightStars(selectedRating);
         });
     });
-    
+
     // Hàm làm nổi bật sao theo đánh giá
     function highlightStars(rating) {
         starInputs.forEach(star => {
@@ -532,25 +532,25 @@ function initReviews() {
             }
         });
     }
-    
+
     // Xử lý gửi đánh giá
-    submitReviewBtn.addEventListener('click', function() {
+    submitReviewBtn.addEventListener('click', function () {
         const reviewText = reviewTextArea.value.trim();
-        
+
         if (selectedRating === 0) {
             alert('Vui lòng chọn số sao đánh giá!');
             return;
         }
-        
+
         if (!reviewText) {
             alert('Vui lòng viết đánh giá của bạn!');
             return;
         }
-        
+
         // Tạo đánh giá mới (giả lập)
         const currentDate = new Date();
         const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-        
+
         const newReview = document.createElement('div');
         newReview.className = 'senst-review-item';
         newReview.innerHTML = `
@@ -560,9 +560,9 @@ function initReviews() {
                     <div class="senst-reviewer-name">Bạn</div>
                     <div class="senst-review-date">${formattedDate}</div>
                     <div class="senst-reviewer-rating">
-                        ${Array(5).fill().map((_, i) => 
-                            `<i class="fa ${i < selectedRating ? 'fa-star' : 'fa-star-o'}"></i>`
-                        ).join('')}
+                        ${Array(5).fill().map((_, i) =>
+            `<i class="fa ${i < selectedRating ? 'fa-star' : 'fa-star-o'}"></i>`
+        ).join('')}
                     </div>
                 </div>
             </div>
@@ -578,32 +578,32 @@ function initReviews() {
                 </button>
             </div>
         `;
-        
+
         // Thêm đánh giá mới vào đầu danh sách
         const firstReview = reviewsList.querySelector('.senst-review-item');
         reviewsList.insertBefore(newReview, firstReview);
-        
+
         // Reset form
         reviewTextArea.value = '';
         selectedRating = 0;
         highlightStars(0);
-        
+
         // Hiển thị thông báo thành công
         alert('Cảm ơn bạn đã đánh giá!');
     });
-    
+
     // Xử lý nút xem thêm bình luận
-    moreReviewsBtn.addEventListener('click', function() {
+    moreReviewsBtn.addEventListener('click', function () {
         // Giả lập tải thêm bình luận
         const loadingText = document.createElement('div');
         loadingText.className = 'senst-loading';
         loadingText.textContent = 'Đang tải thêm bình luận...';
         reviewsList.insertBefore(loadingText, moreReviewsBtn);
-        
-        setTimeout(function() {
+
+        setTimeout(function () {
             // Xóa thông báo đang tải
             reviewsList.removeChild(loadingText);
-            
+
             // Thêm bình luận mới
             for (let i = 0; i < 2; i++) {
                 const newReview = document.createElement('div');
@@ -613,7 +613,7 @@ function initReviews() {
                         <img src="/api/placeholder/50/50" alt="User Avatar" class="senst-reviewer-avatar" />
                         <div class="senst-reviewer-details">
                             <div class="senst-reviewer-name">Người dùng Mới</div>
-                            <div class="senst-review-date">0${i+1}/04/2025</div>
+                            <div class="senst-review-date">0${i + 1}/04/2025</div>
                             <div class="senst-reviewer-rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -635,18 +635,18 @@ function initReviews() {
                         </button>
                     </div>
                 `;
-                
+
                 reviewsList.insertBefore(newReview, moreReviewsBtn);
             }
-            
+
             // Ẩn nút nếu không còn bình luận để tải
             moreReviewsBtn.style.display = 'none';
         }, 1000);
     });
-    
+
     // Xử lý nút "Hữu ích" cho các bình luận
     document.querySelectorAll('.senst-btn-like').forEach(likeBtn => {
-        likeBtn.addEventListener('click', function() {
+        likeBtn.addEventListener('click', function () {
             const likeText = this.textContent.trim();
             const currentLikes = parseInt(likeText.match(/\d+/)[0]);
             this.innerHTML = `<i class="fa fa-thumbs-up"></i> Hữu ích (${currentLikes + 1})`;
@@ -675,31 +675,31 @@ function initActionButtons() {
                 },
                 body: new URLSearchParams({ documentId: documentId })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    if (data.isFavorite) {
-                        icon.className = 'fa fa-heart';
-                        favoriteBtn.classList.add('senst-btn-favorite-active');
-                        alert('Đã thêm vào danh sách yêu thích!');
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.isFavorite) {
+                            icon.className = 'fa fa-heart';
+                            favoriteBtn.classList.add('senst-btn-favorite-active');
+                            alert('Đã thêm vào danh sách yêu thích!');
+                        } else {
+                            icon.className = 'fa fa-heart-o';
+                            favoriteBtn.classList.remove('senst-btn-favorite-active');
+                            alert('Đã xóa khỏi danh sách yêu thích!');
+                        }
                     } else {
-                        icon.className = 'fa fa-heart-o';
-                        favoriteBtn.classList.remove('senst-btn-favorite-active');
-                        alert('Đã xóa khỏi danh sách yêu thích!');
+                        if (!data.isAuthenticated) {
+                            alert(data.message || "Vui lòng đăng nhập để sử dụng chức năng này.");
+                        }
                     }
-                } else {
-                    if (!data.isAuthenticated) {
-                        alert(data.message || "Vui lòng đăng nhập để sử dụng chức năng này.");
-                    }
-                }
-            })
-            .catch(error => {
-                console.error("Lỗi khi gửi yêu thích:", error);
-            });
+                })
+                .catch(error => {
+                    console.error("Lỗi khi gửi yêu thích:", error);
+                });
         });
     }
 
-    readDocBtn.addEventListener('click', function() {
+    readDocBtn.addEventListener('click', function () {
         document.querySelector('.senst-tab-item[data-tab="preview"]').click();
 
         document.querySelector('.senst-pdf-viewer').scrollIntoView({
@@ -708,7 +708,7 @@ function initActionButtons() {
     });
 
     downloadOptions.forEach(option => {
-        option.addEventListener('click', function(e) {
+        option.addEventListener('click', function (e) {
             e.preventDefault();
             const format = this.textContent.includes('PDF') ? 'PDF' : 'DOCX';
             alert(`Đang tải xuống tài liệu ở định dạng ${format}...`);
@@ -719,23 +719,33 @@ function initActionButtons() {
 function downloadDocument(documentId, fileType) {
     showDownloadingMessage(fileType);
 
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/Document/Download?id=${documentId}&type=${fileType}`;
+    fetch('/api/Document/TrackDownload', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ documentId: documentId })
+    }).then(() => {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/api/Document/Download?id=${documentId}&type=${fileType}`;
 
-    const token = document.querySelector('input[name="__RequestVerificationToken"]');
-    if (token) {
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '__RequestVerificationToken';
-        csrfInput.value = token.value;
-        form.appendChild(csrfInput);
-    }
+        const token = document.querySelector('input[name="__RequestVerificationToken"]');
+        if (token) {
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '__RequestVerificationToken';
+            csrfInput.value = token.value;
+            form.appendChild(csrfInput);
+        }
 
-    document.body.appendChild(form);
-    form.submit();
+        document.body.appendChild(form);
+        form.submit();
 
-    incrementDownloadCount(documentId, fileType);
+        incrementDownloadCount(documentId, fileType);
+    }).catch((error) => {
+        console.error('Lỗi khi ghi lịch sử tải xuống:', error);
+    });
 }
 
 function showDownloadingMessage(fileType) {
@@ -749,9 +759,9 @@ function showDownloadingMessage(fileType) {
             <span>Đang tải xuống ${fileTypeName}...</span>
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.classList.add('senst-notification-hiding');
         setTimeout(() => {
@@ -769,14 +779,14 @@ function incrementDownloadCount(documentId, fileType) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const downloadDropdown = document.querySelector('.senst-dropdown');
     if (downloadDropdown) {
-        downloadDropdown.addEventListener('mouseenter', function() {
+        downloadDropdown.addEventListener('mouseenter', function () {
             this.querySelector('.senst-dropdown-content').style.display = 'block';
         });
-        
-        downloadDropdown.addEventListener('mouseleave', function() {
+
+        downloadDropdown.addEventListener('mouseleave', function () {
             this.querySelector('.senst-dropdown-content').style.display = 'none';
         });
     }

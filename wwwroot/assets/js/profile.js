@@ -204,50 +204,50 @@ function initActivityTabs() {
 }
 
 // ---------- Pagination ----------
-function initPagination() {
-    const prevButtons = document.querySelectorAll('.sensy-pagination-prev');
-    const nextButtons = document.querySelectorAll('.sensy-pagination-next');
+//function initPagination() {
+//    const prevButtons = document.querySelectorAll('.sensy-pagination-prev');
+//    const nextButtons = document.querySelectorAll('.sensy-pagination-next');
     
-    prevButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const paginationInfo = this.nextElementSibling;
-            const currentPage = parseInt(paginationInfo.textContent.split('/')[0].replace('Trang ', ''));
-            const totalPages = parseInt(paginationInfo.textContent.split('/')[1]);
+//    prevButtons.forEach(button => {
+//        button.addEventListener('click', function() {
+//            const paginationInfo = this.nextElementSibling;
+//            const currentPage = parseInt(paginationInfo.textContent.split('/')[0].replace('Trang ', ''));
+//            const totalPages = parseInt(paginationInfo.textContent.split('/')[1]);
             
-            if (currentPage > 1) {
-                const newPage = currentPage - 1;
-                paginationInfo.textContent = `Trang ${newPage}/${totalPages}`;
+//            if (currentPage > 1) {
+//                const newPage = currentPage - 1;
+//                paginationInfo.textContent = `Trang ${newPage}/${totalPages}`;
                 
-                // Enable/disable buttons
-                this.disabled = newPage === 1;
-                this.nextElementSibling.nextElementSibling.disabled = false;
+//                // Enable/disable buttons
+//                this.disabled = newPage === 1;
+//                this.nextElementSibling.nextElementSibling.disabled = false;
                 
-                // Here you would fetch and display the appropriate data for the new page
-                // fetchPageData(currentActivityTab, newPage);
-            }
-        });
-    });
+//                // Here you would fetch and display the appropriate data for the new page
+//                // fetchPageData(currentActivityTab, newPage);
+//            }
+//        });
+//    });
     
-    nextButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const paginationInfo = this.previousElementSibling;
-            const currentPage = parseInt(paginationInfo.textContent.split('/')[0].replace('Trang ', ''));
-            const totalPages = parseInt(paginationInfo.textContent.split('/')[1]);
+//    nextButtons.forEach(button => {
+//        button.addEventListener('click', function() {
+//            const paginationInfo = this.previousElementSibling;
+//            const currentPage = parseInt(paginationInfo.textContent.split('/')[0].replace('Trang ', ''));
+//            const totalPages = parseInt(paginationInfo.textContent.split('/')[1]);
             
-            if (currentPage < totalPages) {
-                const newPage = currentPage + 1;
-                paginationInfo.textContent = `Trang ${newPage}/${totalPages}`;
+//            if (currentPage < totalPages) {
+//                const newPage = currentPage + 1;
+//                paginationInfo.textContent = `Trang ${newPage}/${totalPages}`;
                 
-                // Enable/disable buttons
-                this.disabled = newPage === totalPages;
-                this.previousElementSibling.previousElementSibling.disabled = false;
+//                // Enable/disable buttons
+//                this.disabled = newPage === totalPages;
+//                this.previousElementSibling.previousElementSibling.disabled = false;
                 
-                // Here you would fetch and display the appropriate data for the new page
-                // fetchPageData(currentActivityTab, newPage);
-            }
-        });
-    });
-}
+//                // Here you would fetch and display the appropriate data for the new page
+//                // fetchPageData(currentActivityTab, newPage);
+//            }
+//        });
+//    });
+//}
 
 // ---------- Form Submissions ----------
 function initFormSubmissions() {

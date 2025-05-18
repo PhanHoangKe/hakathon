@@ -12,7 +12,11 @@ namespace hakathon.Models
     {
         [Key]
         public int ViewID { get; set; }
+
+        [ForeignKey("User")]
         public int UserID { get; set; }
+
+        [ForeignKey("Documents")]
         public int DocumentID { get; set; }
         public DateTime ViewDate { get; set; } = DateTime.Now;
         public int? ViewDuration { get; set; }

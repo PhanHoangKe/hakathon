@@ -33,5 +33,7 @@ namespace hakathon.Models
         public tblPublishers Publisher { get; set; }
         public ICollection<tblDocumentAuthors> DocumentAuthor { get; set; }
         public ICollection<tblFavorites> Favorite { get; set; }
+
+        public int? Point { get; set; }
     }
 }

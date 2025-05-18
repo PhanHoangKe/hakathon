@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace hakathon.Models
 {
@@ -12,8 +13,15 @@ namespace hakathon.Models
     {
         [Key]
         public int DownloadID { get; set; }
-        public int UserID { get; set; }
-        public int DocumentID { get; set; }
+
+		[ForeignKey("User")]
+		public int UserID { get; set; }
+
+		[ForeignKey("Documents")]
+		public int DocumentID { get; set; }
         public DateTime DownloadDate { get; set; } = DateTime.Now;
-    }
+
+		public virtual tblUsers User { get; set; }
+		public virtual tblDocuments Document { get; set; }
+	}
 }

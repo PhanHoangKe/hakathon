@@ -10,15 +10,16 @@ namespace hakathon.Controllers
 	{
 
 		private readonly DataContext _context;
-
-		public ProfileController(DataContext context)
+		private readonly IWebHostEnvironment _env;
+		public ProfileController(DataContext context, IWebHostEnvironment env)
 		{
 			_context = context;
+			_env = env;
 		}
 
 
         [HttpGet]
-        public IActionResult Profile(string activeTab = "sensy-profile-tab")
+        public IActionResult Profile(string activeTab = "sensy-personal-info")
         {
             TempData["ActiveTab"] = activeTab;
             return View("Profile");
@@ -123,6 +124,82 @@ namespace hakathon.Controllers
             return View("~/Views/Profile/Profile.cshtml");
         }
 
+		[HttpPost]
+		public async Task<IActionResult> UploadDocument(IFormFile file, string title, string description, int categoryId)
+		{
+			if (file == null || file.Length == 0)
+				return BadRequest("File không hợp lệ.");
 
-    }
+			var allowedExtensions = new[] { ".pdf", ".docx" };
+			var ext = Path.GetExtension(file.FileName).ToLower();
+
+			if (!allowedExtensions.Contains(ext))
+				return BadRequest("Chỉ chấp nhận file .pdf hoặc .docx.");
+
+			var uploadsPath = Path.Combine(_env.WebRootPath, "uploads");
+			if (!Directory.Exists(uploadsPath))
+				Directory.CreateDirectory(uploadsPath);
+
+			var fileName = $"{Guid.NewGuid()}{ext}";
+			var filePath = Path.Combine(uploadsPath, fileName);
+
+			using (var stream = new FileStream(filePath, FileMode.Create))
+			{
+				await file.CopyToAsync(stream);
+			}
+
+			var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+				return Unauthorized();
+
+			var doc = new tblDocuments
+			{
+				Title = title,
+				Description = description,
+				CategoryID = categoryId,
+				FileOriginalPath = "/uploads/" + fileName,
+				FilePDFPath = ext == ".pdf" ? "/uploads/" + fileName : "",
+				FileSize = file.Length,
+				FileType = ext,
+				UserID = userId,
+				MenuID = 7,
+				IsActive = false,
+				CreatedDate = DateTime.Now,
+				ModifiedDate = DateTime.Now
+			};
+
+			_context.tblDocuments.Add(doc);
+			await _context.SaveChangesAsync();
+
+			// Trả về JSON cho client biết upload thành công
+			TempData["UploadSuccess"] = "Upload thành công.";
+			TempData["ActiveTab"] = "sensy-document";
+
+			return View("~/Views/Profile/Profile.cshtml");
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> GetUserDocuments()
+		{
+			var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+				return Unauthorized();
+
+			var documents = await _context.tblDocuments
+				.Where(d => d.UserID == userId)
+				.OrderByDescending(d => d.UploadDate)
+				.Select(d => new {
+					d.DocumentID,
+					d.Title,
+					d.Description,
+					d.UploadDate,
+					d.FileOriginalPath,
+					d.FileType,
+					d.IsActive
+				}).ToListAsync();
+
+			return Json(documents);
+		}
+	}
 }

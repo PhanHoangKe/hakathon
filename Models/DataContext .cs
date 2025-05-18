@@ -49,6 +49,17 @@ namespace hakathon.Models
                 .HasKey(ur => new { ur.UserID, ur.RoleID });
             modelBuilder.Entity<tblDocumentAuthors>()
                 .HasKey(da => new { da.DocumentID, da.AuthorID });
+            modelBuilder.Entity<tblViewHistory>()
+       .HasOne(v => v.User)
+       .WithMany()
+       .HasForeignKey(v => v.UserID)
+       .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<tblViewHistory>()
+                .HasOne(v => v.Document)
+                .WithMany()
+                .HasForeignKey(v => v.DocumentID)
+                .OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }
     }
